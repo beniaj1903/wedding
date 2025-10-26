@@ -20,7 +20,7 @@ export function initMusicPlayer() {
     // Cargar la API de YouTube (pero no iniciar reproducción aún)
     loadYouTubeAPI();
     
-    // Click en el botón
+    // Click en el botón para pausar/reproducir
     musicToggle.addEventListener('click', () => {
         hasUserInteracted = true;
         musicTooltip.classList.remove('show');
@@ -33,32 +33,8 @@ export function initMusicPlayer() {
         toggleMusic();
     });
     
-    // ✨ Reproducir con primera interacción del usuario
-    let hasTriedPlay = false;
-    const startMusicOnInteraction = () => {
-        if (hasTriedPlay) return;
-        
-        hasTriedPlay = true;
-        
-        if (isPlayerReady) {
-            // Player listo → reproducir SÍNCRONAMENTE (crítico para políticas de autoplay)
-            try {
-                player.playVideo(); // Llamada directa y síncrona
-                console.log('🎵 Música iniciada con interacción del usuario');
-            } catch (error) {
-                console.error('Error al reproducir música:', error);
-            }
-        } else {
-            // Player no listo → guardar intención para cuando esté listo
-            shouldAutoPlayWhenReady = true;
-            console.log('🎵 Interacción detectada, esperando a que el player esté listo...');
-        }
-    };
-    
-    // Escuchar primera interacción: click, scroll o touch
-    window.addEventListener('click', startMusicOnInteraction, { once: true });
-    window.addEventListener('scroll', startMusicOnInteraction, { once: true });
-    window.addEventListener('touchstart', startMusicOnInteraction, { once: true });
+    // La música ahora se inicia SOLO desde el cierre del modal de bienvenida
+    // (Ver función startMusicFromExternalTrigger más abajo)
 }
 
 /**
