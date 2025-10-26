@@ -10,6 +10,7 @@ import { initNavigation, initSmoothScroll } from './modules/navigation.js';
 import { initScrollEffects } from './modules/scroll-effects.js';
 import { initRSVPForm } from './modules/rsvp-form.js';
 import { initEnvelopeAnimation } from './modules/envelope-animation.js';
+import { initGifts } from './modules/gifts.js';
 import { showConsoleMessage } from './modules/utils.js';
 
 // Funciones opcionales (descomenta para usar):
@@ -39,6 +40,7 @@ function initializeApp() {
     initRSVPForm();
     initSmoothScroll();
     initEnvelopeAnimation();
+    initGifts();
     
     // Mensaje en consola
     showConsoleMessage();
