@@ -9,7 +9,6 @@ export function initRSVPForm() {
     const buscarInput = document.getElementById('buscarInvitado');
     const autocompleteResults = document.getElementById('autocompleteResults');
     const invitadoInfo = document.getElementById('invitadoSeleccionado');
-    const asistentesInput = document.getElementById('asistentes');
     
     if (!form || !buscarInput) return;
     
@@ -93,10 +92,6 @@ export function initRSVPForm() {
         invitadoInfo.querySelector('.invitado-cupos').textContent = `Tienes ${invitadoSeleccionado.cuposAsignados} cupo${invitadoSeleccionado.cuposAsignados > 1 ? 's' : ''} asignado${invitadoSeleccionado.cuposAsignados > 1 ? 's' : ''}`;
         invitadoInfo.style.display = 'block';
         
-        // Configurar límite de asistentes
-        asistentesInput.max = invitadoSeleccionado.cuposAsignados;
-        asistentesInput.value = 1;
-        
         // Pre-llenar email si existe
         if (invitadoSeleccionado.email) {
             document.getElementById('email').value = invitadoSeleccionado.email;
@@ -123,17 +118,13 @@ export function initRSVPForm() {
             return;
         }
         
-        // Validar número de asistentes
-        const numAsistentes = parseInt(asistentesInput.value);
-        if (numAsistentes > invitadoSeleccionado.cuposAsignados) {
-            mostrarMensaje(`Solo tienes ${invitadoSeleccionado.cuposAsignados} cupo${invitadoSeleccionado.cuposAsignados > 1 ? 's' : ''} asignado${invitadoSeleccionado.cuposAsignados > 1 ? 's' : ''}`, 'error');
-            return;
-        }
-        
         // Recopilar datos del formulario
         const formData = new FormData(form);
         const asistencia = formData.get('asistencia');
         const confirmado = asistencia === 'si';
+        
+        // Usar automáticamente los cupos asignados al invitado
+        const cuposConfirmados = confirmado ? invitadoSeleccionado.cuposAsignados : 0;
         
         const datosConfirmacion = {
             invitadoId: invitadoSeleccionado.id,
@@ -141,7 +132,7 @@ export function initRSVPForm() {
             email: formData.get('email'),
             telefono: formData.get('telefono'),
             confirmado: confirmado,
-            cuposConfirmados: confirmado ? numAsistentes : 0,
+            cuposConfirmados: cuposConfirmados,
             necesitaTransporte: formData.get('transporte') === 'si',
             restriccionesAlimenticias: formData.get('alergias') || '',
             mensaje: formData.get('mensaje') || ''
