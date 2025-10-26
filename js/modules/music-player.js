@@ -6,6 +6,7 @@
 let player;
 let isPlayerReady = false;
 let hasUserInteracted = false;
+let shouldAutoPlayWhenReady = false; // Intención de reproducción pendiente
 
 export function initMusicPlayer() {
     const musicToggle = document.getElementById('musicToggle');
@@ -35,10 +36,18 @@ export function initMusicPlayer() {
     // ✨ Reproducir con primera interacción del usuario
     let hasTriedPlay = false;
     const startMusicOnInteraction = () => {
-        if (!hasTriedPlay && isPlayerReady) {
-            hasTriedPlay = true;
+        if (hasTriedPlay) return;
+        
+        hasTriedPlay = true;
+        
+        if (isPlayerReady) {
+            // Player listo → reproducir inmediatamente
             playMusic();
             console.log('🎵 Música iniciada con interacción del usuario');
+        } else {
+            // Player no listo → guardar intención para cuando esté listo
+            shouldAutoPlayWhenReady = true;
+            console.log('🎵 Interacción detectada, esperando a que el player esté listo...');
         }
     };
     
@@ -113,7 +122,15 @@ function onPlayerReady(event) {
     // Configurar volumen inicial (50%)
     player.setVolume(50);
     
-    console.log('🎵 Reproductor de música listo - esperando interacción del usuario');
+    console.log('🎵 Reproductor de música listo');
+    
+    // ✨ Si hubo una interacción antes de que estuviera listo, reproducir ahora
+    if (shouldAutoPlayWhenReady) {
+        console.log('🎵 Reproduciendo música (interacción previa detectada)');
+        setTimeout(() => {
+            playMusic();
+        }, 300);
+    }
 }
 
 /**
