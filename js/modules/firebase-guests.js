@@ -130,6 +130,32 @@ export async function guardarConfirmacion(datosConfirmacion) {
 }
 
 // ================================
+// OBTENER TODOS LOS INVITADOS
+// ================================
+export async function obtenerTodosInvitados() {
+    try {
+        const invitadosRef = collection(db, INVITADOS_COLLECTION);
+        const snapshot = await getDocs(invitadosRef);
+        
+        const invitados = [];
+        snapshot.forEach((doc) => {
+            invitados.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        
+        // Ordenar alfabéticamente
+        invitados.sort((a, b) => a.nombreCompleto.localeCompare(b.nombreCompleto));
+        
+        return invitados;
+    } catch (error) {
+        console.error('Error obteniendo invitados:', error);
+        return [];
+    }
+}
+
+// ================================
 // OBTENER TODAS LAS CONFIRMACIONES
 // ================================
 export async function obtenerConfirmaciones() {

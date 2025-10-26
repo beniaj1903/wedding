@@ -133,7 +133,7 @@ JAVASCRIPT MODULAR
 ❓ Quiero cambiar los nombres de los novios
 
 1. Abre: components/hero.html
-   Busca: <h1 class="hero-title">Yoselyn & Benito</h1>
+   Busca: <h1 class="hero-title">Yose & Benito</h1>
    Cambia por: <h1 class="hero-title">Tus Nombres</h1>
 
 2. Abre: components/invitation.html

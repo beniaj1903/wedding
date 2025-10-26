@@ -68,4 +68,4 @@ wedding/
 
 ## 💕 Hecho con amor
 
-Yoselyn & Benito - #bodalosnenes
+Yose & Benito - #bodalosnenes

@@ -115,7 +115,7 @@ wedding/
 ```html
 Archivo: index.html
 
-Buscar: "Yoselyn & Benito"
+Buscar: "Yose & Benito"
 Reemplazar con: tus nombres
 ```
 

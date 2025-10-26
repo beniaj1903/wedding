@@ -49,13 +49,14 @@
         .stat-number {
             font-size: 2.5rem;
             font-weight: bold;
-            color: var(--secondary-color);
+            color: var(--text-dark);
         }
         
         .stat-label {
-            color: var(--text-light);
+            color: var(--text-dark);
             font-size: 0.9rem;
             margin-top: 0.5rem;
+            opacity: 0.7;
         }
         
         .admin-section {
@@ -220,6 +221,35 @@
             <div id="addMessage" class="message"></div>
         </div>
         
+        <!-- Lista de Invitados -->
+        <div class="admin-section">
+            <h2><i class="fas fa-users"></i> Lista de Invitados</h2>
+            <button onclick="cargarInvitados()" class="btn btn-primary" style="margin-bottom: 1rem;">
+                <i class="fas fa-sync"></i> Actualizar
+            </button>
+            <div style="overflow-x: auto;">
+                <table id="invitadosTable">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cupos</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Grupo</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody id="invitadosBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: var(--text-dark); opacity: 0.7;">
+                                Cargando invitados...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
         <!-- Lista de Confirmaciones -->
         <div class="admin-section">
             <h2><i class="fas fa-list"></i> Confirmaciones RSVP</h2>
@@ -252,7 +282,7 @@
     </div>
     
     <script type="module">
-        import { agregarInvitado, obtenerEstadisticas, obtenerConfirmaciones } from './js/modules/firebase-guests.js';
+        import { agregarInvitado, obtenerEstadisticas, obtenerConfirmaciones, obtenerTodosInvitados } from './js/modules/firebase-guests.js';
         
         // Cargar estadísticas
         async function cargarEstadisticas() {
@@ -265,6 +295,48 @@
                 document.getElementById('confirmadosNoAsistiran').textContent = stats.confirmadosNoAsistiran;
                 document.getElementById('sinResponder').textContent = stats.sinResponder;
             }
+        }
+        
+        // Cargar lista de invitados
+        window.cargarInvitados = async function() {
+            const invitados = await obtenerTodosInvitados();
+            const confirmaciones = await obtenerConfirmaciones();
+            const tbody = document.getElementById('invitadosBody');
+            
+            if (invitados.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-dark); opacity: 0.7;">No hay invitados registrados</td></tr>';
+                return;
+            }
+            
+            // Crear mapa de confirmaciones por invitadoId
+            const confirmacionesMap = {};
+            confirmaciones.forEach(conf => {
+                confirmacionesMap[conf.invitadoId] = conf;
+            });
+            
+            tbody.innerHTML = invitados.map(inv => {
+                const confirmacion = confirmacionesMap[inv.id];
+                let estadoBadge = '<span class="badge badge-warning">Sin responder</span>';
+                
+                if (confirmacion) {
+                    if (confirmacion.confirmado) {
+                        estadoBadge = '<span class="badge badge-success">Confirmado</span>';
+                    } else {
+                        estadoBadge = '<span class="badge badge-danger">No asistirá</span>';
+                    }
+                }
+                
+                return `
+                    <tr>
+                        <td>${inv.nombreCompleto}</td>
+                        <td>${inv.cuposAsignados}</td>
+                        <td>${inv.email || '-'}</td>
+                        <td>${inv.telefono || '-'}</td>
+                        <td>${inv.grupo || 'General'}</td>
+                        <td>${estadoBadge}</td>
+                    </tr>
+                `;
+            }).join('');
         }
         
         // Cargar confirmaciones
@@ -312,6 +384,7 @@
                 e.target.reset();
                 document.getElementById('cuposAsignados').value = 1;
                 cargarEstadisticas();
+                cargarInvitados();
             } catch (error) {
                 mostrarMensaje('Error al agregar invitado: ' + error.message, 'error');
             }
@@ -329,11 +402,13 @@
         
         // Cargar datos iniciales
         cargarEstadisticas();
+        cargarInvitados();
         cargarConfirmaciones();
         
         // Actualizar cada 30 segundos
         setInterval(() => {
             cargarEstadisticas();
+            cargarInvitados();
             cargarConfirmaciones();
         }, 30000);
     </script>
