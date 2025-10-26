@@ -11,6 +11,7 @@ import { initScrollEffects } from './modules/scroll-effects.js';
 import { initRSVPForm } from './modules/rsvp-form.js';
 import { initEnvelopeAnimation } from './modules/envelope-animation.js';
 import { initGifts } from './modules/gifts.js';
+import { initMusicPlayer } from './modules/music-player.js';
 import { showConsoleMessage } from './modules/utils.js';
 
 // Funciones opcionales (descomenta para usar):
@@ -41,6 +42,7 @@ function initializeApp() {
     initSmoothScroll();
     initEnvelopeAnimation();
     initGifts();
+    initMusicPlayer();
     
     // Mensaje en consola
     showConsoleMessage();

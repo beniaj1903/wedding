@@ -61,7 +61,8 @@ export async function loadAllComponents() {
         { name: 'info', target: 'body' },
         { name: 'gifts', target: 'body' },
         { name: 'video', target: 'body' },
-        { name: 'footer', target: 'body' }
+        { name: 'footer', target: 'body' },
+        { name: 'music-player', target: 'body' }
     ];
     
     await loadComponents(components);
