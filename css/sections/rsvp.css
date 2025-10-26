@@ -117,3 +117,97 @@
     display: block;
 }
 
+/* ================================
+   AUTOCOMPLETADO DE INVITADOS
+   ================================ */
+.autocomplete-wrapper {
+    position: relative;
+}
+
+.autocomplete-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border: 2px solid var(--secondary-color);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.autocomplete-item {
+    padding: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.autocomplete-item:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-item:hover {
+    background: var(--accent-color);
+}
+
+.autocomplete-item.no-results {
+    cursor: default;
+    color: var(--text-light);
+    text-align: center;
+}
+
+.autocomplete-item.no-results:hover {
+    background: transparent;
+}
+
+.invitado-nombre-resultado {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.invitado-cupos-resultado {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    background: var(--accent-color);
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+}
+
+/* Información del invitado seleccionado */
+.invitado-info {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.1), rgba(191, 167, 125, 0.1));
+    border-radius: 10px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.invitado-info .invitado-nombre {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.invitado-info .invitado-cupos {
+    color: var(--secondary-color);
+    font-size: 0.95rem;
+}
+
+/* Hint del formulario */
+.form-hint {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+

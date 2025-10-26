@@ -1,110 +1,195 @@
-/* ================================
-   MÓDULO: FORMULARIO RSVP
-   Validación y envío de confirmaciones
-   ================================ */
+// Formulario RSVP con integración Firebase
+import { buscarInvitados, obtenerInvitado, guardarConfirmacion } from './firebase-guests.js';
+
+let invitadoSeleccionado = null;
+let timeoutBusqueda = null;
 
 export function initRSVPForm() {
     const form = document.getElementById('rsvpForm');
-    const formMessage = document.getElementById('formMessage');
+    const buscarInput = document.getElementById('buscarInvitado');
+    const autocompleteResults = document.getElementById('autocompleteResults');
+    const invitadoInfo = document.getElementById('invitadoSeleccionado');
+    const asistentesInput = document.getElementById('asistentes');
     
-    if (!form) return;
+    if (!form || !buscarInput) return;
     
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+    // ================================
+    // AUTOCOMPLETADO DE INVITADOS
+    // ================================
+    buscarInput.addEventListener('input', (e) => {
+        const texto = e.target.value.trim();
         
-        // Validación básica
-        if (!validateForm(form)) {
-            showMessage('Por favor completa todos los campos obligatorios.', 'error');
+        // Limpiar timeout anterior
+        if (timeoutBusqueda) {
+            clearTimeout(timeoutBusqueda);
+        }
+        
+        // Si el texto es muy corto, limpiar resultados
+        if (texto.length < 2) {
+            autocompleteResults.innerHTML = '';
+            autocompleteResults.style.display = 'none';
             return;
         }
         
-        // Obtener datos del formulario
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
+        // Buscar con un pequeño delay (debounce)
+        timeoutBusqueda = setTimeout(async () => {
+            const resultados = await buscarInvitados(texto);
+            mostrarResultadosAutocompletado(resultados);
+        }, 300);
+    });
+    
+    // Cerrar autocompletado al hacer clic fuera
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.autocomplete-wrapper')) {
+            autocompleteResults.style.display = 'none';
+        }
+    });
+    
+    // ================================
+    // MOSTRAR RESULTADOS
+    // ================================
+    function mostrarResultadosAutocompletado(resultados) {
+        if (resultados.length === 0) {
+            autocompleteResults.innerHTML = '<div class="autocomplete-item no-results">No se encontraron invitados</div>';
+            autocompleteResults.style.display = 'block';
+            return;
+        }
         
-        // Mostrar loading
-        const submitButton = form.querySelector('button[type="submit"]');
-        const originalButtonText = submitButton.innerHTML;
-        submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
-        submitButton.disabled = true;
+        autocompleteResults.innerHTML = resultados.map(invitado => `
+            <div class="autocomplete-item" data-id="${invitado.id}">
+                <span class="invitado-nombre-resultado">${invitado.nombreCompleto}</span>
+                <span class="invitado-cupos-resultado">${invitado.cuposAsignados} cupo${invitado.cuposAsignados > 1 ? 's' : ''}</span>
+            </div>
+        `).join('');
         
-        // Simular envío (aquí deberías integrar con tu backend o servicio)
-        setTimeout(function() {
-            // Aquí puedes agregar tu lógica de envío real
-            // Por ejemplo: fetch a tu API, Google Sheets, Formspree, etc.
-            
-            console.log('Datos del formulario:', data);
-            
-            // EJEMPLO: Integración con FormSubmit.co (servicio gratuito)
-            // Descomenta y configura con tu email:
-            /*
-            fetch('https://formsubmit.co/tu-email@ejemplo.com', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                showMessage('¡Gracias por confirmar! Nos vemos pronto.', 'success');
-                form.reset();
-            })
-            .catch(error => {
-                showMessage('Hubo un error. Por favor intenta de nuevo.', 'error');
+        autocompleteResults.style.display = 'block';
+        
+        // Agregar event listeners a cada resultado
+        autocompleteResults.querySelectorAll('.autocomplete-item').forEach(item => {
+            item.addEventListener('click', async () => {
+                const invitadoId = item.dataset.id;
+                await seleccionarInvitado(invitadoId);
             });
-            */
-            
-            // Por ahora, solo mostramos mensaje de éxito
-            showMessage('¡Gracias por confirmar tu asistencia! Nos vemos pronto. 💕', 'success');
-            form.reset();
-            
-            // Restaurar botón
-            submitButton.innerHTML = originalButtonText;
-            submitButton.disabled = false;
-            
-            // Scroll al mensaje
-            formMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 1500);
-    });
-}
-
-// Validación de formulario
-function validateForm(form) {
-    const requiredFields = form.querySelectorAll('[required]');
-    let isValid = true;
-    
-    requiredFields.forEach(field => {
-        if (!field.value.trim()) {
-            isValid = false;
-            field.style.borderColor = '#dc3545';
-        } else {
-            field.style.borderColor = '#e0e0e0';
-        }
-    });
-    
-    // Validar email
-    const emailField = form.querySelector('[type="email"]');
-    if (emailField && emailField.value) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailField.value)) {
-            isValid = false;
-            emailField.style.borderColor = '#dc3545';
-        }
+        });
     }
     
-    return isValid;
-}
-
-// Mostrar mensajes
-function showMessage(message, type) {
-    const formMessage = document.getElementById('formMessage');
-    formMessage.textContent = message;
-    formMessage.className = `form-message ${type}`;
+    // ================================
+    // SELECCIONAR INVITADO
+    // ================================
+    async function seleccionarInvitado(invitadoId) {
+        invitadoSeleccionado = await obtenerInvitado(invitadoId);
+        
+        if (!invitadoSeleccionado) {
+            alert('Error al cargar información del invitado');
+            return;
+        }
+        
+        // Actualizar UI
+        buscarInput.value = invitadoSeleccionado.nombreCompleto;
+        document.getElementById('invitadoId').value = invitadoSeleccionado.id;
+        
+        // Mostrar información del invitado
+        invitadoInfo.querySelector('.invitado-nombre').textContent = `✓ ${invitadoSeleccionado.nombreCompleto}`;
+        invitadoInfo.querySelector('.invitado-cupos').textContent = `Tienes ${invitadoSeleccionado.cuposAsignados} cupo${invitadoSeleccionado.cuposAsignados > 1 ? 's' : ''} asignado${invitadoSeleccionado.cuposAsignados > 1 ? 's' : ''}`;
+        invitadoInfo.style.display = 'block';
+        
+        // Configurar límite de asistentes
+        asistentesInput.max = invitadoSeleccionado.cuposAsignados;
+        asistentesInput.value = 1;
+        
+        // Pre-llenar email si existe
+        if (invitadoSeleccionado.email) {
+            document.getElementById('email').value = invitadoSeleccionado.email;
+        }
+        
+        // Pre-llenar teléfono si existe
+        if (invitadoSeleccionado.telefono) {
+            document.getElementById('telefono').value = invitadoSeleccionado.telefono;
+        }
+        
+        // Ocultar resultados
+        autocompleteResults.style.display = 'none';
+    }
     
-    // Ocultar mensaje después de 5 segundos
-    setTimeout(function() {
-        formMessage.style.display = 'none';
-    }, 5000);
+    // ================================
+    // ENVIAR FORMULARIO
+    // ================================
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Validar que se haya seleccionado un invitado
+        if (!invitadoSeleccionado) {
+            mostrarMensaje('Por favor selecciona tu nombre de la lista', 'error');
+            return;
+        }
+        
+        // Validar número de asistentes
+        const numAsistentes = parseInt(asistentesInput.value);
+        if (numAsistentes > invitadoSeleccionado.cuposAsignados) {
+            mostrarMensaje(`Solo tienes ${invitadoSeleccionado.cuposAsignados} cupo${invitadoSeleccionado.cuposAsignados > 1 ? 's' : ''} asignado${invitadoSeleccionado.cuposAsignados > 1 ? 's' : ''}`, 'error');
+            return;
+        }
+        
+        // Recopilar datos del formulario
+        const formData = new FormData(form);
+        const asistencia = formData.get('asistencia');
+        const confirmado = asistencia === 'si';
+        
+        const datosConfirmacion = {
+            invitadoId: invitadoSeleccionado.id,
+            nombreCompleto: invitadoSeleccionado.nombreCompleto,
+            email: formData.get('email'),
+            telefono: formData.get('telefono'),
+            confirmado: confirmado,
+            cuposConfirmados: confirmado ? numAsistentes : 0,
+            necesitaTransporte: formData.get('transporte') === 'si',
+            restriccionesAlimenticias: formData.get('alergias') || '',
+            mensaje: formData.get('mensaje') || ''
+        };
+        
+        // Deshabilitar botón
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+        
+        try {
+            await guardarConfirmacion(datosConfirmacion);
+            
+            // Mostrar mensaje de éxito
+            mostrarMensaje(
+                confirmado 
+                    ? '¡Gracias por confirmar! Nos vemos en la boda 🎉' 
+                    : 'Gracias por avisarnos. Te extrañaremos 💔',
+                'success'
+            );
+            
+            // Limpiar formulario
+            form.reset();
+            invitadoSeleccionado = null;
+            invitadoInfo.style.display = 'none';
+            buscarInput.value = '';
+            
+        } catch (error) {
+            console.error('Error guardando confirmación:', error);
+            mostrarMensaje('Hubo un error al enviar tu confirmación. Por favor intenta de nuevo.', 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Confirmación';
+        }
+    });
+    
+    // ================================
+    // MOSTRAR MENSAJES
+    // ================================
+    function mostrarMensaje(texto, tipo) {
+        const messageDiv = document.getElementById('formMessage');
+        messageDiv.textContent = texto;
+        messageDiv.className = `form-message ${tipo}`;
+        messageDiv.style.display = 'block';
+        
+        // Ocultar después de 5 segundos
+        setTimeout(() => {
+            messageDiv.style.display = 'none';
+        }, 5000);
+    }
 }
-
