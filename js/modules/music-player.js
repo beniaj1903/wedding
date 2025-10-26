@@ -19,18 +19,6 @@ export function initMusicPlayer() {
     // Cargar la API de YouTube
     loadYouTubeAPI();
     
-    // Mostrar tooltip de bienvenida después de 2 segundos
-    setTimeout(() => {
-        if (!hasUserInteracted) {
-            musicTooltip.classList.add('show');
-            
-            // Ocultar tooltip después de 8 segundos
-            setTimeout(() => {
-                musicTooltip.classList.remove('show');
-            }, 8000);
-        }
-    }, 2000);
-    
     // Click en el botón
     musicToggle.addEventListener('click', () => {
         hasUserInteracted = true;
@@ -44,15 +32,32 @@ export function initMusicPlayer() {
         toggleMusic();
     });
     
-    // Auto-play al primer scroll (después de interacción del usuario)
-    let hasAutoPlayed = false;
-    window.addEventListener('scroll', () => {
-        if (!hasAutoPlayed && isPlayerReady && window.scrollY > 100) {
-            hasAutoPlayed = true;
-            hasUserInteracted = true;
-            playMusic();
+    // Fallback: Si el autoplay falla, intentar con primera interacción
+    let hasTriedManualPlay = false;
+    const tryManualPlay = () => {
+        if (!hasTriedManualPlay && isPlayerReady) {
+            hasTriedManualPlay = true;
+            const state = player.getPlayerState();
+            
+            // Si no está reproduciendo, intentar iniciar
+            if (state !== YT.PlayerState.PLAYING) {
+                console.log('🎵 Autoplay bloqueado, iniciando con interacción del usuario');
+                playMusic();
+                
+                if (musicTooltip) {
+                    musicTooltip.classList.add('show');
+                    setTimeout(() => {
+                        musicTooltip.classList.remove('show');
+                    }, 5000);
+                }
+            }
         }
-    }, { once: true });
+    };
+    
+    // Intentar reproducir con primer click o scroll
+    window.addEventListener('click', tryManualPlay, { once: true });
+    window.addEventListener('scroll', tryManualPlay, { once: true });
+    window.addEventListener('touchstart', tryManualPlay, { once: true });
 }
 
 /**
@@ -86,7 +91,7 @@ function createPlayer() {
         width: '0',
         videoId: '95kYsVOf_sw', // ID del video de YouTube
         playerVars: {
-            autoplay: 0,
+            autoplay: 1, // ✨ Intentar autoplay inmediato
             controls: 0,
             disablekb: 1,
             fs: 0,
@@ -96,7 +101,8 @@ function createPlayer() {
             rel: 0,
             showinfo: 0,
             loop: 1,
-            playlist: '95kYsVOf_sw' // Para que se repita
+            playlist: '95kYsVOf_sw', // Para que se repita
+            mute: 0 // No silenciar (intentamos con audio)
         },
         events: {
             onReady: onPlayerReady,
@@ -112,6 +118,7 @@ function createPlayer() {
 function onPlayerReady(event) {
     isPlayerReady = true;
     const musicToggle = document.getElementById('musicToggle');
+    const musicTooltip = document.getElementById('musicTooltip');
     
     if (musicToggle) {
         musicToggle.classList.remove('loading');
@@ -121,6 +128,20 @@ function onPlayerReady(event) {
     player.setVolume(50);
     
     console.log('🎵 Reproductor de música listo');
+    
+    // ✨ INTENTAR AUTOPLAY INMEDIATO
+    setTimeout(() => {
+        player.playVideo();
+        console.log('🎵 Intentando autoplay...');
+        
+        // Mostrar tooltip indicando que la música está sonando
+        if (musicTooltip) {
+            musicTooltip.classList.add('show');
+            setTimeout(() => {
+                musicTooltip.classList.remove('show');
+            }, 5000);
+        }
+    }, 500);
 }
 
 /**
