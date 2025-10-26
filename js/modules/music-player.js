@@ -41,9 +41,13 @@ export function initMusicPlayer() {
         hasTriedPlay = true;
         
         if (isPlayerReady) {
-            // Player listo → reproducir inmediatamente
-            playMusic();
-            console.log('🎵 Música iniciada con interacción del usuario');
+            // Player listo → reproducir SÍNCRONAMENTE (crítico para políticas de autoplay)
+            try {
+                player.playVideo(); // Llamada directa y síncrona
+                console.log('🎵 Música iniciada con interacción del usuario');
+            } catch (error) {
+                console.error('Error al reproducir música:', error);
+            }
         } else {
             // Player no listo → guardar intención para cuando esté listo
             shouldAutoPlayWhenReady = true;
@@ -124,12 +128,16 @@ function onPlayerReady(event) {
     
     console.log('🎵 Reproductor de música listo');
     
-    // ✨ Si hubo una interacción antes de que estuviera listo, reproducir ahora
+    // ✨ Si hubo una interacción antes de que estuviera listo, intentar reproducir
+    // NOTA: Esto puede fallar si el navegador perdió el contexto del "user gesture"
+    // En ese caso, esperará al próximo click/scroll del usuario
     if (shouldAutoPlayWhenReady) {
-        console.log('🎵 Reproduciendo música (interacción previa detectada)');
-        setTimeout(() => {
-            playMusic();
-        }, 300);
+        console.log('🎵 Intentando reproducir música (interacción previa detectada)');
+        try {
+            player.playVideo();
+        } catch (error) {
+            console.warn('No se pudo iniciar música automáticamente, esperando nueva interacción:', error);
+        }
     }
 }
 
@@ -186,10 +194,14 @@ function onPlayerError(event) {
  * Reproducir música
  */
 function playMusic() {
-    if (!player || !isPlayerReady) return;
+    if (!player || !isPlayerReady) {
+        console.warn('Player no disponible:', { player: !!player, isPlayerReady });
+        return;
+    }
     
     try {
         player.playVideo();
+        console.log('🎵 playVideo() ejecutado');
     } catch (error) {
         console.error('Error al reproducir música:', error);
     }
