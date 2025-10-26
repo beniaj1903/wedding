@@ -32,32 +32,20 @@ export function initMusicPlayer() {
         toggleMusic();
     });
     
-    // Fallback: Si el autoplay falla, intentar con primera interacción
-    let hasTriedManualPlay = false;
-    const tryManualPlay = () => {
-        if (!hasTriedManualPlay && isPlayerReady) {
-            hasTriedManualPlay = true;
-            const state = player.getPlayerState();
-            
-            // Si no está reproduciendo, intentar iniciar
-            if (state !== YT.PlayerState.PLAYING) {
-                console.log('🎵 Autoplay bloqueado, iniciando con interacción del usuario');
-                playMusic();
-                
-                if (musicTooltip) {
-                    musicTooltip.classList.add('show');
-                    setTimeout(() => {
-                        musicTooltip.classList.remove('show');
-                    }, 5000);
-                }
-            }
+    // ✨ Reproducir con primera interacción del usuario
+    let hasTriedPlay = false;
+    const startMusicOnInteraction = () => {
+        if (!hasTriedPlay && isPlayerReady) {
+            hasTriedPlay = true;
+            playMusic();
+            console.log('🎵 Música iniciada con interacción del usuario');
         }
     };
     
-    // Intentar reproducir con primer click o scroll
-    window.addEventListener('click', tryManualPlay, { once: true });
-    window.addEventListener('scroll', tryManualPlay, { once: true });
-    window.addEventListener('touchstart', tryManualPlay, { once: true });
+    // Escuchar primera interacción: click, scroll o touch
+    window.addEventListener('click', startMusicOnInteraction, { once: true });
+    window.addEventListener('scroll', startMusicOnInteraction, { once: true });
+    window.addEventListener('touchstart', startMusicOnInteraction, { once: true });
 }
 
 /**
@@ -91,7 +79,7 @@ function createPlayer() {
         width: '0',
         videoId: '95kYsVOf_sw', // ID del video de YouTube
         playerVars: {
-            autoplay: 1, // ✨ Intentar autoplay inmediato
+            autoplay: 0, // No autoplay - esperar interacción
             controls: 0,
             disablekb: 1,
             fs: 0,
@@ -101,8 +89,7 @@ function createPlayer() {
             rel: 0,
             showinfo: 0,
             loop: 1,
-            playlist: '95kYsVOf_sw', // Para que se repita
-            mute: 0 // No silenciar (intentamos con audio)
+            playlist: '95kYsVOf_sw' // Para que se repita
         },
         events: {
             onReady: onPlayerReady,
@@ -118,7 +105,6 @@ function createPlayer() {
 function onPlayerReady(event) {
     isPlayerReady = true;
     const musicToggle = document.getElementById('musicToggle');
-    const musicTooltip = document.getElementById('musicTooltip');
     
     if (musicToggle) {
         musicToggle.classList.remove('loading');
@@ -127,21 +113,7 @@ function onPlayerReady(event) {
     // Configurar volumen inicial (50%)
     player.setVolume(50);
     
-    console.log('🎵 Reproductor de música listo');
-    
-    // ✨ INTENTAR AUTOPLAY INMEDIATO
-    setTimeout(() => {
-        player.playVideo();
-        console.log('🎵 Intentando autoplay...');
-        
-        // Mostrar tooltip indicando que la música está sonando
-        if (musicTooltip) {
-            musicTooltip.classList.add('show');
-            setTimeout(() => {
-                musicTooltip.classList.remove('show');
-            }, 5000);
-        }
-    }, 500);
+    console.log('🎵 Reproductor de música listo - esperando interacción del usuario');
 }
 
 /**
@@ -149,6 +121,7 @@ function onPlayerReady(event) {
  */
 function onPlayerStateChange(event) {
     const musicToggle = document.getElementById('musicToggle');
+    const musicTooltip = document.getElementById('musicTooltip');
     
     if (!musicToggle) return;
     
@@ -160,6 +133,15 @@ function onPlayerStateChange(event) {
         musicToggle.classList.add('playing');
         musicToggle.classList.remove('paused');
         musicToggle.querySelector('.music-icon i').className = 'fas fa-pause';
+        
+        // ✨ Mostrar tooltip solo cuando empieza a reproducir
+        if (musicTooltip && !hasUserInteracted) {
+            hasUserInteracted = true;
+            musicTooltip.classList.add('show');
+            setTimeout(() => {
+                musicTooltip.classList.remove('show');
+            }, 5000);
+        }
     } else if (event.data === YT.PlayerState.PAUSED) {
         musicToggle.classList.remove('playing');
         musicToggle.classList.add('paused');
