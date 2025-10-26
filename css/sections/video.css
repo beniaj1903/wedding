@@ -1,0 +1,47 @@
+/* ================================
+   SECCIÓN 7: VIDEO DE DESPEDIDA
+   Mostrar video de despedida
+   ================================ */
+
+.video-section {
+    background: var(--accent-color);
+}
+
+.video-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.video-player {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+.video-player iframe {
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    max-height: 600px;
+    border-radius: 15px;
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .video-player {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-player {
+        padding: 1rem;
+    }
+    
+    .video-player iframe {
+        border-radius: 10px;
+        max-height: 500px;
+    }
+}
+

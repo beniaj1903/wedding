@@ -1,0 +1,84 @@
+/* ================================
+   SECCIÓN 6: REGALOS / APORTES
+   Información sobre contribuciones
+   ================================ */
+
+.gifts-section {
+    background: var(--white);
+}
+
+.gifts-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.gift-card-single {
+    background: var(--accent-color);
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.gift-card-single:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.gift-icon {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--text-dark) 0%, var(--secondary-color) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+}
+
+.gift-icon i {
+    font-size: 3rem;
+    color: var(--white);
+}
+
+.gift-message {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin: 2rem 0;
+}
+
+.gift-card-single .btn {
+    margin-top: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .gift-card-single {
+        padding: 2.5rem 2rem;
+    }
+    
+    .gift-message {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .gift-card-single {
+        padding: 2rem 1.5rem;
+    }
+    
+    .gift-icon {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .gift-icon i {
+        font-size: 2.5rem;
+    }
+    
+    .gift-message {
+        font-size: 1rem;
+    }
+}

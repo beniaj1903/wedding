@@ -1,0 +1,191 @@
+/* ================================
+   SECCIÓN 1: HERO / CAROUSEL
+   Slider infinito de fotos
+   ================================ */
+
+.hero-section {
+    height: 100vh;
+    position: relative;
+    margin-top: 70px;
+}
+
+.hero-swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.slide-content {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0 auto;
+    background-repeat: repeat; /* Permite repetición del fondo */
+}
+
+/* Capa que transparenta solo las repeticiones de los bordes */
+.slide-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Gradiente radial: transparente en el centro, opaco (color champagne) en los bordes */
+    background: radial-gradient(
+        ellipse at center,
+        transparent 0%,
+        transparent 30%,
+        rgba(234, 215, 182, 0.7) 60%,
+        rgba(234, 215, 182, 0.95) 100%
+    );
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Overlay oscuro solo para mejorar legibilidad del texto (no transparenta la foto) */
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Solo oscurece levemente para el texto */
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.2) 0%,
+        rgba(0, 0, 0, 0.4) 100%
+    );
+    z-index: 1;
+}
+
+.hero-text {
+    text-align: center;
+    color: var(--white);
+    z-index: 2;
+    padding: 2rem;
+    position: relative;
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: 5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    animation: fadeInUp 1s ease;
+    text-shadow: 
+        2px 2px 8px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    animation: fadeInUp 1s ease 0.2s backwards;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.hero-date {
+    font-size: 2rem;
+    font-weight: 400;
+    animation: fadeInUp 1s ease 0.4s backwards;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.slide-title {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 
+        2px 2px 8px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.slide-text {
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Indicador de Scroll */
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    animation: bounce 2s infinite;
+}
+
+.scroll-indicator i {
+    font-size: 2rem;
+    color: var(--white);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Animación de rebote */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 3rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        letter-spacing: 3px;
+    }
+    
+    .hero-date {
+        font-size: 1.5rem;
+    }
+    
+    .slide-title {
+        font-size: 2.5rem;
+    }
+    
+    .slide-text {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+    }
+    
+    .hero-date {
+        font-size: 1.3rem;
+    }
+    
+    .slide-title {
+        font-size: 2rem;
+    }
+    
+    .slide-text {
+        font-size: 1rem;
+    }
+}
