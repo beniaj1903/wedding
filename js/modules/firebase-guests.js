@@ -8,6 +8,7 @@ import {
     where, 
     orderBy,
     updateDoc,
+    deleteDoc,
     doc,
     getDoc,
     serverTimestamp
@@ -90,6 +91,61 @@ export async function agregarInvitado(datosInvitado) {
         return docRef.id;
     } catch (error) {
         console.error('Error agregando invitado:', error);
+        throw error;
+    }
+}
+
+// ================================
+// ACTUALIZAR INVITADO
+// ================================
+export async function actualizarInvitado(invitadoId, datosInvitado) {
+    try {
+        const docRef = doc(db, INVITADOS_COLLECTION, invitadoId);
+        await updateDoc(docRef, {
+            nombreCompleto: datosInvitado.nombreCompleto,
+            cuposAsignados: datosInvitado.cuposAsignados,
+            email: datosInvitado.email || '',
+            telefono: datosInvitado.telefono || '',
+            grupo: datosInvitado.grupo || 'General',
+            updatedAt: serverTimestamp()
+        });
+        
+        console.log('Invitado actualizado:', invitadoId);
+        return invitadoId;
+    } catch (error) {
+        console.error('Error actualizando invitado:', error);
+        throw error;
+    }
+}
+
+// ================================
+// ELIMINAR INVITADO
+// ================================
+export async function eliminarInvitado(invitadoId) {
+    try {
+        const docRef = doc(db, INVITADOS_COLLECTION, invitadoId);
+        await deleteDoc(docRef);
+        
+        console.log('Invitado eliminado:', invitadoId);
+        return invitadoId;
+    } catch (error) {
+        console.error('Error eliminando invitado:', error);
+        throw error;
+    }
+}
+
+// ================================
+// ELIMINAR CONFIRMACIÓN
+// ================================
+export async function eliminarConfirmacion(confirmacionId) {
+    try {
+        const docRef = doc(db, CONFIRMACIONES_COLLECTION, confirmacionId);
+        await deleteDoc(docRef);
+        
+        console.log('Confirmación eliminada:', confirmacionId);
+        return confirmacionId;
+    } catch (error) {
+        console.error('Error eliminando confirmación:', error);
         throw error;
     }
 }
