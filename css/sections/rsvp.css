@@ -124,6 +124,10 @@
     position: relative;
 }
 
+#buscarInvitado {
+    width: 100%;
+}
+
 .autocomplete-results {
     position: absolute;
     top: 100%;
