@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Regalos · Yose & Benito</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --champagne:#f3eee7;
+      --ink:#3b2f2f;
+      --ink-soft:#5a4840;
+      --accent:#8b5e3c;
+    }
+    *{box-sizing:border-box;}
+    html,body{
+      margin:0;padding:0;
+      color:var(--ink);
+      background-color:var(--champagne);
+      background-image:url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+      background-repeat:repeat;
+      background-size:auto;
+    }
+    .wrap{
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      padding:28px;
+    }
+    .card{
+      width:min(720px, 94vw);
+      background:rgba(255,255,255,0.65);
+      backdrop-filter:saturate(140%) blur(3px);
+      border:1px solid rgba(139,94,60,0.20);
+      box-shadow:0 10px 30px rgba(59,47,47,0.08);
+      border-radius:24px;
+      padding:38px 28px 30px;
+      position:relative;
+      overflow:hidden;
+    }
+    h1,h2,h3{font-family:"Cormorant Garamond", serif; margin:0; color:var(--ink);}
+    p,li,small{font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;}
+    h1{font-size:clamp(28px, 5vw, 40px); font-weight:700; letter-spacing:.2px; text-align:center; margin-bottom:18px;}
+    .list{margin:18px auto 10px; width:min(540px, 100%); color:var(--ink-soft); font-size:clamp(16px, 2.4vw, 18px); line-height:1.55;}
+    .list p{margin:6px 0;}
+    .email{letter-spacing:.6px; font-weight:600; color:var(--ink);}
+    .divider{height:1px; background:linear-gradient(90deg, transparent, rgba(139,94,60,0.35), transparent); margin:18px auto; width:min(360px, 70%);}
+    .cta{
+      display:inline-block;
+      margin:16px auto 4px;
+      padding:12px 20px;
+      border-radius:999px;
+      font-weight:600;
+      text-decoration:none;
+      color:var(--ink);
+      border:1px solid rgba(139,94,60,0.4);
+      background:linear-gradient(180deg, #fff5, #fff0);
+      transition:transform .08s ease, box-shadow .2s ease;
+    }
+    .cta:hover{ transform:translateY(-1px); box-shadow:0 8px 18px rgba(59,47,47,.12);}
+    .cta span.star{margin:0 .4ch;}
+    .thanks{font-style:italic; text-align:center; margin-top:12px; color:var(--ink-soft);}
+    .or{ text-align:center; font-family:"Inter"; color:var(--ink-soft); margin:6px 0; }
+    .title{ text-align:center; margin-bottom:6px;}
+    
+    /* Botón de volver */
+    .back-btn{
+      position:fixed;
+      top:20px;
+      left:20px;
+      padding:10px 16px;
+      background:rgba(255,255,255,0.8);
+      border:1px solid rgba(139,94,60,0.3);
+      border-radius:999px;
+      text-decoration:none;
+      color:var(--ink);
+      font-family:"Inter";
+      font-weight:600;
+      font-size:14px;
+      transition:all .2s ease;
+      box-shadow:0 4px 12px rgba(59,47,47,0.08);
+    }
+    .back-btn:hover{
+      background:rgba(255,255,255,0.95);
+      transform:translateX(-2px);
+    }
+  </style>
+</head>
+<body>
+  <a href="index.html#regalos" class="back-btn">← Volver</a>
+  
+  <main class="wrap">
+    <section class="card" role="region" aria-labelledby="titulo">
+      <h1 id="titulo" class="title">Yoselyn Del Valle<br/>Moreno Zambrano</h1>
+
+      <div class="list" aria-describedby="desc">
+        <p>RUT: <strong>26.309.894-3</strong></p>
+        <p>Cuenta Corriente</p>
+        <p><strong>0 000 90 86823 3</strong></p>
+        <p>Banco Santander</p>
+        <p class="email">YOCEM18@GMAIL.COM</p>
+      </div>
+
+      <div class="or">— ó —</div>
+
+      <p style="text-align:center;">
+        <a class="cta" href="https://paypal.me/bodalosnenes?locale.x=es_XC&country.x=CL" target="_blank" rel="noopener noreferrer" aria-label="Contribuir por PayPal">
+          <span class="star">✨</span> Contribuir por PayPal <span class="star">✨</span>
+        </a>
+      </p>
+
+      <div class="divider"></div>
+
+      <p id="desc" class="thanks">Muchísimas gracias por tu aporte a nuestro día y por tu amistad y compañía.</p>
+    </section>
+  </main>
+</body>
+</html>
+
