@@ -270,71 +270,86 @@
             justify-content: flex-end;
         }
     </style>
+    
+    <!-- ⚠️ VERIFICACIÓN DE SEGURIDAD: Solo localhost puede ver el admin -->
+    <script>
+        (function() {
+            const hostname = window.location.hostname;
+            const isLocalhost = hostname === 'localhost' || 
+                               hostname === '127.0.0.1' || 
+                               hostname === '[::1]' || 
+                               hostname.startsWith('192.168.') ||
+                               hostname.startsWith('10.0.') ||
+                               hostname.endsWith('.local');
+            
+            if (!isLocalhost) {
+                // ⛔ DETENER CARGA Y REDIRIGIR
+                document.write(`
+                    <!DOCTYPE html>
+                    <html lang="es">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <meta http-equiv="refresh" content="3;url=index.html">
+                        <title>Acceso Restringido</title>
+                    </head>
+                    <body style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        min-height: 100vh;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+                        margin: 0;
+                        padding: 20px;
+                    ">
+                        <div style="
+                            background: white;
+                            padding: 3rem;
+                            border-radius: 20px;
+                            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                            text-align: center;
+                            max-width: 500px;
+                        ">
+                            <div style="font-size: 4rem; margin-bottom: 1rem;">🔒</div>
+                            <h1 style="
+                                color: #333;
+                                margin: 0 0 1rem 0;
+                                font-size: 1.8rem;
+                            ">Acceso Restringido</h1>
+                            <p style="
+                                color: #666;
+                                line-height: 1.6;
+                                margin-bottom: 2rem;
+                            ">
+                                Esta página solo está disponible en entorno local (localhost).<br/>
+                                Por razones de seguridad, el panel de administración no es accesible públicamente.
+                            </p>
+                            <p style="color: #999; font-size: 0.9rem;">Redirigiendo al inicio en 3 segundos...</p>
+                            <a href="index.html" style="
+                                display: inline-block;
+                                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                color: white;
+                                padding: 12px 24px;
+                                border-radius: 8px;
+                                text-decoration: none;
+                                font-weight: 600;
+                                transition: transform 0.2s;
+                                margin-top: 1rem;
+                            " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                                Ir al Inicio Ahora
+                            </a>
+                        </div>
+                    </body>
+                    </html>
+                `);
+                document.close();
+                throw new Error('Acceso denegado');
+            }
+        })();
+    </script>
 </head>
 <body>
-    <!-- Protección para localhost solamente -->
-    <script>
-        // Verificar si NO estamos en localhost
-        const hostname = window.location.hostname;
-        const isLocalhost = hostname === 'localhost' || 
-                           hostname === '127.0.0.1' || 
-                           hostname === '[::1]' || 
-                           hostname.startsWith('192.168.') ||
-                           hostname.startsWith('10.0.') ||
-                           hostname.endsWith('.local');
-        
-        if (!isLocalhost) {
-            document.body.innerHTML = `
-                <div style="
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 100vh;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-                    margin: 0;
-                    padding: 20px;
-                ">
-                    <div style="
-                        background: white;
-                        padding: 3rem;
-                        border-radius: 20px;
-                        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-                        text-align: center;
-                        max-width: 500px;
-                    ">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">🔒</div>
-                        <h1 style="
-                            color: #333;
-                            margin: 0 0 1rem 0;
-                            font-size: 1.8rem;
-                        ">Acceso Restringido</h1>
-                        <p style="
-                            color: #666;
-                            line-height: 1.6;
-                            margin-bottom: 2rem;
-                        ">
-                            Esta página solo está disponible en entorno local (localhost).<br/>
-                            Por razones de seguridad, el panel de administración no es accesible públicamente.
-                        </p>
-                        <a href="index.html" style="
-                            display: inline-block;
-                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                            color: white;
-                            padding: 12px 24px;
-                            border-radius: 8px;
-                            text-decoration: none;
-                            font-weight: 600;
-                            transition: transform 0.2s;
-                        " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                            Volver al Inicio
-                        </a>
-                    </div>
-                </div>
-            `;
-            throw new Error('Acceso denegado: solo localhost');
-        }
-    </script>
     
     <div class="admin-container">
         <div class="admin-header">
