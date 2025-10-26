@@ -11,7 +11,8 @@ import { initScrollEffects } from './modules/scroll-effects.js';
 import { initRSVPForm } from './modules/rsvp-form.js';
 import { initEnvelopeAnimation } from './modules/envelope-animation.js';
 import { initGifts } from './modules/gifts.js';
-import { initMusicPlayer } from './modules/music-player.js';
+import { initMusicPlayer, startMusicFromExternalTrigger } from './modules/music-player.js';
+import { initWelcomeModal, onModalClose } from './modules/welcome-modal.js';
 import { showConsoleMessage } from './modules/utils.js';
 
 // Funciones opcionales (descomenta para usar):
@@ -43,6 +44,13 @@ function initializeApp() {
     initEnvelopeAnimation();
     initGifts();
     initMusicPlayer();
+    initWelcomeModal();
+    
+    // Conectar cierre del modal con inicio de música
+    onModalClose(() => {
+        console.log('🎵 Modal cerrado, iniciando música...');
+        startMusicFromExternalTrigger();
+    });
     
     // Mensaje en consola
     showConsoleMessage();

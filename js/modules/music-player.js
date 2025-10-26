@@ -17,7 +17,7 @@ export function initMusicPlayer() {
         return;
     }
     
-    // Cargar la API de YouTube
+    // Cargar la API de YouTube (pero no iniciar reproducción aún)
     loadYouTubeAPI();
     
     // Click en el botón
@@ -233,6 +233,27 @@ function toggleMusic() {
         pauseMusic();
     } else {
         playMusic();
+    }
+}
+
+/**
+ * Iniciar música desde evento externo (como cierre de modal)
+ * Esta función es para ser llamada desde otros módulos
+ */
+export function startMusicFromExternalTrigger() {
+    console.log('🎵 Intento de inicio externo de música');
+    
+    if (isPlayerReady) {
+        try {
+            player.playVideo();
+            console.log('🎵 Música iniciada desde trigger externo');
+        } catch (error) {
+            console.error('Error al iniciar música desde trigger externo:', error);
+        }
+    } else {
+        // Si el player no está listo, marcar para reproducir cuando lo esté
+        shouldAutoPlayWhenReady = true;
+        console.log('🎵 Player no listo, música iniciará cuando esté disponible');
     }
 }
 

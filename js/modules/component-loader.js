@@ -53,6 +53,7 @@ export async function loadComponents(components) {
  */
 export async function loadAllComponents() {
     const components = [
+        { name: 'welcome-modal', target: 'body' },
         { name: 'navigation', target: 'body' },
         { name: 'hero', target: 'body' },
         { name: 'invitation', target: 'body' },
