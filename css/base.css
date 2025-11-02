@@ -50,6 +50,16 @@ body {
 }
 
 /* ================================
+   BLOQUEO DE SCROLL - MODAL ABIERTO
+   ================================ */
+body.modal-open {
+    overflow: hidden;
+    height: 100vh;
+    position: fixed;
+    width: 100%;
+}
+
+/* ================================
    LOADING STATE - OCULTAR CONTENIDO HASTA QUE EL MODAL SE CIERRE
    ================================ */
 body.loading-page > *:not(.welcome-modal) {

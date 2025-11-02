@@ -27,6 +27,8 @@ export function initWelcomeModal() {
     }
     
     // Modal SIEMPRE visible al cargar la página (no hay persistencia)
+    // Bloquear scroll mientras el modal está abierto
+    document.body.classList.add('modal-open');
     
     // Event listeners
     if (searchInput) {
@@ -251,6 +253,7 @@ function closeModal() {
     // Esto hará visible el contenido principal con animación
     setTimeout(() => {
         document.body.classList.remove('loading-page');
+        document.body.classList.remove('modal-open'); // Desbloquear scroll
         document.body.classList.add('page-loaded');
         console.log('📄 Contenido principal mostrado');
     }, 300); // Después de que comience la animación del modal
