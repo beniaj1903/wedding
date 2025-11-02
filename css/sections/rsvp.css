@@ -410,7 +410,7 @@
    MENSAJE INVITADO REMOTO
    ================================ */
 .mensaje-invitado-remoto {
-    background: var(--white);
+    background: var(--accent-color);
     border-radius: 20px;
     padding: 3rem 2rem;
     text-align: center;
@@ -420,9 +420,16 @@
 }
 
 .remoto-icon {
-    font-size: 4rem;
-    color: var(--secondary-color);
-    margin-bottom: 1.5rem;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--text-dark) 0%, var(--secondary-color) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 3rem;
+    color: var(--white);
 }
 
 .mensaje-invitado-remoto h3 {
@@ -447,7 +454,7 @@
     line-height: 1.6;
     margin-bottom: 1.5rem;
     padding: 1.5rem;
-    background: var(--accent-color);
+    background: var(--white);
     border-radius: 15px;
     border-left: 4px solid var(--secondary-color);
 }
