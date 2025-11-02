@@ -438,21 +438,39 @@ export function initRSVPForm() {
             
             mostrarMensaje(mensajeExito, 'success');
             
-            // Si es modo edición, volver a mostrar la confirmación actualizada
+            // Si es modo edición, recargar la confirmación desde Firebase
             if (modoEdicion) {
                 modoEdicion = false;
-                confirmacionExistente = {
-                    ...datosConfirmacion,
-                    id: confirmacionExistente.id,
-                    timestamp: { seconds: Date.now() / 1000 }
-                };
                 
-                form.style.display = 'none';
-                mostrarConfirmacionExistente(confirmacionExistente);
-                
-                // Remover botón cancelar si existe
-                const cancelBtn = document.getElementById('cancelEditBtn');
-                if (cancelBtn) cancelBtn.remove();
+                // Buscar la confirmación actualizada desde Firebase
+                setTimeout(async () => {
+                    const confirmacionActualizada = await buscarConfirmacion(invitadoSeleccionado.id);
+                    if (confirmacionActualizada) {
+                        confirmacionExistente = confirmacionActualizada;
+                        form.style.display = 'none';
+                        mostrarConfirmacionExistente(confirmacionExistente);
+                        
+                        // Restaurar estructura de botones
+                        const buttonsRow = submitBtn.parentElement;
+                        if (buttonsRow && buttonsRow.classList.contains('form-buttons-row')) {
+                            buttonsRow.parentElement.insertBefore(submitBtn, buttonsRow);
+                            buttonsRow.remove();
+                        }
+                        
+                        // Restaurar texto original del botón
+                        submitBtn.innerHTML = originalText;
+                        
+                        // Remover botón cancelar si existe
+                        const cancelBtn = document.getElementById('cancelEditBtn');
+                        if (cancelBtn) cancelBtn.remove();
+                        
+                        // Scroll suave hacia la confirmación
+                        const confirmacionEl = document.getElementById('confirmacionExistente');
+                        if (confirmacionEl) {
+                            confirmacionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                }, 1000);
             } else {
                 // Nueva confirmación: recargar para ver el estado actualizado
                 setTimeout(() => {
