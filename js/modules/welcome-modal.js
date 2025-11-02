@@ -238,8 +238,16 @@ function closeModal() {
     
     if (!modal) return;
     
-    // Animar salida
+    // Animar salida del modal
     modal.classList.add('hidden');
+    
+    // Remover clase de carga y agregar clase de página cargada
+    // Esto hará visible el contenido principal con animación
+    setTimeout(() => {
+        document.body.classList.remove('loading-page');
+        document.body.classList.add('page-loaded');
+        console.log('📄 Contenido principal mostrado');
+    }, 300); // Después de que comience la animación del modal
     
     // Ejecutar callback después de la animación (si existe)
     setTimeout(() => {

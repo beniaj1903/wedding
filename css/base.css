@@ -50,6 +50,33 @@ body {
 }
 
 /* ================================
+   LOADING STATE - OCULTAR CONTENIDO HASTA QUE EL MODAL SE CIERRE
+   ================================ */
+body.loading-page > *:not(.welcome-modal) {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+body.page-loaded > *:not(.welcome-modal) {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    animation: fadeInContent 0.6s ease-out;
+}
+
+@keyframes fadeInContent {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================
    CONTENEDOR Y SECCIONES
    ================================ */
 .container {

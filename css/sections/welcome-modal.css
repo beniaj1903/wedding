@@ -31,8 +31,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(59, 47, 47, 0.95);
-    backdrop-filter: blur(10px);
+    background: rgba(59, 47, 47, 0.98);
+    backdrop-filter: blur(15px);
 }
 
 /* Contenido del modal */
