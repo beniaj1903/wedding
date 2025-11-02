@@ -25,15 +25,7 @@ export function initWelcomeModal() {
         return;
     }
     
-    // Verificar si ya se identificó en ESTA sesión (misma pestaña)
-    const savedGuest = getSavedGuest();
-    if (savedGuest) {
-        // Ya se identificó en esta sesión, cerrar modal automáticamente
-        modal.classList.add('hidden');
-        return;
-    }
-    
-    // Modal siempre visible al inicio (nueva sesión)
+    // Modal SIEMPRE visible al cargar la página (no hay persistencia)
     
     // Event listeners
     if (searchInput) {
@@ -222,10 +214,9 @@ function handleChangeGuest() {
 function handleEnter() {
     if (!selectedGuest) return;
     
-    // Guardar invitado seleccionado
-    saveGuest(selectedGuest);
+    console.log('👤 Usuario identificado:', selectedGuest.nombreCompleto);
     
-    // Cerrar modal
+    // Cerrar modal (no guardamos nada)
     closeModal();
 }
 
@@ -233,12 +224,9 @@ function handleEnter() {
  * Continuar sin identificarse
  */
 function handleSkip() {
-    // Guardar que el usuario decidió saltar la identificación
-    sessionStorage.setItem('guestSkipped', 'true');
-    
     console.log('⏭️ Usuario continuó sin identificarse');
     
-    // Cerrar modal
+    // Cerrar modal (no guardamos nada)
     closeModal();
 }
 
@@ -264,51 +252,26 @@ function closeModal() {
 }
 
 /**
- * Guardar invitado en sessionStorage (solo para la sesión actual)
- */
-function saveGuest(guest) {
-    try {
-        sessionStorage.setItem('currentGuest', JSON.stringify(guest));
-        console.log('💾 Invitado guardado para esta sesión:', guest.nombreCompleto);
-    } catch (error) {
-        console.error('Error guardando invitado:', error);
-    }
-}
-
-/**
- * Obtener invitado guardado de la sesión actual
- */
-function getSavedGuest() {
-    try {
-        const guestStr = sessionStorage.getItem('currentGuest');
-        return guestStr ? JSON.parse(guestStr) : null;
-    } catch (error) {
-        console.error('Error obteniendo invitado guardado:', error);
-        return null;
-    }
-}
-
-/**
  * Obtener invitado actual (para usar en otros módulos)
+ * Solo disponible durante la navegación actual (en memoria)
  */
 export function getCurrentGuest() {
-    return getSavedGuest();
+    return selectedGuest;
 }
 
 /**
  * Verificar si el usuario saltó la identificación
  */
 export function isGuestSkipped() {
-    return sessionStorage.getItem('guestSkipped') === 'true';
+    return selectedGuest === null;
 }
 
 /**
- * Limpiar invitado guardado (para debugging o cerrar sesión)
+ * Limpiar invitado actual (resetear estado)
  */
 export function clearCurrentGuest() {
-    sessionStorage.removeItem('currentGuest');
-    sessionStorage.removeItem('guestSkipped');
-    console.log('🗑️ Invitado limpiado');
+    selectedGuest = null;
+    console.log('🗑️ Estado limpiado');
 }
 
 /**
