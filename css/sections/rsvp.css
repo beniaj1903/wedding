@@ -138,12 +138,12 @@
 }
 
 .confirmacion-header.confirmado {
-    background: linear-gradient(135deg, var(--accent-color) 0%, var(--background) 100%);
+    background: var(--accent-color);
     border-bottom: 3px solid var(--secondary-color);
 }
 
 .confirmacion-header.no-confirmado {
-    background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-color) 100%);
+    background: var(--accent-color);
     border-bottom: 3px solid var(--secondary-color);
 }
 
