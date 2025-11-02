@@ -186,6 +186,9 @@ export function initRSVPForm() {
             form.parentElement.insertBefore(existingAlert, form);
         }
         
+        // Asegurarse de que esté visible (puede tener display: none de edición previa)
+        existingAlert.style.display = 'block';
+        
         const estadoIcon = confirmacion.confirmado ? '✅' : '❌';
         const estadoTexto = confirmacion.confirmado ? 'Confirmaste tu asistencia' : 'Indicaste que NO asistirás';
         const estadoClass = confirmacion.confirmado ? 'confirmado' : 'no-confirmado';
