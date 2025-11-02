@@ -3,6 +3,21 @@
    Maneja la apertura y cierre del sobre de invitación
    ================================ */
 
+/**
+ * Personaliza el sobre con el nombre del invitado
+ */
+export function personalizarSobre(nombreInvitado = null) {
+    const envelopeName = document.getElementById('envelopeName');
+    if (!envelopeName) return;
+    
+    if (nombreInvitado) {
+        envelopeName.textContent = nombreInvitado;
+        console.log('📨 Sobre personalizado para:', nombreInvitado);
+    } else {
+        envelopeName.textContent = 'Invitado Especial';
+    }
+}
+
 export function initEnvelopeAnimation() {
     const envelope = document.getElementById('envelope');
     const invitationDetails = document.getElementById('invitationDetails');
@@ -12,6 +27,9 @@ export function initEnvelopeAnimation() {
         console.warn('Envelope elements not found');
         return;
     }
+    
+    // Personalizar con el nombre del invitado si está disponible
+    personalizarSobre();
     
     // Abrir sobre al hacer click
     envelope.addEventListener('click', function() {
@@ -69,4 +87,3 @@ export function initEnvelopeAnimation() {
         }
     });
 }
-

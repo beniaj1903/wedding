@@ -9,7 +9,7 @@ import { initSwiper } from './modules/swiper-init.js';
 import { initNavigation, initSmoothScroll } from './modules/navigation.js';
 import { initScrollEffects } from './modules/scroll-effects.js';
 import { initRSVPForm } from './modules/rsvp-form.js';
-import { initEnvelopeAnimation } from './modules/envelope-animation.js';
+import { initEnvelopeAnimation, personalizarSobre } from './modules/envelope-animation.js';
 import { initGifts } from './modules/gifts.js';
 import { initLiveStream } from './modules/live-stream.js';
 import { initMusicPlayer, startMusicFromExternalTrigger } from './modules/music-player.js';
@@ -53,11 +53,18 @@ function initializeApp() {
         console.log('🎵 Modal cerrado, iniciando música...');
         startMusicFromExternalTrigger();
         
-        // Personalizar RSVP después de cerrar el modal
+        // Personalizar contenido después de cerrar el modal
         const guestFromModal = getCurrentGuest();
-        if (guestFromModal && window.preSeleccionarInvitadoRSVP) {
-            console.log('🎯 Personalizando RSVP con:', guestFromModal.nombreCompleto);
-            window.preSeleccionarInvitadoRSVP(guestFromModal);
+        if (guestFromModal) {
+            // Personalizar sobre con nombre del invitado
+            console.log('📨 Personalizando sobre para:', guestFromModal.nombreCompleto);
+            personalizarSobre(guestFromModal.nombreCompleto);
+            
+            // Personalizar RSVP
+            if (window.preSeleccionarInvitadoRSVP) {
+                console.log('🎯 Personalizando RSVP con:', guestFromModal.nombreCompleto);
+                window.preSeleccionarInvitadoRSVP(guestFromModal);
+            }
         }
     });
     
