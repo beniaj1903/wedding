@@ -19,7 +19,7 @@
    ================================ */
 
 .live-stream-placeholder {
-    background: var(--accent-color);
+    background: var(--white);
     border-radius: 20px;
     padding: 4rem 2rem;
     text-align: center;
@@ -85,7 +85,7 @@
 }
 
 .live-note {
-    background: rgba(255, 255, 255, 0.5);
+    background: var(--accent-color);
     padding: 1rem 1.5rem;
     border-radius: 10px;
     font-size: 0.95rem;
@@ -185,7 +185,7 @@
 }
 
 .live-info .info-card {
-    background: var(--accent-color);
+    background: var(--white);
     padding: 2rem;
     border-radius: 15px;
     text-align: center;
