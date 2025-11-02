@@ -16,7 +16,7 @@
         <div class="live-stream-content">
             
             <!-- Estado: Antes del evento -->
-            <div class="live-stream-placeholder" id="liveStreamPlaceholder">
+            <div class="live-stream-placeholder" id="liveStreamPlaceholder" style="display: none;">
                 <div class="placeholder-icon">
                     <i class="fas fa-calendar-check"></i>
                 </div>
@@ -31,8 +31,8 @@
                 </p>
             </div>
 
-            <!-- Reproductor de YouTube (oculto por defecto, mostrar cuando haya link) -->
-            <div class="live-stream-player" id="liveStreamPlayer" style="display: none;">
+            <!-- Reproductor de YouTube (visible desde ya) -->
+            <div class="live-stream-player" id="liveStreamPlayer">
                 <div class="video-wrapper">
                     <iframe 
                         id="liveStreamIframe"

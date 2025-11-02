@@ -5,8 +5,8 @@
 
 // Configuración del live stream
 const LIVE_STREAM_CONFIG = {
-    // Cambiar a true cuando el live stream esté activo
-    isLive: false,
+    // Live stream activo - YouTube mostrará contador hasta que inicie
+    isLive: true,
     
     // ID del video de YouTube
     videoId: 'EEOn36Ia2Oo',
