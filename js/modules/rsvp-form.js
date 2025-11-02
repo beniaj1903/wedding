@@ -431,7 +431,7 @@ export function initRSVPForm() {
             
             // Mostrar mensaje de éxito
             const mensajeExito = modoEdicion
-                ? '¡Tu confirmación ha sido actualizada correctamente! ✅'
+                ? '¡Tu confirmación ha sido actualizada correctamente!'
                 : (confirmado 
                     ? '¡Gracias por confirmar! Nos vemos en la boda 🎉' 
                     : 'Gracias por avisarnos. Te extrañaremos 💔');
