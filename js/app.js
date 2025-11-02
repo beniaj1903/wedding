@@ -13,7 +13,7 @@ import { initEnvelopeAnimation } from './modules/envelope-animation.js';
 import { initGifts } from './modules/gifts.js';
 import { initLiveStream } from './modules/live-stream.js';
 import { initMusicPlayer, startMusicFromExternalTrigger } from './modules/music-player.js';
-import { initWelcomeModal, onModalClose } from './modules/welcome-modal.js';
+import { initWelcomeModal, onModalClose, getCurrentGuest } from './modules/welcome-modal.js';
 import { showConsoleMessage } from './modules/utils.js';
 
 // Funciones opcionales (descomenta para usar):
@@ -48,10 +48,17 @@ function initializeApp() {
     initMusicPlayer();
     initWelcomeModal();
     
-    // Conectar cierre del modal con inicio de música
+    // Conectar cierre del modal con acciones posteriores
     onModalClose(() => {
         console.log('🎵 Modal cerrado, iniciando música...');
         startMusicFromExternalTrigger();
+        
+        // Personalizar RSVP después de cerrar el modal
+        const guestFromModal = getCurrentGuest();
+        if (guestFromModal && window.preSeleccionarInvitadoRSVP) {
+            console.log('🎯 Personalizando RSVP con:', guestFromModal.nombreCompleto);
+            window.preSeleccionarInvitadoRSVP(guestFromModal);
+        }
     });
     
     // Mensaje en consola

@@ -4,6 +4,7 @@ import { getCurrentGuest } from './welcome-modal.js';
 
 let invitadoSeleccionado = null;
 let timeoutBusqueda = null;
+let formElements = null; // Guardar referencias a elementos del formulario
 
 export function initRSVPForm() {
     const form = document.getElementById('rsvpForm');
@@ -13,15 +14,18 @@ export function initRSVPForm() {
     
     if (!form || !buscarInput) return;
     
+    // Guardar referencias para uso posterior
+    formElements = {
+        form,
+        buscarInput,
+        autocompleteResults,
+        invitadoInfo
+    };
+    
     // ================================
     // PERSONALIZACIÓN AUTOMÁTICA
+    // Se ejecutará desde app.js después de cerrar el modal
     // ================================
-    const guestFromModal = getCurrentGuest();
-    
-    if (guestFromModal) {
-        console.log('🎯 Pre-llenando RSVP con:', guestFromModal.nombreCompleto);
-        preSeleccionarInvitado(guestFromModal);
-    }
     
     // ================================
     // AUTOCOMPLETADO DE INVITADOS
@@ -85,9 +89,12 @@ export function initRSVPForm() {
     
     // ================================
     // PRE-SELECCIONAR INVITADO (desde modal de bienvenida)
+    // Función interna para uso del módulo
     // ================================
-    function preSeleccionarInvitado(guest) {
+    function preSeleccionarInvitadoInterno(guest) {
         invitadoSeleccionado = guest;
+        
+        console.log('🎯 Pre-llenando RSVP con:', guest.nombreCompleto);
         
         // Actualizar UI
         buscarInput.value = guest.nombreCompleto;
@@ -132,6 +139,9 @@ export function initRSVPForm() {
             invitadoInfo.appendChild(cambiarBtn);
         }
     }
+    
+    // Exponer función pública para uso externo
+    window.preSeleccionarInvitadoRSVP = preSeleccionarInvitadoInterno;
     
     // ================================
     // SELECCIONAR INVITADO (desde búsqueda manual)
