@@ -322,6 +322,8 @@
 /* ================================
    RESPONSIVE
    ================================ */
+
+/* ===== DESKTOP / PC DE ESCRITORIO (>1024px) ===== */
 @media (max-width: 1500px) {
     .envelope-container {
         width: 1200px;
@@ -344,10 +346,29 @@
     }
 }
 
-/* Tablets grandes (iPad Pro, etc.) */
+/* Desktop con pantallas altas */
+@media (min-width: 1025px) and (min-height: 900px) {
+    .envelope-container {
+        min-height: 850px;
+    }
+    
+    .envelope-container:has(.invitation-details.show) {
+        min-height: 1300px;
+    }
+    
+    .details-inner {
+        min-height: 1300px;
+    }
+    
+    .invitation-details {
+        min-height: 1300px;
+    }
+}
+
+/* ===== TABLETS GRANDES (901px - 1024px) ===== */
+/* iPad Pro, tablets landscape */
 @media (max-width: 1024px) and (min-width: 901px) {
     .envelope-container {
-        width: 100%;
         max-width: 90%;
         min-height: 700px;
     }
@@ -386,10 +407,10 @@
     }
 }
 
-/* Tablets medianas (iPad Air, iPad normal) */
+/* ===== TABLETS PEQUEÑAS (769px - 900px) ===== */
+/* iPad Air, iPad normal, tablets portrait */
 @media (max-width: 900px) and (min-width: 769px) {
     .envelope-container {
-        width: 100%;
         max-width: 92%;
         min-height: 600px;
     }
@@ -424,18 +445,20 @@
     }
     
     .info-columns {
+        grid-template-columns: 1fr;
         gap: 2rem;
     }
 }
 
-@media (max-width: 768px) {
+/* ===== TELÉFONOS GRANDES (481px - 768px) ===== */
+/* iPhone Plus, Android grandes, tablets pequeñas portrait */
+@media (max-width: 768px) and (min-width: 481px) {
     .invitation-section {
         padding: 3rem 0 4rem 0;
     }
     
     .invitation-section > .container {
         max-width: 100%;
-        width: 100%;
         padding: 0 0.75rem;
     }
     
@@ -443,7 +466,6 @@
         min-height: 550px;
         padding: 0;
         align-items: flex-start;
-        width: 100%;
         max-width: 100%;
     }
     
@@ -453,21 +475,27 @@
     }
     
     .envelope {
-        width: 100%;
         max-width: 100%;
     }
     
     .envelope-body {
         min-height: 500px;
-        width: 100%;
         background-size: contain;
         background-position: center center;
     }
     
     .invitation-details {
-        width: 100%;
         max-width: 100%;
         padding: 0 0.5rem;
+        min-height: 650px;
+        top: 45%;
+    }
+    
+    .details-inner {
+        padding: 2rem 1.5rem;
+        min-height: 650px;
+        background-size: contain;
+        background-position: center center;
     }
     
     .names {
@@ -481,23 +509,10 @@
         letter-spacing: 2px;
     }
     
-    .details-inner {
-        padding: 2rem 1.5rem;
-        min-height: 650px;
-        background-size: contain;
-        background-position: center center;
-    }
-    
-    .invitation-details {
-        min-height: 650px;
-        top: 45%;
-    }
-    
     .event-info-card {
         padding: 2rem 1.5rem;
     }
     
-    /* Una columna en tablet */
     .info-columns {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -524,18 +539,18 @@
     }
 }
 
-@media (max-width: 480px) {
+/* ===== TELÉFONOS MEDIANOS (391px - 480px) ===== */
+/* iPhone 12/13/14, Pixel, mayoría de smartphones */
+@media (max-width: 480px) and (min-width: 391px) {
     .invitation-section > .container {
         max-width: 100%;
-        width: 100%;
         padding: 0 0.5rem;
     }
     
     .envelope-container {
-        min-height: 400px;
+        min-height: 420px;
         align-items: flex-start;
         padding: 0;
-        width: 100%;
         max-width: 100%;
     }
     
@@ -544,46 +559,36 @@
         align-items: center;
     }
     
-    .envelope {
-        width: 100%;
-        max-width: 100%;
-    }
-    
     .envelope-body {
-        min-height: 380px;
-        width: 100%;
+        min-height: 420px;
         background-size: contain;
         background-position: center center;
     }
     
     .invitation-details {
-        width: 100%;
         max-width: 100%;
         padding: 0 0.25rem;
-    }
-    
-    .names {
-        font-size: 1.5rem;
-        bottom: 5rem;
-        letter-spacing: 0.5px;
-    }
-    
-    .click-hint {
-        font-size: 0.75rem;
-        top: 48%;
-        letter-spacing: 1.5px;
+        min-height: 580px;
+        top: 45%;
     }
     
     .details-inner {
         padding: 1.5rem 1rem;
-        min-height: 550px;
+        min-height: 580px;
         background-size: contain;
         background-position: center center;
     }
     
-    .invitation-details {
-        min-height: 550px;
-        top: 45%;
+    .names {
+        font-size: 1.7rem;
+        bottom: 5.5rem;
+        letter-spacing: 1px;
+    }
+    
+    .click-hint {
+        font-size: 0.8rem;
+        top: 48%;
+        letter-spacing: 1.5px;
     }
     
     .event-info-card {
@@ -591,6 +596,7 @@
     }
     
     .info-columns {
+        grid-template-columns: 1fr;
         gap: 1.5rem;
     }
     
@@ -607,8 +613,46 @@
     }
 }
 
-/* Ajuste para pantallas muy pequeñas (iPhone SE, etc.) */
-@media (max-width: 375px) {
+/* ===== TELÉFONOS PEQUEÑOS (≤390px) ===== */
+/* iPhone SE, smartphones compactos */
+@media (max-width: 390px) {
+    .invitation-section > .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+    }
+    
+    .envelope-container {
+        min-height: 370px;
+        align-items: flex-start;
+        padding: 0;
+        max-width: 100%;
+    }
+    
+    .envelope-container:has(.invitation-details.show) {
+        min-height: 550px;
+        align-items: center;
+    }
+    
+    .envelope-body {
+        min-height: 350px;
+        background-size: contain;
+        background-position: center center;
+    }
+    
+    .invitation-details {
+        max-width: 100%;
+        padding: 0 0.25rem;
+        min-height: 500px;
+        top: 45%;
+    }
+    
+    .details-inner {
+        padding: 1.5rem 1rem;
+        min-height: 500px;
+        background-size: contain;
+        background-position: center center;
+    }
+    
     .names {
         font-size: 1.3rem;
         bottom: 4.5rem;
@@ -617,57 +661,28 @@
     
     .click-hint {
         font-size: 0.7rem;
+        top: 48%;
         letter-spacing: 1px;
     }
     
-    .envelope-body {
-        min-height: 350px;
+    .event-info-card {
+        padding: 1.5rem 1rem;
     }
     
-    .envelope-container {
-        min-height: 370px;
-    }
-}
-
-/* Ajuste específico para pantallas tipo Pixel 7 / iPhone Pro Max */
-@media (min-width: 390px) and (max-width: 430px) {
-    .envelope-body {
-        min-height: 420px;
-        background-size: contain;
+    .info-columns {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
     
-    .details-inner {
-        min-height: 580px;
-        background-size: contain;
+    .info-row {
+        gap: 1rem;
     }
     
-    .names {
-        font-size: 1.7rem;
-        bottom: 5.5rem;
-        letter-spacing: 1px;
-    }
-    
-    .click-hint {
-        font-size: 0.8rem;
-        letter-spacing: 1.5px;
-    }
-}
-
-/* Ajuste de altura adaptable para pantallas grandes de escritorio */
-@media (min-width: 1024px) and (min-height: 900px) {
-    .envelope-container {
-        min-height: 850px;
-    }
-    
-    .envelope-container:has(.invitation-details.show) {
-        min-height: 1300px;
-    }
-    
-    .details-inner {
-        min-height: 1300px;
-    }
-    
-    .invitation-details {
-        min-height: 1300px;
+    .close-envelope {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        top: -10px;
+        right: -10px;
     }
 }
