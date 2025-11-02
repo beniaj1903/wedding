@@ -344,40 +344,41 @@
     }
 }
 
-@media (max-width: 1024px) {
+/* Tablets grandes (iPad Pro, etc.) */
+@media (max-width: 1024px) and (min-width: 901px) {
     .envelope-container {
         width: 100%;
         max-width: 90%;
-        min-height: 650px;
+        min-height: 700px;
     }
     
     .envelope-container:has(.invitation-details.show) {
-        min-height: 1000px;
+        min-height: 1100px;
     }
     
     .envelope-body {
-        min-height: 600px;
+        min-height: 650px;
         background-size: contain;
         background-position: center center;
     }
     
     .details-inner {
-        min-height: 900px;
+        min-height: 1000px;
         background-size: contain;
         background-position: center center;
     }
     
     .invitation-details {
-        min-height: 900px;
+        min-height: 1000px;
     }
     
     .names {
-        font-size: 2.5rem;
-        bottom: 5rem;
+        font-size: 2.8rem;
+        bottom: 5.5rem;
     }
     
     .click-hint {
-        font-size: 1rem;
+        font-size: 1.05rem;
     }
     
     .info-columns {
@@ -385,14 +386,28 @@
     }
 }
 
-/* Media query específico para tablets en orientación portrait */
+/* Tablets medianas (iPad Air, iPad normal) */
 @media (max-width: 900px) and (min-width: 769px) {
+    .envelope-container {
+        width: 100%;
+        max-width: 92%;
+        min-height: 600px;
+    }
+    
+    .envelope-container:has(.invitation-details.show) {
+        min-height: 900px;
+    }
+    
     .envelope-body {
-        min-height: 580px;
+        min-height: 550px;
+        background-size: contain;
+        background-position: center center;
     }
     
     .details-inner {
         min-height: 800px;
+        background-size: contain;
+        background-position: center center;
     }
     
     .invitation-details {
@@ -401,7 +416,15 @@
     
     .names {
         font-size: 2.3rem;
-        bottom: 5.5rem;
+        bottom: 5rem;
+    }
+    
+    .click-hint {
+        font-size: 0.95rem;
+    }
+    
+    .info-columns {
+        gap: 2rem;
     }
 }
 
