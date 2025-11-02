@@ -152,6 +152,15 @@
     font-size: 1.8rem;
     color: var(--text-dark);
     margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.confirmacion-header h3 i {
+    font-size: 2rem;
+    color: var(--secondary-color);
 }
 
 .confirmacion-fecha {
@@ -176,10 +185,19 @@
 }
 
 .detalle-item strong {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     font-weight: 600;
     margin-bottom: 0.3rem;
     color: var(--secondary-color);
+}
+
+.detalle-item strong i {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    min-width: 1.2rem;
+    text-align: center;
 }
 
 .confirmacion-acciones {

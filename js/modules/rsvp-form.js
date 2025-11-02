@@ -189,7 +189,7 @@ export function initRSVPForm() {
         // Asegurarse de que esté visible (puede tener display: none de edición previa)
         existingAlert.style.display = 'block';
         
-        const estadoIcon = confirmacion.confirmado ? '✅' : '❌';
+        const estadoIcon = confirmacion.confirmado ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>';
         const estadoTexto = confirmacion.confirmado ? 'Confirmaste tu asistencia' : 'Indicaste que NO asistirás';
         const estadoClass = confirmacion.confirmado ? 'confirmado' : 'no-confirmado';
         
@@ -201,28 +201,28 @@ export function initRSVPForm() {
             
             <div class="confirmacion-detalles">
                 <div class="detalle-item">
-                    <strong>👤 Nombre:</strong> ${confirmacion.nombreCompleto}
+                    <strong><i class="fas fa-user"></i> Nombre:</strong> ${confirmacion.nombreCompleto}
                 </div>
                 <div class="detalle-item">
-                    <strong>📧 Email:</strong> ${confirmacion.email || 'No proporcionado'}
+                    <strong><i class="fas fa-envelope"></i> Email:</strong> ${confirmacion.email || 'No proporcionado'}
                 </div>
                 <div class="detalle-item">
-                    <strong>📱 Teléfono:</strong> ${confirmacion.telefono || 'No proporcionado'}
+                    <strong><i class="fas fa-phone"></i> Teléfono:</strong> ${confirmacion.telefono || 'No proporcionado'}
                 </div>
                 <div class="detalle-item">
-                    <strong>👥 Cupos:</strong> ${confirmacion.cuposConfirmados || 0} ${confirmacion.cuposConfirmados === 1 ? 'persona' : 'personas'}
+                    <strong><i class="fas fa-users"></i> Cupos:</strong> ${confirmacion.cuposConfirmados || 0} ${confirmacion.cuposConfirmados === 1 ? 'persona' : 'personas'}
                 </div>
                 <div class="detalle-item">
-                    <strong>🚗 Transporte:</strong> ${confirmacion.necesitaTransporte ? 'Sí' : 'No'}
+                    <strong><i class="fas fa-car"></i> Transporte:</strong> ${confirmacion.necesitaTransporte ? 'Sí' : 'No'}
                 </div>
                 ${confirmacion.restriccionesAlimenticias ? `
                     <div class="detalle-item">
-                        <strong>🍽️ Restricciones:</strong> ${confirmacion.restriccionesAlimenticias}
+                        <strong><i class="fas fa-utensils"></i> Restricciones:</strong> ${confirmacion.restriccionesAlimenticias}
                     </div>
                 ` : ''}
                 ${confirmacion.mensaje ? `
                     <div class="detalle-item">
-                        <strong>💬 Mensaje:</strong> ${confirmacion.mensaje}
+                        <strong><i class="fas fa-comment"></i> Mensaje:</strong> ${confirmacion.mensaje}
                     </div>
                 ` : ''}
             </div>
@@ -461,20 +461,18 @@ export function initRSVPForm() {
             }
             
             // Buscar la confirmación desde Firebase (para nueva confirmación o actualización)
-            setTimeout(async () => {
-                const confirmacionActualizada = await buscarConfirmacion(invitadoSeleccionado.id);
-                if (confirmacionActualizada) {
-                    confirmacionExistente = confirmacionActualizada;
-                    form.style.display = 'none';
-                    mostrarConfirmacionExistente(confirmacionExistente);
-                    
-                    // Scroll suave hacia la confirmación
-                    const confirmacionEl = document.getElementById('confirmacionExistente');
-                    if (confirmacionEl) {
-                        confirmacionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }
+            const confirmacionActualizada = await buscarConfirmacion(invitadoSeleccionado.id);
+            if (confirmacionActualizada) {
+                confirmacionExistente = confirmacionActualizada;
+                form.style.display = 'none';
+                mostrarConfirmacionExistente(confirmacionExistente);
+                
+                // Scroll suave hacia la confirmación
+                const confirmacionEl = document.getElementById('confirmacionExistente');
+                if (confirmacionEl) {
+                    confirmacionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
-            }, 1500);
+            }
             
         } catch (error) {
             console.error('Error guardando confirmación:', error);
