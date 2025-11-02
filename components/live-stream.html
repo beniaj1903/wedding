@@ -1,0 +1,84 @@
+<!-- SECCIÓN: TRANSMISIÓN EN VIVO -->
+<section id="live-stream" class="live-stream-section">
+    <div class="container">
+        <!-- Encabezado de sección -->
+        <div class="section-header">
+            <i class="fas fa-video section-icon"></i>
+            <h2 class="section-title">Transmisión en Vivo</h2>
+            <div class="title-underline"></div>
+            <p class="section-subtitle">
+                Si no puedes estar con nosotros presencialmente,<br/>
+                podrás seguir nuestra ceremonia en vivo desde cualquier lugar del mundo
+            </p>
+        </div>
+
+        <!-- Contenido del live stream -->
+        <div class="live-stream-content">
+            
+            <!-- Estado: Antes del evento -->
+            <div class="live-stream-placeholder" id="liveStreamPlaceholder">
+                <div class="placeholder-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3>¡Próximamente!</h3>
+                <p>La transmisión en vivo estará disponible el día de la boda</p>
+                <div class="live-date">
+                    <i class="far fa-calendar"></i>
+                    <span>10 de Octubre, 2026 • 19:00h</span>
+                </div>
+                <p class="live-note">
+                    💡 <strong>Tip:</strong> Guarda esta página en favoritos para acceder fácilmente el día del evento
+                </p>
+            </div>
+
+            <!-- Reproductor de YouTube (oculto por defecto, mostrar cuando haya link) -->
+            <div class="live-stream-player" id="liveStreamPlayer" style="display: none;">
+                <div class="video-wrapper">
+                    <!-- Reemplazar VIDEO_ID_AQUI con el ID del live stream cuando esté disponible -->
+                    <iframe 
+                        id="liveStreamIframe"
+                        src="https://www.youtube.com/embed/VIDEO_ID_AQUI" 
+                        title="Transmisión en Vivo - Boda Yoselyn y Benito"
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen
+                        loading="lazy">
+                    </iframe>
+                </div>
+                
+                <!-- Botones de acción -->
+                <div class="live-actions">
+                    <a href="https://www.youtube.com/watch?v=VIDEO_ID_AQUI" target="_blank" rel="noopener noreferrer" class="btn-live">
+                        <i class="fab fa-youtube"></i>
+                        Ver en YouTube
+                    </a>
+                    <button class="btn-notify" id="notifyBtn">
+                        <i class="far fa-bell"></i>
+                        Activar Recordatorio
+                    </button>
+                </div>
+            </div>
+
+            <!-- Información adicional -->
+            <div class="live-info">
+                <div class="info-card">
+                    <i class="fas fa-clock"></i>
+                    <h4>Horario</h4>
+                    <p>La transmisión comenzará a las 19:00h (hora de Chile)</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-wifi"></i>
+                    <h4>Requisitos</h4>
+                    <p>Solo necesitas una conexión a internet estable</p>
+                </div>
+                <div class="info-card">
+                    <i class="fas fa-heart"></i>
+                    <h4>Interacción</h4>
+                    <p>Podrás dejarnos mensajes en el chat en vivo</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+

@@ -1,4 +1,4 @@
-# 💍 Boda Yoselyn y Benito
+# 💍 Boda Yose y Benito
 
 Sitio web de invitación para nuestra boda - 15 de Junio, 2026
 

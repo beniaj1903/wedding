@@ -61,6 +61,7 @@ export async function loadAllComponents() {
         { name: 'rsvp', target: 'body' },
         { name: 'info', target: 'body' },
         { name: 'gifts', target: 'body' },
+        { name: 'live-stream', target: 'body' },
         { name: 'video', target: 'body' },
         { name: 'footer', target: 'body' },
         { name: 'music-player', target: 'body' }
