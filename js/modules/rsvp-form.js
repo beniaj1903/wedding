@@ -1,5 +1,6 @@
-// Formulario RSVP con integración Firebase
+// Formulario RSVP con integración Firebase y personalización
 import { buscarInvitados, obtenerInvitado, guardarConfirmacion } from './firebase-guests.js';
+import { getCurrentGuest } from './welcome-modal.js';
 
 let invitadoSeleccionado = null;
 let timeoutBusqueda = null;
@@ -11,6 +12,16 @@ export function initRSVPForm() {
     const invitadoInfo = document.getElementById('invitadoSeleccionado');
     
     if (!form || !buscarInput) return;
+    
+    // ================================
+    // PERSONALIZACIÓN AUTOMÁTICA
+    // ================================
+    const guestFromModal = getCurrentGuest();
+    
+    if (guestFromModal) {
+        console.log('🎯 Pre-llenando RSVP con:', guestFromModal.nombreCompleto);
+        preSeleccionarInvitado(guestFromModal);
+    }
     
     // ================================
     // AUTOCOMPLETADO DE INVITADOS
@@ -73,7 +84,57 @@ export function initRSVPForm() {
     }
     
     // ================================
-    // SELECCIONAR INVITADO
+    // PRE-SELECCIONAR INVITADO (desde modal de bienvenida)
+    // ================================
+    function preSeleccionarInvitado(guest) {
+        invitadoSeleccionado = guest;
+        
+        // Actualizar UI
+        buscarInput.value = guest.nombreCompleto;
+        buscarInput.disabled = true; // Deshabilitar para evitar confusión
+        buscarInput.style.backgroundColor = '#f0f4ff';
+        buscarInput.style.cursor = 'not-allowed';
+        document.getElementById('invitadoId').value = guest.id;
+        
+        // Mostrar información del invitado
+        invitadoInfo.querySelector('.invitado-nombre').textContent = `✓ ${guest.nombreCompleto}`;
+        invitadoInfo.querySelector('.invitado-cupos').textContent = `Tienes ${guest.cuposAsignados} cupo${guest.cuposAsignados > 1 ? 's' : ''} asignado${guest.cuposAsignados > 1 ? 's' : ''}`;
+        invitadoInfo.style.display = 'block';
+        
+        // Pre-llenar email si existe
+        if (guest.email) {
+            document.getElementById('email').value = guest.email;
+        }
+        
+        // Pre-llenar teléfono si existe
+        if (guest.telefono) {
+            document.getElementById('telefono').value = guest.telefono;
+        }
+        
+        // Agregar botón para cambiar invitado
+        const cambiarBtn = document.createElement('button');
+        cambiarBtn.type = 'button';
+        cambiarBtn.className = 'btn-cambiar-invitado';
+        cambiarBtn.innerHTML = '<i class="fas fa-edit"></i> Cambiar invitado';
+        cambiarBtn.onclick = () => {
+            buscarInput.disabled = false;
+            buscarInput.style.backgroundColor = '';
+            buscarInput.style.cursor = '';
+            buscarInput.value = '';
+            buscarInput.focus();
+            invitadoSeleccionado = null;
+            invitadoInfo.style.display = 'none';
+            cambiarBtn.remove();
+        };
+        
+        // Agregar botón si no existe
+        if (!invitadoInfo.querySelector('.btn-cambiar-invitado')) {
+            invitadoInfo.appendChild(cambiarBtn);
+        }
+    }
+    
+    // ================================
+    // SELECCIONAR INVITADO (desde búsqueda manual)
     // ================================
     async function seleccionarInvitado(invitadoId) {
         invitadoSeleccionado = await obtenerInvitado(invitadoId);

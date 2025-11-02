@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limpiar Caché - Testing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2rem;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin: 0.5rem;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .info-box {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-box ul {
+            margin-left: 1.5rem;
+            color: #666;
+        }
+        
+        .info-box li {
+            margin: 0.5rem 0;
+        }
+        
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            display: none;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Limpiar Caché de Testing</h1>
+        <p>Usa esta herramienta para resetear los datos del sitio y probar el modal de bienvenida nuevamente.</p>
+        
+        <div class="info-box">
+            <h3>📋 Se limpiará:</h3>
+            <ul>
+                <li>Invitado guardado (localStorage)</li>
+                <li>Estado del modal (sessionStorage)</li>
+                <li>Todas las preferencias guardadas</li>
+            </ul>
+        </div>
+        
+        <button class="btn" onclick="clearAndRedirect()">
+            🗑️ Limpiar y Ver Modal
+        </button>
+        
+        <button class="btn btn-secondary" onclick="showCurrentData()">
+            👀 Ver Datos Actuales
+        </button>
+        
+        <div class="status" id="status"></div>
+    </div>
+    
+    <script>
+        function clearAndRedirect() {
+            // Limpiar todo
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Mostrar mensaje
+            const status = document.getElementById('status');
+            status.className = 'status success';
+            status.textContent = '✅ Datos limpiados! Redirigiendo...';
+            
+            // Redirigir después de 1 segundo
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        }
+        
+        function showCurrentData() {
+            const guest = localStorage.getItem('currentGuest');
+            const skipped = sessionStorage.getItem('guestSkipped');
+            const status = document.getElementById('status');
+            
+            status.className = 'status info';
+            
+            if (guest) {
+                const guestData = JSON.parse(guest);
+                status.innerHTML = `
+                    <strong>👤 Invitado guardado:</strong><br>
+                    ${guestData.nombreCompleto}<br>
+                    ${guestData.cuposAsignados} invitados
+                `;
+            } else if (skipped === 'true') {
+                status.textContent = '⏭️ Usuario saltó la identificación';
+            } else {
+                status.textContent = '🆕 No hay datos guardados (modal debería aparecer)';
+            }
+        }
+        
+        // Mostrar datos al cargar
+        window.onload = () => {
+            showCurrentData();
+        };
+    </script>
+</body>
+</html>
