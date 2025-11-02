@@ -373,6 +373,14 @@
                 <div class="stat-label">Cupos Totales</div>
             </div>
             <div class="stat-card">
+                <div class="stat-number" id="cuposPresenciales">0</div>
+                <div class="stat-label">👥 Cupos Presenciales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="cuposRemotos">0</div>
+                <div class="stat-label">📺 Cupos Remotos</div>
+            </div>
+            <div class="stat-card">
                 <div class="stat-number" id="confirmadosAsistiran">0</div>
                 <div class="stat-label">Confirmados (Sí)</div>
             </div>
@@ -427,13 +435,14 @@
                             <th>Email</th>
                             <th>Teléfono</th>
                             <th>Grupo</th>
+                            <th>Categoría</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="invitadosBody">
                         <tr>
-                            <td colspan="7" style="text-align: center; color: var(--text-dark); opacity: 0.7;">
+                            <td colspan="8" style="text-align: center; color: var(--text-dark); opacity: 0.7;">
                                 Cargando invitados...
                             </td>
                         </tr>
@@ -521,6 +530,8 @@
                 document.getElementById('invitadosPresenciales').textContent = stats.invitadosPresenciales;
                 document.getElementById('invitadosRemotos').textContent = stats.invitadosRemotos;
                 document.getElementById('totalCupos').textContent = stats.totalCuposAsignados;
+                document.getElementById('cuposPresenciales').textContent = stats.cuposPresenciales;
+                document.getElementById('cuposRemotos').textContent = stats.cuposRemotos;
                 document.getElementById('confirmadosAsistiran').textContent = stats.confirmadosAsistiran;
                 document.getElementById('cuposConfirmados').textContent = stats.totalCuposConfirmados;
                 document.getElementById('confirmadosNoAsistiran').textContent = stats.confirmadosNoAsistiran;
@@ -535,7 +546,7 @@
             const tbody = document.getElementById('invitadosBody');
             
             if (invitados.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-dark); opacity: 0.7;">No hay invitados registrados</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; color: var(--text-dark); opacity: 0.7;">No hay invitados registrados</td></tr>';
                 return;
             }
             
@@ -547,13 +558,26 @@
             
             tbody.innerHTML = invitados.map(inv => {
                 const confirmacion = confirmacionesMap[inv.id];
-                let estadoBadge = '<span class="badge badge-warning">Sin responder</span>';
+                const esRemoto = inv.categoria === 'remoto';
                 
-                if (confirmacion) {
-                    if (confirmacion.confirmado) {
-                        estadoBadge = '<span class="badge badge-success">Confirmado</span>';
-                    } else {
-                        estadoBadge = '<span class="badge badge-danger">No asistirá</span>';
+                // Categoría con ícono
+                const categoriaBadge = esRemoto 
+                    ? '<span class="badge badge-info">📺 Remoto</span>'
+                    : '<span class="badge badge-primary">👥 Presencial</span>';
+                
+                // Estado: N/A para remotos, normal para presenciales
+                let estadoBadge;
+                if (esRemoto) {
+                    estadoBadge = '<span class="badge" style="background: var(--text-dark); opacity: 0.5;">N/A</span>';
+                } else {
+                    estadoBadge = '<span class="badge badge-warning">Sin responder</span>';
+                    
+                    if (confirmacion) {
+                        if (confirmacion.confirmado) {
+                            estadoBadge = '<span class="badge badge-success">Confirmado</span>';
+                        } else {
+                            estadoBadge = '<span class="badge badge-danger">No asistirá</span>';
+                        }
                     }
                 }
                 
@@ -564,6 +588,7 @@
                         <td>${inv.email || '-'}</td>
                         <td>${inv.telefono || '-'}</td>
                         <td>${inv.grupo || 'General'}</td>
+                        <td>${categoriaBadge}</td>
                         <td>${estadoBadge}</td>
                         <td>
                             <button class="btn-action btn-edit" onclick="editarInvitado('${inv.id}')">

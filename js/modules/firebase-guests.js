@@ -275,17 +275,23 @@ export async function obtenerEstadisticas() {
         let totalCuposAsignados = 0;
         let invitadosPresenciales = 0;
         let invitadosRemotos = 0;
+        let cuposPresenciales = 0;
+        let cuposRemotos = 0;
         
         invitados.forEach(doc => {
             const data = doc.data();
+            const cupos = data.cuposAsignados || 1;
+            
             totalInvitados++;
-            totalCuposAsignados += data.cuposAsignados || 1;
+            totalCuposAsignados += cupos;
             
             // Contar por categoría
             if (data.categoria === 'remoto') {
                 invitadosRemotos++;
+                cuposRemotos += cupos;
             } else {
                 invitadosPresenciales++;
+                cuposPresenciales += cupos;
             }
         });
         
@@ -308,6 +314,8 @@ export async function obtenerEstadisticas() {
             totalCuposAsignados,
             invitadosPresenciales,
             invitadosRemotos,
+            cuposPresenciales,
+            cuposRemotos,
             confirmadosAsistiran,
             confirmadosNoAsistiran,
             totalCuposConfirmados,
