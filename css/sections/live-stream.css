@@ -29,7 +29,7 @@
 
 .placeholder-icon {
     font-size: 4rem;
-    color: var(--secondary-color);
+    color: var(--text-dark);
     margin-bottom: 1.5rem;
     animation: pulse 2s ease-in-out infinite;
 }
@@ -73,7 +73,7 @@
 }
 
 .live-date i {
-    color: var(--secondary-color);
+    color: var(--text-dark);
     font-size: 1.2rem;
 }
 
@@ -90,7 +90,7 @@
     border-radius: 10px;
     font-size: 0.95rem;
     margin-top: 2rem;
-    border-left: 4px solid var(--secondary-color);
+    border-left: 4px solid var(--text-dark);
 }
 
 /* ================================
@@ -200,7 +200,7 @@
 
 .live-info .info-card i {
     font-size: 2.5rem;
-    color: var(--secondary-color);
+    color: var(--text-dark);
     margin-bottom: 1rem;
 }
 

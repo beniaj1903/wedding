@@ -8,8 +8,8 @@ const LIVE_STREAM_CONFIG = {
     // Cambiar a true cuando el live stream esté activo
     isLive: false,
     
-    // ID del video de YouTube (cambiar cuando tengas el link)
-    videoId: 'VIDEO_ID_AQUI',
+    // ID del video de YouTube
+    videoId: 'EEOn36Ia2Oo',
     
     // Fecha del evento (para calcular si ya pasó)
     eventDate: new Date('2026-10-10T19:00:00-03:00') // Formato: YYYY-MM-DDTHH:mm:ss-timezone
