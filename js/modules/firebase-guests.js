@@ -273,10 +273,20 @@ export async function obtenerEstadisticas() {
         
         let totalInvitados = 0;
         let totalCuposAsignados = 0;
+        let invitadosPresenciales = 0;
+        let invitadosRemotos = 0;
         
         invitados.forEach(doc => {
+            const data = doc.data();
             totalInvitados++;
-            totalCuposAsignados += doc.data().cuposAsignados || 1;
+            totalCuposAsignados += data.cuposAsignados || 1;
+            
+            // Contar por categoría
+            if (data.categoria === 'remoto') {
+                invitadosRemotos++;
+            } else {
+                invitadosPresenciales++;
+            }
         });
         
         let confirmadosAsistiran = 0;
@@ -296,6 +306,8 @@ export async function obtenerEstadisticas() {
         return {
             totalInvitados,
             totalCuposAsignados,
+            invitadosPresenciales,
+            invitadosRemotos,
             confirmadosAsistiran,
             confirmadosNoAsistiran,
             totalCuposConfirmados,

@@ -361,6 +361,14 @@
                 <div class="stat-label">Total Invitados</div>
             </div>
             <div class="stat-card">
+                <div class="stat-number" id="invitadosPresenciales">0</div>
+                <div class="stat-label">👥 Presenciales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="invitadosRemotos">0</div>
+                <div class="stat-label">📺 Remotos</div>
+            </div>
+            <div class="stat-card">
                 <div class="stat-number" id="totalCupos">0</div>
                 <div class="stat-label">Cupos Totales</div>
             </div>
@@ -510,6 +518,8 @@
             const stats = await obtenerEstadisticas();
             if (stats) {
                 document.getElementById('totalInvitados').textContent = stats.totalInvitados;
+                document.getElementById('invitadosPresenciales').textContent = stats.invitadosPresenciales;
+                document.getElementById('invitadosRemotos').textContent = stats.invitadosRemotos;
                 document.getElementById('totalCupos').textContent = stats.totalCuposAsignados;
                 document.getElementById('confirmadosAsistiran').textContent = stats.confirmadosAsistiran;
                 document.getElementById('cuposConfirmados').textContent = stats.totalCuposConfirmados;
