@@ -277,7 +277,19 @@ export function initRSVPForm() {
         
         // Cambiar texto del botón
         const submitBtn = form.querySelector('button[type="submit"]');
+        const originalBtnHTML = submitBtn.innerHTML;
         submitBtn.innerHTML = '<i class="fas fa-save"></i> Actualizar Confirmación';
+        
+        // Crear contenedor para botones si no existe
+        let buttonsRow = submitBtn.parentElement.querySelector('.form-buttons-row');
+        if (!buttonsRow) {
+            buttonsRow = document.createElement('div');
+            buttonsRow.className = 'form-buttons-row';
+            
+            // Mover el botón submit al contenedor
+            submitBtn.parentElement.insertBefore(buttonsRow, submitBtn);
+            buttonsRow.appendChild(submitBtn);
+        }
         
         // Agregar botón cancelar
         let cancelBtn = document.getElementById('cancelEditBtn');
@@ -287,16 +299,24 @@ export function initRSVPForm() {
             cancelBtn.id = 'cancelEditBtn';
             cancelBtn.className = 'btn btn-secondary btn-large';
             cancelBtn.innerHTML = '<i class="fas fa-times"></i> Cancelar';
-            cancelBtn.style.marginLeft = '1rem';
             cancelBtn.onclick = () => {
                 modoEdicion = false;
                 form.style.display = 'none';
                 const existingAlert = document.getElementById('confirmacionExistente');
                 if (existingAlert) existingAlert.style.display = 'block';
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Confirmación';
+                
+                // Restaurar botón original
+                submitBtn.innerHTML = originalBtnHTML;
+                
+                // Sacar el submitBtn del contenedor de botones si existe
+                if (buttonsRow && buttonsRow.parentElement) {
+                    buttonsRow.parentElement.insertBefore(submitBtn, buttonsRow);
+                    buttonsRow.remove();
+                }
+                
                 cancelBtn.remove();
             };
-            submitBtn.parentElement.appendChild(cancelBtn);
+            buttonsRow.appendChild(cancelBtn);
         }
     };
     
