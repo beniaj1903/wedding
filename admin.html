@@ -392,6 +392,10 @@
                     <input type="email" id="email" placeholder="Email (opcional)">
                     <input type="tel" id="telefono" placeholder="Teléfono (opcional)">
                     <input type="text" id="grupo" placeholder="Grupo (Familia/Amigos)" value="General">
+                    <select id="categoria" style="padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem;">
+                        <option value="presencial">Presencial</option>
+                        <option value="remoto">Remoto</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Agregar Invitado
@@ -482,6 +486,11 @@
                     <input type="tel" id="editTelefono">
                     <label for="editGrupo">Grupo</label>
                     <input type="text" id="editGrupo" value="General">
+                    <label for="editCategoria">Categoría *</label>
+                    <select id="editCategoria" style="width: 100%; padding: 0.8rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem;">
+                        <option value="presencial">Presencial</option>
+                        <option value="remoto">Remoto</option>
+                    </select>
                 </form>
             </div>
             <div class="modal-footer">
@@ -600,7 +609,8 @@
                 cuposAsignados: parseInt(document.getElementById('cuposAsignados').value),
                 email: document.getElementById('email').value,
                 telefono: document.getElementById('telefono').value,
-                grupo: document.getElementById('grupo').value
+                grupo: document.getElementById('grupo').value,
+                categoria: document.getElementById('categoria').value
             };
             
             try {
@@ -639,6 +649,7 @@
             document.getElementById('editEmail').value = invitado.email || '';
             document.getElementById('editTelefono').value = invitado.telefono || '';
             document.getElementById('editGrupo').value = invitado.grupo || 'General';
+            document.getElementById('editCategoria').value = invitado.categoria || 'presencial';
             
             // Mostrar modal
             document.getElementById('editInvitadoModal').classList.add('show');
@@ -655,7 +666,8 @@
                 cuposAsignados: parseInt(document.getElementById('editCupos').value),
                 email: document.getElementById('editEmail').value,
                 telefono: document.getElementById('editTelefono').value,
-                grupo: document.getElementById('editGrupo').value
+                grupo: document.getElementById('editGrupo').value,
+                categoria: document.getElementById('editCategoria').value
             };
             
             try {

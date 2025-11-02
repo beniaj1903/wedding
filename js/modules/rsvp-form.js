@@ -147,8 +147,69 @@ export function initRSVPForm() {
             invitadoInfo.appendChild(cambiarBtn);
         }
         
+        // Verificar si el invitado es remoto
+        if (guest.categoria === 'remoto') {
+            mostrarModalInvitadoRemoto();
+            return;
+        }
+        
         // Buscar si ya tiene confirmación
         await verificarConfirmacionExistente(guest.id);
+    }
+    
+    // ================================
+    // MODAL INVITADO REMOTO
+    // ================================
+    function mostrarModalInvitadoRemoto() {
+        // Crear overlay si no existe
+        let overlay = document.getElementById('remotoModalOverlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'remotoModalOverlay';
+            overlay.className = 'remoto-modal-overlay';
+            overlay.innerHTML = `
+                <div class="remoto-modal-content">
+                    <div class="remoto-modal-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>¡Gracias por tu interés!</h3>
+                    <p class="remoto-modal-message">
+                        Entendemos que no podrás asistir a celebrar presencialmente con nosotros.
+                    </p>
+                    <p class="remoto-modal-invite">
+                        Te invitamos a acompañarnos en la <strong>transmisión en vivo</strong>, 
+                        que podrás encontrar al final de la página.
+                    </p>
+                    <p class="remoto-modal-thanks">
+                        Gracias por estar allí 💕
+                    </p>
+                    <button class="btn btn-primary" onclick="cerrarModalRemoto()">
+                        <i class="fas fa-heart"></i> Entendido
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+        overlay.style.display = 'flex';
+        
+        // Ocultar formulario RSVP
+        document.getElementById('rsvpForm').style.display = 'none';
+    }
+    
+    // Función global para cerrar el modal
+    window.cerrarModalRemoto = function() {
+        const overlay = document.getElementById('remotoModalOverlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+        }
+        
+        // Scroll hacia la sección de live stream
+        const liveStreamSection = document.getElementById('live-stream');
+        if (liveStreamSection) {
+            setTimeout(() => {
+                liveStreamSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
     }
     
     // ================================
@@ -436,8 +497,8 @@ export function initRSVPForm() {
             const mensajeExito = modoEdicion
                 ? '¡Tu confirmación ha sido actualizada correctamente!'
                 : (confirmado 
-                    ? '¡Gracias por confirmar! Nos vemos en la boda 🎉' 
-                    : 'Gracias por avisarnos. Te extrañaremos 💔');
+                    ? '¡Gracias por confirmar! Nos vemos en la boda' 
+                    : 'Gracias por avisarnos. ¡Te extrañaremos!');
             
             mostrarMensaje(mensajeExito, 'success');
             

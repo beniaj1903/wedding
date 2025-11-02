@@ -83,6 +83,7 @@ export async function agregarInvitado(datosInvitado) {
             email: datosInvitado.email || '',
             telefono: datosInvitado.telefono || '',
             grupo: datosInvitado.grupo || 'General',
+            categoria: datosInvitado.categoria || 'presencial', // 'presencial' o 'remoto'
             invitadoPor: datosInvitado.invitadoPor || '',
             createdAt: serverTimestamp()
         });
@@ -107,6 +108,7 @@ export async function actualizarInvitado(invitadoId, datosInvitado) {
             email: datosInvitado.email || '',
             telefono: datosInvitado.telefono || '',
             grupo: datosInvitado.grupo || 'General',
+            categoria: datosInvitado.categoria || 'presencial', // 'presencial' o 'remoto'
             updatedAt: serverTimestamp()
         });
         
