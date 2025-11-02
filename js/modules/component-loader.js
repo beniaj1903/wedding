@@ -50,10 +50,10 @@ export async function loadComponents(components) {
 
 /**
  * Carga todos los componentes de la página en el orden especificado
+ * Nota: welcome-modal ya está incluido directamente en index.html
  */
 export async function loadAllComponents() {
     const components = [
-        { name: 'welcome-modal', target: 'body' },
         { name: 'navigation', target: 'body' },
         { name: 'hero', target: 'body' },
         { name: 'invitation', target: 'body' },
