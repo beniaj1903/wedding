@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestra Boda ♥</title>
+    <title>Nuestra Boda ♥ Yose & Benito</title>
     
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -33,40 +33,31 @@
     <link rel="stylesheet" href="css/sections/responsive.css">
 </head>
 <body class="loading-page">
-    <!-- 
-        ╔════════════════════════════════════════════════════════════╗
-        ║  MODAL DE BIENVENIDA (CARGA INMEDIATA)                    ║
-        ║  Incluido directamente para evitar intermitencias          ║
-        ║  Para editar: ver HTML abajo (no en components/)          ║
-        ╚════════════════════════════════════════════════════════════╝
-    -->
-    <!-- MODAL DE BIENVENIDA -->
+    
+    <!-- ========================================
+         MODAL DE BIENVENIDA (SIEMPRE VISIBLE PRIMERO)
+         ======================================== -->
     <div class="welcome-modal" id="welcomeModal">
         <div class="welcome-overlay"></div>
         <div class="welcome-content">
             <div class="welcome-inner">
-                <!-- Decoración superior -->
                 <div class="welcome-decoration-top">
                     <i class="fas fa-heart"></i>
                 </div>
                 
-                <!-- Contenido principal -->
                 <h1 class="welcome-title">Yose & Benito</h1>
                 <p class="welcome-subtitle">Nos casamos</p>
                 <p class="welcome-date">10 de Octubre, 2026</p>
                 
-                <!-- Decoración -->
                 <div class="welcome-divider">
                     <span>✦</span>
                 </div>
                 
-                <!-- Mensaje -->
                 <p class="welcome-message">
                     ¡Bienvenido/a a nuestra celebración!<br/>
                     Por favor, identifícate para una experiencia personalizada
                 </p>
                 
-                <!-- Formulario de identificación -->
                 <div class="welcome-guest-form">
                     <div class="guest-search-wrapper">
                         <i class="fas fa-search search-icon"></i>
@@ -82,12 +73,8 @@
                         </div>
                     </div>
                     
-                    <!-- Lista de sugerencias -->
-                    <div class="guest-suggestions" id="welcomeGuestSuggestions" style="display: none;">
-                        <!-- Se llena dinámicamente con JavaScript -->
-                    </div>
+                    <div class="guest-suggestions" id="welcomeGuestSuggestions" style="display: none;"></div>
                     
-                    <!-- Invitado seleccionado -->
                     <div class="guest-selected" id="welcomeGuestSelected" style="display: none;">
                         <div class="selected-info">
                             <i class="fas fa-user-check"></i>
@@ -102,18 +89,15 @@
                     </div>
                 </div>
                 
-                <!-- Botón de entrada (solo visible cuando hay invitado seleccionado) -->
                 <button class="welcome-btn" id="welcomeEnterBtn" style="display: none;">
                     <span>Entrar al sitio</span>
                     <i class="fas fa-heart"></i>
                 </button>
                 
-                <!-- Opción para continuar sin identificarse -->
                 <button class="welcome-skip-btn" id="welcomeSkipBtn">
                     Continuar sin identificarme
                 </button>
                 
-                <!-- Nota sobre música -->
                 <p class="welcome-note">
                     🎵 Incluye música de fondo
                 </p>
@@ -121,28 +105,601 @@
         </div>
     </div>
 
-    <!-- 
-        ╔════════════════════════════════════════════════════════════╗
-        ║  RESTO DE COMPONENTES (CARGA DINÁMICA)                    ║
-        ║  Se cargan después del modal vía JavaScript                ║
-        ║                                                            ║
-        ║  Para editar contenido, modifica los archivos en:         ║
-        ║  components/navigation.html                                ║
-        ║  components/hero.html                                      ║
-        ║  components/invitation.html                                ║
-        ║  components/timeline.html                                  ║
-        ║  components/rsvp.html                                      ║
-        ║  components/info.html                                      ║
-        ║  components/gifts.html                                     ║
-        ║  components/live-stream.html                               ║
-        ║  components/video.html                                     ║
-        ║  components/footer.html                                    ║
-        ║  components/music-player.html                              ║
-        ╚════════════════════════════════════════════════════════════╝
-    -->
+    <!-- ========================================
+         NAVEGACIÓN
+         ======================================== -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Y & B</div>
+            <ul class="nav-menu">
+                <li><a href="#inicio" class="nav-link">Inicio</a></li>
+                <li><a href="#invitacion" class="nav-link">Invitación</a></li>
+                <li><a href="#programa" class="nav-link">Programa</a></li>
+                <li><a href="#info" class="nav-link">Información</a></li>
+                <li><a href="#rsvp" class="nav-link">RSVP</a></li>
+                <li><a href="#regalos" class="nav-link">Regalos</a></li>
+                <li><a href="#live-stream" class="nav-link">En Vivo</a></li>
+                <li><a href="#video" class="nav-link">Video</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
 
-    <!-- Los componentes se cargarán aquí automáticamente -->
+    <!-- ========================================
+         HERO / CAROUSEL
+         ======================================== -->
+    <section id="inicio" class="hero-section">
+        <div class="swiper hero-swiper">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.48.jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.47.jpeg'); background-size: 40%; background-position: center 10%;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.47 (1).jpeg'); background-size: 40%; background-position: center 55%;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.48 (4).jpeg'); background-size: 40%; background-position: center center;">
+                    <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.49 (1).jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.50.jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.48 (2).jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.49 (3).jpeg'); background-size: 60%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.42.jpeg'); background-size: 40%; background-position: center 10%;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.49.jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.47 (2).jpeg'); background-size: 40%; background-position: 120% center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.49 (2).jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.48 (3).jpeg'); background-size: 60%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.49 (4).jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.48 (1).jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.50 (1).jpeg'); background-size: 60%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.50 (2).jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.50 (3).jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="slide-content" style="background-image: url('media/carousel/WhatsApp Image 2025-10-25 at 11.24.50 (4).jpeg'); background-size: 40%; background-position: center center;">
+                        <div class="hero-overlay"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- ========================================
+         INVITACIÓN
+         ======================================== -->
+    <section id="invitacion" class="invitation-section">
+        <div class="container">
+            <div class="section-header">
+                <i class="fas fa-heart section-icon"></i>
+                <h2 class="section-title">Invitación</h2>
+                <div class="title-underline"></div>
+            </div>
+            
+            <div class="envelope-container">
+                <div class="envelope" id="envelope">
+                    <div class="envelope-body">
+                        <div class="envelope-content">
+                            <h3 class="names" id="envelopeName">Invitado Especial</h3>
+                            <div class="click-hint">
+                                <i class="fas fa-hand-pointer"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="invitation-details" id="invitationDetails">
+                    <button class="close-envelope" id="closeEnvelope" aria-label="Cerrar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="details-inner"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         TIMELINE / PROGRAMA
+         ======================================== -->
+    <section id="programa" class="timeline-section">
+        <div class="container">
+            <div class="section-header">
+                <i class="fas fa-clock section-icon"></i>
+                <h2 class="section-title">Programa del Día</h2>
+                <div class="title-underline"></div>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>19:00h</h3>
+                        <h4>Ceremonia</h4>
+                        <p>Inicio de la celebración</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>20:00h</h3>
+                        <h4>Cóctel</h4>
+                        <p>Aperitivos y bebidas de bienvenida</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>21:00h</h3>
+                        <h4>Cena</h4>
+                        <p>Deliciosa cena para compartir</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <h3>22:00h</h3>
+                        <h4>Baile y Fiesta</h4>
+                        <p>¡A bailar y celebrar!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         RSVP
+         ======================================== -->
+    <section id="rsvp" class="rsvp-section">
+        <div class="container">
+            <div class="section-header">
+                <i class="fas fa-envelope section-icon"></i>
+                <h2 class="section-title">Confirma tu Asistencia</h2>
+                <div class="title-underline"></div>
+                <p class="section-subtitle">Por favor confírmanos antes del 1 de Mayo, 2026</p>
+            </div>
+            <div class="rsvp-form-container">
+                <div id="mensajeInvitadoRemoto" class="mensaje-invitado-remoto" style="display: none;">
+                    <div class="remoto-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3>¡Gracias por tu interés!</h3>
+                    <p class="remoto-message">
+                        Entendemos que no podrás asistir a celebrar presencialmente con nosotros.
+                    </p>
+                    <div class="remoto-invite">
+                        <p>
+                            Te invitamos a acompañarnos en la <strong>transmisión en vivo</strong>, 
+                            que podrás encontrar al final de la página.
+                        </p>
+                    </div>
+                    <p class="remoto-thanks">
+                        Gracias por estar allí 💕
+                    </p>
+                    <a href="#live-stream" class="btn btn-primary">
+                        <i class="fas fa-video"></i> Ver Transmisión en Vivo
+                    </a>
+                </div>
+                
+                <form id="rsvpForm" class="rsvp-form">
+                    <div class="form-group">
+                        <label for="buscarInvitado">Busca tu nombre en la lista de invitados *</label>
+                        <div class="autocomplete-wrapper">
+                            <input 
+                                type="text" 
+                                id="buscarInvitado" 
+                                name="buscarInvitado" 
+                                placeholder="Escribe tu nombre..."
+                                autocomplete="off"
+                                required>
+                            <div id="autocompleteResults" class="autocomplete-results"></div>
+                        </div>
+                        <input type="hidden" id="invitadoId" name="invitadoId">
+                        <div id="invitadoSeleccionado" class="invitado-info" style="display: none;">
+                            <p class="invitado-nombre"></p>
+                            <p class="invitado-cupos"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Teléfono</label>
+                            <input type="tel" id="telefono" name="telefono">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>¿Confirmas tu asistencia? *</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="asistencia" value="si" required>
+                                <span>Sí, asistiré con gusto</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="asistencia" value="no">
+                                <span>No podré asistir</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>¿Necesitas transporte?</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="transporte" value="si">
+                                <span>Sí</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="transporte" value="no" checked>
+                                <span>No</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="alergias">Alergias o Restricciones Alimenticias</label>
+                        <textarea id="alergias" name="alergias" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje para los Novios</label>
+                        <textarea id="mensaje" name="mensaje" rows="4" placeholder="Déjanos un mensaje especial..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <i class="fas fa-paper-plane"></i> Enviar Confirmación
+                    </button>
+                </form>
+                <div id="formMessage" class="form-message"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         INFORMACIÓN PRÁCTICA
+         ======================================== -->
+    <section id="info" class="info-section">
+        <div class="container">
+            <div class="section-header">
+                <i class="fas fa-info-circle section-icon"></i>
+                <h2 class="section-title">Información Práctica</h2>
+                <div class="title-underline"></div>
+            </div>
+            <div class="info-grid">
+                <div class="info-card full-width">
+                    <div class="info-icon">
+                        <i class="fas fa-bus"></i>
+                    </div>
+                    <h3>Opciones de Traslado</h3>
+                    
+                    <div class="transport-option">
+                        <h4><i class="fas fa-shuttle-van"></i> Opción 1: Transporte Organizado</h4>
+                        <p>Tenemos un transporte desde Santiago hasta el salón, ida y vuelta</p>
+                        <p class="note">Por favor confirma tu necesidad de transporte en el RSVP</p>
+                    </div>
+                    
+                    <div class="transport-option">
+                        <h4><i class="fas fa-car"></i> Opción 2: Auto Propio</h4>
+                        <p>Puedes ocupar tu auto, hay estacionamiento seguro dentro del complejo</p>
+                    </div>
+                    
+                    <div class="transport-option">
+                        <h4><i class="fas fa-route"></i> Opción 3: Transporte Público</h4>
+                        <p>Tomar un bus en Santiago - Limache y de ahí tomar un bus, uber o colectivo hasta el complejo</p>
+                    </div>
+                </div>
+                
+                <div class="info-card full-width">
+                    <div class="info-icon">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <h3>Hospedaje</h3>
+                    <p>Opciones de alojamiento cercanas:</p>
+                    <div class="lodging-options">
+                        <div class="hotel-info">
+                            <h4><i class="fas fa-home"></i> Cabañas en el Complejo</h4>
+                            <p>Desde 2 a 6 personas</p>
+                            <p><i class="fas fa-phone"></i> <a href="tel:+56942207284">+56 9 4220 7284</a></p>
+                            <p class="note">Dentro del mismo complejo</p>
+                        </div>
+                        <div class="hotel-info">
+                            <h4><i class="fab fa-instagram"></i> Olmuenatura</h4>
+                            <p><i class="fas fa-map-marker-alt"></i> A 6 minutos del complejo</p>
+                            <p><i class="fab fa-instagram"></i> <a href="https://instagram.com/olmuenatura" target="_blank">@olmuenatura</a></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-card full-width">
+                    <div class="info-icon">
+                        <i class="fas fa-map"></i>
+                    </div>
+                    <h3>Ubicación</h3>
+                    <p>Salón La Siesta Dejando Huella - Las Cruces, Olmué</p>
+                    <div class="map-placeholder">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3345.7195345507876!2d-71.20427011310123!3d-33.01116902491699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9689d555d0ffbdaf%3A0x21fd02146bffe47!2sDejando%20Huella%20La%20Siesta!5e0!3m2!1sen!2scl!4v1761504219606!5m2!1sen!2scl"
+                            width="100%"
+                            height="450"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    <a href="https://maps.app.goo.gl/1ZgNcTfhG9k2c7Ro8" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-directions"></i> Ver en Google Maps
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         REGALOS / APORTES
+         ======================================== -->
+    <section id="regalos" class="gifts-section">
+        <div class="container">
+            <div class="section-header">
+                <i class="fas fa-gift section-icon"></i>
+                <h2 class="section-title">Regalos / Aportes</h2>
+                <div class="title-underline"></div>
+            </div>
+            <div class="gifts-container">
+                <div class="gift-card-initial" id="giftCardInitial">
+                    <div class="gift-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <p class="gift-message">
+                        Si deseas hacernos un regalo, puedes contribuir a nuestro fondo de boda mediante la transferencia bancaria, un aporte por paypal ó el medio que te convenga, cualquier duda puedes contactarnos.
+                    </p>
+                    <button class="btn btn-primary" id="btnOpenGift">
+                        <i class="fas fa-hand-holding-heart"></i> Contribuir
+                    </button>
+                </div>
+
+                <div class="gift-details" id="giftDetails">
+                    <div class="gift-details-content">
+                        <button class="gift-close-btn" id="btnCloseGift" aria-label="Cerrar">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        
+                        <h3 class="gift-details-title">Yoselyn Del Valle<br/>Moreno Zambrano</h3>
+                        
+                        <div class="gift-bank-info">
+                            <p><strong>RUT:</strong> 26.309.894-3</p>
+                            <p>Cuenta Corriente</p>
+                            <p class="account-number">0 000 90 86823 3</p>
+                            <p>Banco Santander</p>
+                            <p class="email-contact">YOCEM18@GMAIL.COM</p>
+                        </div>
+
+                        <div class="gift-divider">— ó —</div>
+
+                        <a class="btn btn-paypal" 
+                           href="https://paypal.me/bodalosnenes?locale.x=es_XC&country.x=CL" 
+                           target="_blank" 
+                           rel="noopener noreferrer">
+                            <i class="fab fa-paypal"></i> Contribuir por PayPal
+                        </a>
+
+                        <p class="gift-thanks">
+                            Muchísimas gracias por tu aporte a nuestro día y por tu amistad y compañía.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         TRANSMISIÓN EN VIVO
+         ======================================== -->
+    <section id="live-stream" class="live-stream-section">
+        <div class="container">
+            <div class="section-header">
+                <i class="fas fa-video section-icon"></i>
+                <h2 class="section-title">Transmisión en Vivo</h2>
+                <div class="title-underline"></div>
+                <p class="section-subtitle">
+                    Si no puedes estar con nosotros presencialmente,<br/>
+                    podrás seguir nuestra ceremonia en vivo desde cualquier lugar del mundo
+                </p>
+            </div>
+
+            <div class="live-stream-content">
+                <div class="live-stream-placeholder" id="liveStreamPlaceholder" style="display: none;">
+                    <div class="placeholder-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>¡Próximamente!</h3>
+                    <p>La transmisión en vivo estará disponible el día de la boda</p>
+                    <div class="live-date">
+                        <i class="far fa-calendar"></i>
+                        <span>10 de Octubre, 2026 • 19:00h</span>
+                    </div>
+                    <p class="live-note">
+                        💡 <strong>Tip:</strong> Guarda esta página en favoritos para acceder fácilmente el día del evento
+                    </p>
+                </div>
+
+                <div class="live-stream-player" id="liveStreamPlayer">
+                    <div class="video-wrapper">
+                        <iframe 
+                            id="liveStreamIframe"
+                            src="https://www.youtube.com/embed/EEOn36Ia2Oo" 
+                            title="Transmisión en Vivo - Boda Yoselyn y Benito"
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            allowfullscreen
+                            loading="lazy">
+                        </iframe>
+                    </div>
+                    
+                    <div class="live-actions">
+                        <a href="https://youtube.com/live/EEOn36Ia2Oo" target="_blank" rel="noopener noreferrer" class="btn-live">
+                            <i class="fab fa-youtube"></i>
+                            Ver en YouTube
+                        </a>
+                        <button class="btn-notify" id="notifyBtn">
+                            <i class="far fa-bell"></i>
+                            Activar Recordatorio
+                        </button>
+                    </div>
+                </div>
+
+                <div class="live-info">
+                    <div class="info-card">
+                        <i class="fas fa-clock"></i>
+                        <h4>Horario</h4>
+                        <p>La transmisión comenzará a las 19:00h (hora de Chile)</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-wifi"></i>
+                        <h4>Requisitos</h4>
+                        <p>Solo necesitas una conexión a internet estable</p>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-heart"></i>
+                        <h4>Interacción</h4>
+                        <p>Podrás dejarnos mensajes en el chat en vivo</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         VIDEO DE DESPEDIDA
+         ======================================== -->
+    <section id="video" class="video-section">
+        <div class="container">
+            <div class="section-header">
+                <i class="fas fa-heart section-icon"></i>
+                <h2 class="section-title">Nuestra Despedida</h2>
+                <div class="title-underline"></div>
+                <p class="section-subtitle">Un mensaje especial para ti</p>
+            </div>
+            <div class="video-container">
+                <div class="video-player">
+                    <iframe 
+                        src="https://www.youtube.com/embed/GGo4uANP95E" 
+                        title="Nuestra Despedida" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         FOOTER
+         ======================================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <h3 class="footer-title">Yoselyn y Benito</h3>
+                <p class="footer-date">10.10.2026</p>
+                <p class="footer-hashtag">#bodalosnenes</p>
+                <p class="footer-text">Nos vemos pronto ♥</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================
+         REPRODUCTOR DE MÚSICA
+         ======================================== -->
+    <div class="music-player" id="musicPlayer">
+        <div id="youtubePlayer" style="display: none;"></div>
+        <button class="music-toggle" id="musicToggle" aria-label="Reproducir música">
+            <div class="music-icon">
+                <i class="fas fa-music"></i>
+            </div>
+        </button>
+        <div class="music-tooltip" id="musicTooltip">
+            🎵 Estás escuchando una canción especial
+        </div>
+    </div>
     
+    <!-- ========================================
+         SCRIPTS
+         ======================================== -->
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     
