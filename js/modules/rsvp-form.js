@@ -438,45 +438,40 @@ export function initRSVPForm() {
             
             mostrarMensaje(mensajeExito, 'success');
             
-            // Si es modo edición, recargar la confirmación desde Firebase
+            // Recargar la confirmación desde Firebase (tanto para nueva como para edición)
             if (modoEdicion) {
                 modoEdicion = false;
                 
-                // Buscar la confirmación actualizada desde Firebase
-                setTimeout(async () => {
-                    const confirmacionActualizada = await buscarConfirmacion(invitadoSeleccionado.id);
-                    if (confirmacionActualizada) {
-                        confirmacionExistente = confirmacionActualizada;
-                        form.style.display = 'none';
-                        mostrarConfirmacionExistente(confirmacionExistente);
-                        
-                        // Restaurar estructura de botones
-                        const buttonsRow = submitBtn.parentElement;
-                        if (buttonsRow && buttonsRow.classList.contains('form-buttons-row')) {
-                            buttonsRow.parentElement.insertBefore(submitBtn, buttonsRow);
-                            buttonsRow.remove();
-                        }
-                        
-                        // Restaurar texto original del botón
-                        submitBtn.innerHTML = originalText;
-                        
-                        // Remover botón cancelar si existe
-                        const cancelBtn = document.getElementById('cancelEditBtn');
-                        if (cancelBtn) cancelBtn.remove();
-                        
-                        // Scroll suave hacia la confirmación
-                        const confirmacionEl = document.getElementById('confirmacionExistente');
-                        if (confirmacionEl) {
-                            confirmacionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    }
-                }, 1000);
-            } else {
-                // Nueva confirmación: recargar para ver el estado actualizado
-                setTimeout(() => {
-                    location.reload();
-                }, 2000);
+                // Restaurar estructura de botones si estaba en modo edición
+                const buttonsRow = submitBtn.parentElement;
+                if (buttonsRow && buttonsRow.classList.contains('form-buttons-row')) {
+                    buttonsRow.parentElement.insertBefore(submitBtn, buttonsRow);
+                    buttonsRow.remove();
+                }
+                
+                // Restaurar texto original del botón
+                submitBtn.innerHTML = originalText;
+                
+                // Remover botón cancelar si existe
+                const cancelBtn = document.getElementById('cancelEditBtn');
+                if (cancelBtn) cancelBtn.remove();
             }
+            
+            // Buscar la confirmación desde Firebase (para nueva confirmación o actualización)
+            setTimeout(async () => {
+                const confirmacionActualizada = await buscarConfirmacion(invitadoSeleccionado.id);
+                if (confirmacionActualizada) {
+                    confirmacionExistente = confirmacionActualizada;
+                    form.style.display = 'none';
+                    mostrarConfirmacionExistente(confirmacionExistente);
+                    
+                    // Scroll suave hacia la confirmación
+                    const confirmacionEl = document.getElementById('confirmacionExistente');
+                    if (confirmacionEl) {
+                        confirmacionEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }
+            }, 1500);
             
         } catch (error) {
             console.error('Error guardando confirmación:', error);
