@@ -176,6 +176,9 @@ export function initRSVPForm() {
         }
     }
     
+    // Exponer la función globalmente para uso externo
+    window.mostrarMensajeInvitadoRemoto = mostrarMensajeInvitadoRemoto;
+    
     // ================================
     // VERIFICAR CONFIRMACIÓN EXISTENTE
     // ================================

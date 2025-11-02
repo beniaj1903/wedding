@@ -9,6 +9,7 @@ import { buscarInvitados } from './firebase-guests.js';
 let onModalCloseCallback = null;
 let selectedGuest = null;
 let searchTimeout = null;
+let userSkipped = false; // Flag para saber si el usuario continuó sin identificarse
 
 export function initWelcomeModal() {
     const modal = document.getElementById('welcomeModal');
@@ -155,6 +156,7 @@ function displaySuggestions(guests) {
  */
 function selectGuest(guest) {
     selectedGuest = guest;
+    userSkipped = false; // Se identificó correctamente
     
     const searchInput = document.getElementById('welcomeGuestSearch');
     const suggestions = document.getElementById('welcomeGuestSuggestions');
@@ -187,6 +189,7 @@ function selectGuest(guest) {
  */
 function handleChangeGuest() {
     selectedGuest = null;
+    userSkipped = false; // Resetear flag al cambiar
     
     const searchInput = document.getElementById('welcomeGuestSearch');
     const guestSelected = document.getElementById('welcomeGuestSelected');
@@ -214,6 +217,7 @@ function handleChangeGuest() {
 function handleEnter() {
     if (!selectedGuest) return;
     
+    userSkipped = false; // Se identificó correctamente
     console.log('👤 Usuario identificado:', selectedGuest.nombreCompleto);
     
     // Cerrar modal (no guardamos nada)
@@ -224,6 +228,8 @@ function handleEnter() {
  * Continuar sin identificarse
  */
 function handleSkip() {
+    userSkipped = true; // Marcamos que continuó sin identificarse
+    selectedGuest = null; // No hay invitado seleccionado
     console.log('⏭️ Usuario continuó sin identificarse');
     
     // Cerrar modal (no guardamos nada)
@@ -271,7 +277,7 @@ export function getCurrentGuest() {
  * Verificar si el usuario saltó la identificación
  */
 export function isGuestSkipped() {
-    return selectedGuest === null;
+    return userSkipped;
 }
 
 /**
@@ -279,6 +285,7 @@ export function isGuestSkipped() {
  */
 export function clearCurrentGuest() {
     selectedGuest = null;
+    userSkipped = false;
     console.log('🗑️ Estado limpiado');
 }
 

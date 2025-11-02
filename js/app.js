@@ -13,7 +13,7 @@ import { initEnvelopeAnimation, personalizarSobre } from './modules/envelope-ani
 import { initGifts } from './modules/gifts.js';
 import { initLiveStream } from './modules/live-stream.js';
 import { initMusicPlayer, startMusicFromExternalTrigger } from './modules/music-player.js';
-import { initWelcomeModal, onModalClose, getCurrentGuest } from './modules/welcome-modal.js';
+import { initWelcomeModal, onModalClose, getCurrentGuest, isGuestSkipped } from './modules/welcome-modal.js';
 import { showConsoleMessage } from './modules/utils.js';
 
 // Funciones opcionales (descomenta para usar):
@@ -52,6 +52,16 @@ function initializeApp() {
     onModalClose(() => {
         console.log('🎵 Modal cerrado, iniciando música...');
         startMusicFromExternalTrigger();
+        
+        // Verificar si el usuario continuó sin identificarse
+        if (isGuestSkipped()) {
+            console.log('⏭️ Usuario no identificado - Mostrando mensaje remoto en RSVP');
+            // Mostrar mensaje de invitado remoto para evitar que llenen información de otros
+            if (window.mostrarMensajeInvitadoRemoto) {
+                window.mostrarMensajeInvitadoRemoto();
+            }
+            return; // No personalizar nada más
+        }
         
         // Personalizar contenido después de cerrar el modal
         const guestFromModal = getCurrentGuest();
