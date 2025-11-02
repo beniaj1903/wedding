@@ -138,6 +138,9 @@ export function initRSVPForm() {
             // Limpiar mensaje de confirmación existente
             const existingAlert = document.getElementById('confirmacionExistente');
             if (existingAlert) existingAlert.remove();
+            // Ocultar mensaje de invitado remoto si está visible
+            const mensajeRemoto = document.getElementById('mensajeInvitadoRemoto');
+            if (mensajeRemoto) mensajeRemoto.style.display = 'none';
             // Mostrar formulario normal
             document.getElementById('rsvpForm').style.display = 'block';
         };
@@ -149,7 +152,7 @@ export function initRSVPForm() {
         
         // Verificar si el invitado es remoto
         if (guest.categoria === 'remoto') {
-            mostrarModalInvitadoRemoto();
+            mostrarMensajeInvitadoRemoto();
             return;
         }
         
@@ -158,57 +161,18 @@ export function initRSVPForm() {
     }
     
     // ================================
-    // MODAL INVITADO REMOTO
+    // MENSAJE INVITADO REMOTO
     // ================================
-    function mostrarModalInvitadoRemoto() {
-        // Crear overlay si no existe
-        let overlay = document.getElementById('remotoModalOverlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'remotoModalOverlay';
-            overlay.className = 'remoto-modal-overlay';
-            overlay.innerHTML = `
-                <div class="remoto-modal-content">
-                    <div class="remoto-modal-icon">
-                        <i class="fas fa-video"></i>
-                    </div>
-                    <h3>¡Gracias por tu interés!</h3>
-                    <p class="remoto-modal-message">
-                        Entendemos que no podrás asistir a celebrar presencialmente con nosotros.
-                    </p>
-                    <p class="remoto-modal-invite">
-                        Te invitamos a acompañarnos en la <strong>transmisión en vivo</strong>, 
-                        que podrás encontrar al final de la página.
-                    </p>
-                    <p class="remoto-modal-thanks">
-                        Gracias por estar allí 💕
-                    </p>
-                    <button class="btn btn-primary" onclick="cerrarModalRemoto()">
-                        <i class="fas fa-heart"></i> Entendido
-                    </button>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-        }
-        overlay.style.display = 'flex';
+    function mostrarMensajeInvitadoRemoto() {
+        const mensajeRemoto = document.getElementById('mensajeInvitadoRemoto');
+        const formRSVP = document.getElementById('rsvpForm');
         
-        // Ocultar formulario RSVP
-        document.getElementById('rsvpForm').style.display = 'none';
-    }
-    
-    // Función global para cerrar el modal
-    window.cerrarModalRemoto = function() {
-        const overlay = document.getElementById('remotoModalOverlay');
-        if (overlay) {
-            overlay.style.display = 'none';
-        }
-        
-        // Scroll hacia la sección de live stream
-        const liveStreamSection = document.getElementById('live-stream');
-        if (liveStreamSection) {
-            setTimeout(() => {
-                liveStreamSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 300);
+        if (mensajeRemoto && formRSVP) {
+            // Ocultar formulario y mostrar mensaje
+            formRSVP.style.display = 'none';
+            mensajeRemoto.style.display = 'block';
+            
+            console.log('📺 Mostrando mensaje para invitado remoto');
         }
     }
     
