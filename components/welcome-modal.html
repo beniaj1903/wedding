@@ -20,14 +20,55 @@
             
             <!-- Mensaje -->
             <p class="welcome-message">
-                ¡Bienvenidos a nuestra celebración!<br/>
-                Haz click para entrar y disfrutar de nuestra historia
+                ¡Bienvenido/a a nuestra celebración!<br/>
+                Por favor, identifícate para una experiencia personalizada
             </p>
             
-            <!-- Botón de entrada -->
-            <button class="welcome-btn" id="welcomeEnterBtn">
+            <!-- Formulario de identificación -->
+            <div class="welcome-guest-form">
+                <div class="guest-search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input 
+                        type="text" 
+                        id="welcomeGuestSearch" 
+                        class="guest-search-input"
+                        placeholder="Busca tu nombre..."
+                        autocomplete="off"
+                    >
+                    <div class="search-loader" id="welcomeSearchLoader" style="display: none;">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                </div>
+                
+                <!-- Lista de sugerencias -->
+                <div class="guest-suggestions" id="welcomeGuestSuggestions" style="display: none;">
+                    <!-- Se llena dinámicamente con JavaScript -->
+                </div>
+                
+                <!-- Invitado seleccionado -->
+                <div class="guest-selected" id="welcomeGuestSelected" style="display: none;">
+                    <div class="selected-info">
+                        <i class="fas fa-user-check"></i>
+                        <div class="selected-text">
+                            <strong id="welcomeSelectedName"></strong>
+                            <span id="welcomeSelectedGuests"></span>
+                        </div>
+                    </div>
+                    <button class="change-guest-btn" id="welcomeChangeGuest">
+                        <i class="fas fa-edit"></i> Cambiar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Botón de entrada (solo visible cuando hay invitado seleccionado) -->
+            <button class="welcome-btn" id="welcomeEnterBtn" style="display: none;">
                 <span>Entrar al sitio</span>
                 <i class="fas fa-heart"></i>
+            </button>
+            
+            <!-- Opción para continuar sin identificarse -->
+            <button class="welcome-skip-btn" id="welcomeSkipBtn">
+                Continuar sin identificarme
             </button>
             
             <!-- Nota sobre música -->

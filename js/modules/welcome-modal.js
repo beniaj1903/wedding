@@ -1,40 +1,243 @@
 /**
  * MÓDULO: WELCOME MODAL
- * Modal de bienvenida que se muestra al entrar al sitio
+ * Modal de bienvenida con identificación de invitado
  * Al cerrarlo, inicia la música automáticamente
  */
 
+import { buscarInvitados } from './firebase-guests.js';
+
 let onModalCloseCallback = null;
+let selectedGuest = null;
+let searchTimeout = null;
 
 export function initWelcomeModal() {
     const modal = document.getElementById('welcomeModal');
+    const searchInput = document.getElementById('welcomeGuestSearch');
+    const suggestions = document.getElementById('welcomeGuestSuggestions');
+    const searchLoader = document.getElementById('welcomeSearchLoader');
+    const guestSelected = document.getElementById('welcomeGuestSelected');
     const enterBtn = document.getElementById('welcomeEnterBtn');
+    const skipBtn = document.getElementById('welcomeSkipBtn');
+    const changeBtn = document.getElementById('welcomeChangeGuest');
     
-    if (!modal || !enterBtn) {
-        console.warn('Elementos del modal de bienvenida no encontrados');
+    if (!modal) {
+        console.warn('Modal de bienvenida no encontrado');
         return;
     }
     
-    // Verificar si ya se mostró el modal antes (usar sessionStorage para que se muestre una vez por sesión)
-    const hasSeenWelcome = sessionStorage.getItem('hasSeenWelcome');
-    
-    if (hasSeenWelcome) {
-        // Ya vio el modal, ocultarlo inmediatamente
+    // Verificar si ya hay un invitado guardado
+    const savedGuest = getSavedGuest();
+    if (savedGuest) {
+        // Ya se identificó antes, cerrar modal automáticamente
         modal.classList.add('hidden');
         return;
     }
     
-    // Click en el botón "Entrar"
-    enterBtn.addEventListener('click', () => {
-        closeModal();
+    // Event listeners
+    if (searchInput) {
+        searchInput.addEventListener('input', handleSearch);
+        searchInput.addEventListener('focus', () => {
+            if (searchInput.value.trim()) {
+                suggestions.style.display = 'block';
+            }
+        });
+    }
+    
+    if (enterBtn) {
+        enterBtn.addEventListener('click', handleEnter);
+    }
+    
+    if (skipBtn) {
+        skipBtn.addEventListener('click', handleSkip);
+    }
+    
+    if (changeBtn) {
+        changeBtn.addEventListener('click', handleChangeGuest);
+    }
+    
+    // Cerrar sugerencias al hacer click fuera
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.welcome-guest-form')) {
+            if (suggestions) suggestions.style.display = 'none';
+        }
     });
     
-    // También permitir cerrar con ESC
+    // Permitir ESC para cerrar modal (solo si ya seleccionó o saltó)
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden') && selectedGuest) {
             closeModal();
         }
     });
+    
+    console.log('✅ Welcome Modal con identificación inicializado');
+}
+
+/**
+ * Manejar búsqueda de invitados
+ */
+async function handleSearch(e) {
+    const searchTerm = e.target.value.trim();
+    const suggestions = document.getElementById('welcomeGuestSuggestions');
+    const searchLoader = document.getElementById('welcomeSearchLoader');
+    
+    // Limpiar timeout anterior
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);
+    }
+    
+    // Si está vacío, ocultar sugerencias
+    if (!searchTerm) {
+        suggestions.style.display = 'none';
+        return;
+    }
+    
+    // Mostrar loader
+    searchLoader.style.display = 'block';
+    
+    // Debounce: esperar 300ms antes de buscar
+    searchTimeout = setTimeout(async () => {
+        try {
+            const results = await buscarInvitados(searchTerm);
+            displaySuggestions(results);
+        } catch (error) {
+            console.error('Error en búsqueda:', error);
+            displaySuggestions([]);
+        } finally {
+            searchLoader.style.display = 'none';
+        }
+    }, 300);
+}
+
+/**
+ * Mostrar sugerencias de invitados
+ */
+function displaySuggestions(guests) {
+    const suggestions = document.getElementById('welcomeGuestSuggestions');
+    
+    if (!suggestions) return;
+    
+    // Limpiar sugerencias previas
+    suggestions.innerHTML = '';
+    
+    if (guests.length === 0) {
+        suggestions.innerHTML = `
+            <div class="guest-suggestion-item" style="cursor: default; opacity: 0.6;">
+                <i class="fas fa-info-circle"></i>
+                <div class="guest-suggestion-info">
+                    <div class="guest-suggestion-name">No se encontraron resultados</div>
+                    <div class="guest-suggestion-guests">Intenta con otro nombre</div>
+                </div>
+            </div>
+        `;
+        suggestions.style.display = 'block';
+        return;
+    }
+    
+    // Crear elementos de sugerencia
+    guests.forEach(guest => {
+        const item = document.createElement('div');
+        item.className = 'guest-suggestion-item';
+        item.innerHTML = `
+            <i class="fas fa-user"></i>
+            <div class="guest-suggestion-info">
+                <div class="guest-suggestion-name">${guest.nombreCompleto}</div>
+                <div class="guest-suggestion-guests">
+                    ${guest.cuposAsignados} ${guest.cuposAsignados === 1 ? 'invitado' : 'invitados'}
+                </div>
+            </div>
+        `;
+        
+        // Click en sugerencia
+        item.addEventListener('click', () => selectGuest(guest));
+        
+        suggestions.appendChild(item);
+    });
+    
+    suggestions.style.display = 'block';
+}
+
+/**
+ * Seleccionar un invitado
+ */
+function selectGuest(guest) {
+    selectedGuest = guest;
+    
+    const searchInput = document.getElementById('welcomeGuestSearch');
+    const suggestions = document.getElementById('welcomeGuestSuggestions');
+    const guestSelected = document.getElementById('welcomeGuestSelected');
+    const enterBtn = document.getElementById('welcomeEnterBtn');
+    const skipBtn = document.getElementById('welcomeSkipBtn');
+    const selectedName = document.getElementById('welcomeSelectedName');
+    const selectedGuests = document.getElementById('welcomeSelectedGuests');
+    
+    // Ocultar búsqueda y sugerencias
+    if (searchInput) searchInput.style.display = 'none';
+    if (suggestions) suggestions.style.display = 'none';
+    
+    // Mostrar invitado seleccionado
+    if (selectedName) selectedName.textContent = guest.nombreCompleto;
+    if (selectedGuests) {
+        selectedGuests.textContent = `${guest.cuposAsignados} ${guest.cuposAsignados === 1 ? 'invitado' : 'invitados'}`;
+    }
+    if (guestSelected) guestSelected.style.display = 'flex';
+    
+    // Mostrar botón de entrada y ocultar skip
+    if (enterBtn) enterBtn.style.display = 'inline-flex';
+    if (skipBtn) skipBtn.style.display = 'none';
+    
+    console.log('👤 Invitado seleccionado:', guest.nombreCompleto);
+}
+
+/**
+ * Cambiar invitado seleccionado
+ */
+function handleChangeGuest() {
+    selectedGuest = null;
+    
+    const searchInput = document.getElementById('welcomeGuestSearch');
+    const guestSelected = document.getElementById('welcomeGuestSelected');
+    const enterBtn = document.getElementById('welcomeEnterBtn');
+    const skipBtn = document.getElementById('welcomeSkipBtn');
+    
+    // Mostrar búsqueda de nuevo
+    if (searchInput) {
+        searchInput.style.display = 'block';
+        searchInput.value = '';
+        searchInput.focus();
+    }
+    
+    // Ocultar invitado seleccionado
+    if (guestSelected) guestSelected.style.display = 'none';
+    
+    // Ocultar botón de entrada y mostrar skip
+    if (enterBtn) enterBtn.style.display = 'none';
+    if (skipBtn) skipBtn.style.display = 'block';
+}
+
+/**
+ * Entrar al sitio con invitado seleccionado
+ */
+function handleEnter() {
+    if (!selectedGuest) return;
+    
+    // Guardar invitado seleccionado
+    saveGuest(selectedGuest);
+    
+    // Cerrar modal
+    closeModal();
+}
+
+/**
+ * Continuar sin identificarse
+ */
+function handleSkip() {
+    // Guardar que el usuario decidió saltar la identificación
+    sessionStorage.setItem('guestSkipped', 'true');
+    
+    console.log('⏭️ Usuario continuó sin identificarse');
+    
+    // Cerrar modal
+    closeModal();
 }
 
 /**
@@ -44,9 +247,6 @@ function closeModal() {
     const modal = document.getElementById('welcomeModal');
     
     if (!modal) return;
-    
-    // Marcar como visto
-    sessionStorage.setItem('hasSeenWelcome', 'true');
     
     // Animar salida
     modal.classList.add('hidden');
@@ -59,6 +259,54 @@ function closeModal() {
     }, 500); // Después de la animación de fade out
     
     console.log('🎉 Modal de bienvenida cerrado');
+}
+
+/**
+ * Guardar invitado en localStorage
+ */
+function saveGuest(guest) {
+    try {
+        localStorage.setItem('currentGuest', JSON.stringify(guest));
+        console.log('💾 Invitado guardado:', guest.nombreCompleto);
+    } catch (error) {
+        console.error('Error guardando invitado:', error);
+    }
+}
+
+/**
+ * Obtener invitado guardado
+ */
+function getSavedGuest() {
+    try {
+        const guestStr = localStorage.getItem('currentGuest');
+        return guestStr ? JSON.parse(guestStr) : null;
+    } catch (error) {
+        console.error('Error obteniendo invitado guardado:', error);
+        return null;
+    }
+}
+
+/**
+ * Obtener invitado actual (para usar en otros módulos)
+ */
+export function getCurrentGuest() {
+    return getSavedGuest();
+}
+
+/**
+ * Verificar si el usuario saltó la identificación
+ */
+export function isGuestSkipped() {
+    return sessionStorage.getItem('guestSkipped') === 'true';
+}
+
+/**
+ * Limpiar invitado guardado (para debugging o cerrar sesión)
+ */
+export function clearCurrentGuest() {
+    localStorage.removeItem('currentGuest');
+    sessionStorage.removeItem('guestSkipped');
+    console.log('🗑️ Invitado limpiado');
 }
 
 /**
@@ -75,4 +323,3 @@ export function onModalClose(callback) {
 export function forceCloseModal() {
     closeModal();
 }
-
