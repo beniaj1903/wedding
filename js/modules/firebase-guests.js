@@ -151,6 +151,30 @@ export async function eliminarConfirmacion(confirmacionId) {
 }
 
 // ================================
+// BUSCAR CONFIRMACIÓN DE UN INVITADO
+// ================================
+export async function buscarConfirmacion(invitadoId) {
+    try {
+        const confirmacionesRef = collection(db, CONFIRMACIONES_COLLECTION);
+        const q = query(confirmacionesRef, where('invitadoId', '==', invitadoId));
+        const snapshot = await getDocs(q);
+        
+        if (!snapshot.empty) {
+            const doc = snapshot.docs[0];
+            return {
+                id: doc.id,
+                ...doc.data()
+            };
+        }
+        
+        return null;
+    } catch (error) {
+        console.error('Error buscando confirmación:', error);
+        return null;
+    }
+}
+
+// ================================
 // GUARDAR CONFIRMACIÓN (RSVP)
 // ================================
 export async function guardarConfirmacion(datosConfirmacion) {
@@ -174,6 +198,7 @@ export async function guardarConfirmacion(datosConfirmacion) {
             // Crear nueva confirmación
             const docRef = await addDoc(confirmacionesRef, {
                 ...datosConfirmacion,
+                timestamp: serverTimestamp(),
                 createdAt: serverTimestamp()
             });
             console.log('Confirmación guardada con ID:', docRef.id);

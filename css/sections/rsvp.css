@@ -80,7 +80,7 @@
 
 .radio-label:hover {
     background: var(--primary-color);
-    color: var(--white);
+    color: var(--text-dark);
 }
 
 .radio-label input[type="radio"] {
