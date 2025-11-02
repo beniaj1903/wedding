@@ -25,13 +25,15 @@ export function initWelcomeModal() {
         return;
     }
     
-    // Verificar si ya hay un invitado guardado
+    // Verificar si ya se identificó en ESTA sesión (misma pestaña)
     const savedGuest = getSavedGuest();
     if (savedGuest) {
-        // Ya se identificó antes, cerrar modal automáticamente
+        // Ya se identificó en esta sesión, cerrar modal automáticamente
         modal.classList.add('hidden');
         return;
     }
+    
+    // Modal siempre visible al inicio (nueva sesión)
     
     // Event listeners
     if (searchInput) {
@@ -262,23 +264,23 @@ function closeModal() {
 }
 
 /**
- * Guardar invitado en localStorage
+ * Guardar invitado en sessionStorage (solo para la sesión actual)
  */
 function saveGuest(guest) {
     try {
-        localStorage.setItem('currentGuest', JSON.stringify(guest));
-        console.log('💾 Invitado guardado:', guest.nombreCompleto);
+        sessionStorage.setItem('currentGuest', JSON.stringify(guest));
+        console.log('💾 Invitado guardado para esta sesión:', guest.nombreCompleto);
     } catch (error) {
         console.error('Error guardando invitado:', error);
     }
 }
 
 /**
- * Obtener invitado guardado
+ * Obtener invitado guardado de la sesión actual
  */
 function getSavedGuest() {
     try {
-        const guestStr = localStorage.getItem('currentGuest');
+        const guestStr = sessionStorage.getItem('currentGuest');
         return guestStr ? JSON.parse(guestStr) : null;
     } catch (error) {
         console.error('Error obteniendo invitado guardado:', error);
@@ -304,7 +306,7 @@ export function isGuestSkipped() {
  * Limpiar invitado guardado (para debugging o cerrar sesión)
  */
 export function clearCurrentGuest() {
-    localStorage.removeItem('currentGuest');
+    sessionStorage.removeItem('currentGuest');
     sessionStorage.removeItem('guestSkipped');
     console.log('🗑️ Invitado limpiado');
 }
