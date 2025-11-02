@@ -105,7 +105,7 @@
 /* Nombres - PARTE INFERIOR DEL SOBRE */
 .names {
     font-family: var(--font-heading);
-    font-size: 3.5rem;
+    font-size: 4rem;
     font-weight: 400;
     color: var(--primary-color);
     text-shadow: 
@@ -394,8 +394,8 @@
     }
     
     .names {
-        font-size: 2.8rem;
-        bottom: 5.5rem;
+        font-size: 3rem !important;
+        bottom: 9.5rem !important;
     }
     
     .click-hint {
@@ -436,8 +436,8 @@
     }
     
     .names {
-        font-size: 2.3rem;
-        bottom: 5rem;
+        font-size: 2.5rem !important;
+        bottom: 9rem !important;
     }
     
     .click-hint {
@@ -499,9 +499,9 @@
     }
     
     .names {
-        font-size: 2rem;
-        bottom: 7rem;
-        letter-spacing: 1px;
+        font-size: 2.5rem !important;
+        bottom: 8.8rem !important;
+        letter-spacing: 1px !important;
     }
     
     .click-hint {
@@ -580,9 +580,9 @@
     }
     
     .names {
-        font-size: 1.7rem;
-        bottom: 5.5rem;
-        letter-spacing: 1px;
+        font-size: 2.5rem !important;
+        bottom: 7rem !important;
+        letter-spacing: 1px !important;
     }
     
     .click-hint {
@@ -654,9 +654,9 @@
     }
     
     .names {
-        font-size: 1.3rem;
-        bottom: 4.5rem;
-        letter-spacing: 0.5px;
+        font-size: 2.2rem !important;
+        bottom: 5.6rem !important;
+        letter-spacing: 0.5px !important;
     }
     
     .click-hint {
