@@ -1,10 +1,12 @@
 // Formulario RSVP con integración Firebase y personalización
-import { buscarInvitados, obtenerInvitado, guardarConfirmacion } from './firebase-guests.js';
+import { buscarInvitados, obtenerInvitado, guardarConfirmacion, buscarConfirmacion, eliminarConfirmacion } from './firebase-guests.js';
 import { getCurrentGuest } from './welcome-modal.js';
 
 let invitadoSeleccionado = null;
+let confirmacionExistente = null;
 let timeoutBusqueda = null;
 let formElements = null; // Guardar referencias a elementos del formulario
+let modoEdicion = false; // Para saber si estamos editando una confirmación existente
 
 export function initRSVPForm() {
     const form = document.getElementById('rsvpForm');
@@ -91,7 +93,7 @@ export function initRSVPForm() {
     // PRE-SELECCIONAR INVITADO (desde modal de bienvenida)
     // Función interna para uso del módulo
     // ================================
-    function preSeleccionarInvitadoInterno(guest) {
+    async function preSeleccionarInvitadoInterno(guest) {
         invitadoSeleccionado = guest;
         
         console.log('🎯 Pre-llenando RSVP con:', guest.nombreCompleto);
@@ -130,15 +132,204 @@ export function initRSVPForm() {
             buscarInput.value = '';
             buscarInput.focus();
             invitadoSeleccionado = null;
+            confirmacionExistente = null;
             invitadoInfo.style.display = 'none';
             cambiarBtn.remove();
+            // Limpiar mensaje de confirmación existente
+            const existingAlert = document.getElementById('confirmacionExistente');
+            if (existingAlert) existingAlert.remove();
+            // Mostrar formulario normal
+            document.getElementById('rsvpForm').style.display = 'block';
         };
         
         // Agregar botón si no existe
         if (!invitadoInfo.querySelector('.btn-cambiar-invitado')) {
             invitadoInfo.appendChild(cambiarBtn);
         }
+        
+        // Buscar si ya tiene confirmación
+        await verificarConfirmacionExistente(guest.id);
     }
+    
+    // ================================
+    // VERIFICAR CONFIRMACIÓN EXISTENTE
+    // ================================
+    async function verificarConfirmacionExistente(invitadoId) {
+        try {
+            console.log('🔍 Buscando confirmación existente para:', invitadoId);
+            confirmacionExistente = await buscarConfirmacion(invitadoId);
+            
+            if (confirmacionExistente) {
+                console.log('✅ Confirmación encontrada:', confirmacionExistente);
+                mostrarConfirmacionExistente(confirmacionExistente);
+            } else {
+                console.log('📝 No hay confirmación previa');
+            }
+        } catch (error) {
+            console.error('Error buscando confirmación:', error);
+        }
+    }
+    
+    // ================================
+    // MOSTRAR CONFIRMACIÓN EXISTENTE
+    // ================================
+    function mostrarConfirmacionExistente(confirmacion) {
+        // Ocultar formulario
+        form.style.display = 'none';
+        
+        // Crear mensaje de confirmación existente
+        let existingAlert = document.getElementById('confirmacionExistente');
+        if (!existingAlert) {
+            existingAlert = document.createElement('div');
+            existingAlert.id = 'confirmacionExistente';
+            existingAlert.className = 'confirmacion-existente';
+            form.parentElement.insertBefore(existingAlert, form);
+        }
+        
+        const estadoIcon = confirmacion.confirmado ? '✅' : '❌';
+        const estadoTexto = confirmacion.confirmado ? 'Confirmaste tu asistencia' : 'Indicaste que NO asistirás';
+        const estadoClass = confirmacion.confirmado ? 'confirmado' : 'no-confirmado';
+        
+        existingAlert.innerHTML = `
+            <div class="confirmacion-header ${estadoClass}">
+                <h3>${estadoIcon} ${estadoTexto}</h3>
+                <p class="confirmacion-fecha">Registrado el ${new Date(confirmacion.timestamp?.seconds * 1000 || Date.now()).toLocaleDateString('es-CL')}</p>
+            </div>
+            
+            <div class="confirmacion-detalles">
+                <div class="detalle-item">
+                    <strong>👤 Nombre:</strong> ${confirmacion.nombreCompleto}
+                </div>
+                <div class="detalle-item">
+                    <strong>📧 Email:</strong> ${confirmacion.email || 'No proporcionado'}
+                </div>
+                <div class="detalle-item">
+                    <strong>📱 Teléfono:</strong> ${confirmacion.telefono || 'No proporcionado'}
+                </div>
+                <div class="detalle-item">
+                    <strong>👥 Cupos:</strong> ${confirmacion.cuposConfirmados || 0} ${confirmacion.cuposConfirmados === 1 ? 'persona' : 'personas'}
+                </div>
+                <div class="detalle-item">
+                    <strong>🚗 Transporte:</strong> ${confirmacion.necesitaTransporte ? 'Sí' : 'No'}
+                </div>
+                ${confirmacion.restriccionesAlimenticias ? `
+                    <div class="detalle-item">
+                        <strong>🍽️ Restricciones:</strong> ${confirmacion.restriccionesAlimenticias}
+                    </div>
+                ` : ''}
+                ${confirmacion.mensaje ? `
+                    <div class="detalle-item">
+                        <strong>💬 Mensaje:</strong> ${confirmacion.mensaje}
+                    </div>
+                ` : ''}
+            </div>
+            
+            <div class="confirmacion-acciones">
+                <button type="button" class="btn btn-edit" onclick="window.editarConfirmacionRSVP()">
+                    <i class="fas fa-edit"></i> Editar mi confirmación
+                </button>
+                <button type="button" class="btn btn-delete" onclick="window.eliminarConfirmacionRSVP()">
+                    <i class="fas fa-trash"></i> Eliminar confirmación
+                </button>
+            </div>
+        `;
+    }
+    
+    // ================================
+    // EDITAR CONFIRMACIÓN
+    // ================================
+    window.editarConfirmacionRSVP = function() {
+        modoEdicion = true;
+        
+        // Mostrar formulario
+        form.style.display = 'block';
+        
+        // Ocultar alerta
+        const existingAlert = document.getElementById('confirmacionExistente');
+        if (existingAlert) existingAlert.style.display = 'none';
+        
+        // Pre-llenar con datos existentes
+        if (confirmacionExistente) {
+            document.getElementById('email').value = confirmacionExistente.email || '';
+            document.getElementById('telefono').value = confirmacionExistente.telefono || '';
+            
+            // Seleccionar asistencia
+            const asistenciaRadios = document.querySelectorAll('input[name="asistencia"]');
+            asistenciaRadios.forEach(radio => {
+                if ((radio.value === 'si' && confirmacionExistente.confirmado) ||
+                    (radio.value === 'no' && !confirmacionExistente.confirmado)) {
+                    radio.checked = true;
+                }
+            });
+            
+            // Transporte
+            const transporteRadios = document.querySelectorAll('input[name="transporte"]');
+            transporteRadios.forEach(radio => {
+                if ((radio.value === 'si' && confirmacionExistente.necesitaTransporte) ||
+                    (radio.value === 'no' && !confirmacionExistente.necesitaTransporte)) {
+                    radio.checked = true;
+                }
+            });
+            
+            document.getElementById('alergias').value = confirmacionExistente.restriccionesAlimenticias || '';
+            document.getElementById('mensaje').value = confirmacionExistente.mensaje || '';
+        }
+        
+        // Cambiar texto del botón
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="fas fa-save"></i> Actualizar Confirmación';
+        
+        // Agregar botón cancelar
+        let cancelBtn = document.getElementById('cancelEditBtn');
+        if (!cancelBtn) {
+            cancelBtn = document.createElement('button');
+            cancelBtn.type = 'button';
+            cancelBtn.id = 'cancelEditBtn';
+            cancelBtn.className = 'btn btn-secondary btn-large';
+            cancelBtn.innerHTML = '<i class="fas fa-times"></i> Cancelar';
+            cancelBtn.style.marginLeft = '1rem';
+            cancelBtn.onclick = () => {
+                modoEdicion = false;
+                form.style.display = 'none';
+                const existingAlert = document.getElementById('confirmacionExistente');
+                if (existingAlert) existingAlert.style.display = 'block';
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Confirmación';
+                cancelBtn.remove();
+            };
+            submitBtn.parentElement.appendChild(cancelBtn);
+        }
+    };
+    
+    // ================================
+    // ELIMINAR CONFIRMACIÓN
+    // ================================
+    window.eliminarConfirmacionRSVP = async function() {
+        if (!confirmacionExistente) return;
+        
+        const confirmar = confirm('¿Estás seguro de que quieres eliminar tu confirmación? Esta acción no se puede deshacer.');
+        
+        if (!confirmar) return;
+        
+        try {
+            await eliminarConfirmacion(confirmacionExistente.id);
+            
+            // Limpiar estado
+            confirmacionExistente = null;
+            modoEdicion = false;
+            
+            // Ocultar alerta y mostrar formulario limpio
+            const existingAlert = document.getElementById('confirmacionExistente');
+            if (existingAlert) existingAlert.remove();
+            
+            form.style.display = 'block';
+            form.reset();
+            
+            mostrarMensaje('Tu confirmación ha sido eliminada correctamente', 'success');
+        } catch (error) {
+            console.error('Error eliminando confirmación:', error);
+            mostrarMensaje('Hubo un error al eliminar tu confirmación. Por favor intenta de nuevo.', 'error');
+        }
+    };
     
     // Exponer función pública para uso externo
     window.preSeleccionarInvitadoRSVP = preSeleccionarInvitadoInterno;
@@ -211,6 +402,7 @@ export function initRSVPForm() {
         
         // Deshabilitar botón
         const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
         
@@ -218,25 +410,42 @@ export function initRSVPForm() {
             await guardarConfirmacion(datosConfirmacion);
             
             // Mostrar mensaje de éxito
-            mostrarMensaje(
-                confirmado 
+            const mensajeExito = modoEdicion
+                ? '¡Tu confirmación ha sido actualizada correctamente! ✅'
+                : (confirmado 
                     ? '¡Gracias por confirmar! Nos vemos en la boda 🎉' 
-                    : 'Gracias por avisarnos. Te extrañaremos 💔',
-                'success'
-            );
+                    : 'Gracias por avisarnos. Te extrañaremos 💔');
             
-            // Limpiar formulario
-            form.reset();
-            invitadoSeleccionado = null;
-            invitadoInfo.style.display = 'none';
-            buscarInput.value = '';
+            mostrarMensaje(mensajeExito, 'success');
+            
+            // Si es modo edición, volver a mostrar la confirmación actualizada
+            if (modoEdicion) {
+                modoEdicion = false;
+                confirmacionExistente = {
+                    ...datosConfirmacion,
+                    id: confirmacionExistente.id,
+                    timestamp: { seconds: Date.now() / 1000 }
+                };
+                
+                form.style.display = 'none';
+                mostrarConfirmacionExistente(confirmacionExistente);
+                
+                // Remover botón cancelar si existe
+                const cancelBtn = document.getElementById('cancelEditBtn');
+                if (cancelBtn) cancelBtn.remove();
+            } else {
+                // Nueva confirmación: recargar para ver el estado actualizado
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }
             
         } catch (error) {
             console.error('Error guardando confirmación:', error);
             mostrarMensaje('Hubo un error al enviar tu confirmación. Por favor intenta de nuevo.', 'error');
         } finally {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Confirmación';
+            submitBtn.innerHTML = originalText;
         }
     });
     
