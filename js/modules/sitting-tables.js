@@ -3,9 +3,8 @@
    Gestión de organización de mesas
    ================================ */
 
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import { db } from '../firebase-config.js';
 import { 
-    getFirestore,
     collection, 
     getDocs, 
     doc, 
@@ -15,22 +14,9 @@ import {
     getDoc,
     query,
     where
-} from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// Inicializar Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyCOnilmJBfj0RIH-LO9oc3TZ7ByC6G2YQo",
-    authDomain: "wedding-site-4c8aa.firebaseapp.com",
-    projectId: "wedding-site-4c8aa",
-    storageBucket: "wedding-site-4c8aa.firebasestorage.app",
-    messagingSenderId: "991495903535",
-    appId: "1:991495903535:web:df4ab8a87dabb41def0656"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-console.log('🔥 Firebase inicializado en sitting-tables');
+console.log('🪑 Módulo sitting-tables cargado');
 
 // Estado Global
 let guests = [];
@@ -87,12 +73,13 @@ async function loadGuests() {
         guests = [];
         invitadosSnapshot.forEach((doc) => {
             const data = doc.data();
+            const cuposAsignados = data.cuposAsignados || 1;
             guests.push({
                 id: doc.id,
                 invitadoId: doc.id,
-                nombre: data.nombreCompleto || data.nombre || 'Sin nombre',
-                acompanantes: data.cupos ? data.cupos - 1 : 0,
-                totalPersonas: data.cupos || 1,
+                nombre: data.nombreCompleto || 'Sin nombre',
+                acompanantes: cuposAsignados - 1,
+                totalPersonas: cuposAsignados,
                 email: data.email || '',
                 telefono: data.telefono || '',
                 tableId: data.tableId || null
