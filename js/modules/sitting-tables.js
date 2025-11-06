@@ -392,6 +392,18 @@ async function assignGuestToTable(guestId, tableId) {
     
     guests[guestIndex].tableId = tableId;
     
+    // Guardar en Firebase inmediatamente
+    try {
+        const invitadoRef = doc(db, 'invitados', guestId);
+        await updateDoc(invitadoRef, {
+            tableId: tableId,
+            updatedAt: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Error guardando asignación en Firebase:', error);
+        throw error;
+    }
+    
     renderGuests();
     renderTables();
     updateStats();
@@ -407,11 +419,23 @@ window.removeGuestFromTable = async function(guestId) {
     const guestName = guests[guestIndex].nombre;
     guests[guestIndex].tableId = null;
     
-    renderGuests();
-    renderTables();
-    updateStats();
-    
-    showToast(`${guestName} removido de la mesa`, 'success');
+    // Guardar en Firebase inmediatamente
+    try {
+        const invitadoRef = doc(db, 'invitados', guestId);
+        await updateDoc(invitadoRef, {
+            tableId: null,
+            updatedAt: new Date().toISOString()
+        });
+        
+        renderGuests();
+        renderTables();
+        updateStats();
+        
+        showToast(`${guestName} removido de la mesa`, 'success');
+    } catch (error) {
+        console.error('Error removiendo invitado en Firebase:', error);
+        showToast('Error al remover invitado', 'error');
+    }
 };
 
 /**
@@ -464,19 +488,30 @@ window.deleteTable = async function(tableId) {
     if (!confirm(confirmMessage)) return;
     
     try {
-        // Remover invitados de la mesa
-        tableGuests.forEach(guest => {
+        // Remover invitados de la mesa (en memoria y Firebase)
+        for (const guest of tableGuests) {
             const guestIndex = guests.findIndex(g => g.id === guest.id);
             if (guestIndex !== -1) {
                 guests[guestIndex].tableId = null;
+                
+                // Actualizar en Firebase
+                const invitadoRef = doc(db, 'invitados', guest.id);
+                await updateDoc(invitadoRef, {
+                    tableId: null,
+                    updatedAt: new Date().toISOString()
+                });
             }
-        });
+        }
         
         // Eliminar mesa del estado local
         const tableIndex = tables.findIndex(t => t.id === tableId);
         if (tableIndex !== -1) {
             tables.splice(tableIndex, 1);
         }
+        
+        // Eliminar mesa de Firebase
+        const tableRef = doc(db, 'tables', tableId);
+        await deleteDoc(tableRef);
         
         renderGuests();
         renderTables();
@@ -534,6 +569,17 @@ async function handleTableFormSubmit(e) {
             const tableIndex = tables.findIndex(t => t.id === editingTableId);
             if (tableIndex !== -1) {
                 tables[tableIndex] = { ...tables[tableIndex], ...tableData };
+                
+                // Guardar en Firebase inmediatamente
+                const tableRef = doc(db, 'tables', editingTableId);
+                await setDoc(tableRef, {
+                    name: tableData.name,
+                    capacity: tableData.capacity,
+                    type: tableData.type,
+                    notes: tableData.notes,
+                    createdAt: tables[tableIndex].createdAt || new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                });
             }
             showToast(`${tableData.name} actualizada`, 'success');
         } else {
@@ -544,6 +590,18 @@ async function handleTableFormSubmit(e) {
                 createdAt: new Date().toISOString()
             };
             tables.push(newTable);
+            
+            // Guardar en Firebase inmediatamente
+            const tableRef = doc(db, 'tables', newTable.id);
+            await setDoc(tableRef, {
+                name: newTable.name,
+                capacity: newTable.capacity,
+                type: newTable.type,
+                notes: newTable.notes || '',
+                createdAt: newTable.createdAt,
+                updatedAt: new Date().toISOString()
+            });
+            
             showToast(`${tableData.name} creada`, 'success');
         }
         
@@ -618,22 +676,25 @@ window.autoAssignGuests = async function() {
 };
 
 /**
- * Guardar configuración en Firebase
+ * Sincronizar manualmente toda la configuración (por si acaso)
  */
 window.saveTables = async function() {
     if (tables.length === 0) {
-        showToast('No hay mesas para guardar', 'error');
+        showToast('No hay mesas para sincronizar', 'error');
         return;
     }
     
-    if (!confirm('¿Guardar toda la configuración de mesas en Firebase?')) {
+    if (!confirm('Los cambios se guardan automáticamente. ¿Deseas forzar una sincronización completa?')) {
         return;
     }
     
     try {
         showLoading();
         
-        // Guardar mesas
+        let tablesUpdated = 0;
+        let guestsUpdated = 0;
+        
+        // Sincronizar mesas
         for (const table of tables) {
             const tableRef = doc(db, 'tables', table.id);
             await setDoc(tableRef, {
@@ -644,23 +705,25 @@ window.saveTables = async function() {
                 createdAt: table.createdAt || new Date().toISOString(),
                 updatedAt: new Date().toISOString()
             });
+            tablesUpdated++;
         }
         
-        // Actualizar invitados con tableId
+        // Sincronizar asignaciones de invitados
         for (const guest of guests) {
             const invitadoRef = doc(db, 'invitados', guest.id);
             await updateDoc(invitadoRef, {
                 tableId: guest.tableId || null,
                 updatedAt: new Date().toISOString()
             });
+            guestsUpdated++;
         }
         
-        showToast('✅ Configuración guardada correctamente en Firebase', 'success');
-        console.log('✅ Configuración de mesas guardada en Firebase');
+        showToast(`✅ Sincronización completa: ${tablesUpdated} mesas y ${guestsUpdated} invitados`, 'success');
+        console.log('✅ Sincronización manual completada');
         
     } catch (error) {
-        console.error('Error guardando en Firebase:', error);
-        showToast('Error al guardar en Firebase', 'error');
+        console.error('Error en sincronización:', error);
+        showToast('Error en la sincronización', 'error');
     }
 };
 
