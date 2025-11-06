@@ -3,7 +3,9 @@
    Gestión de organización de mesas
    ================================ */
 
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
 import { 
+    getFirestore,
     collection, 
     getDocs, 
     doc, 
@@ -14,6 +16,21 @@ import {
     query,
     where
 } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+// Inicializar Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyCOnilmJBfj0RIH-LO9oc3TZ7ByC6G2YQo",
+    authDomain: "wedding-site-4c8aa.firebaseapp.com",
+    projectId: "wedding-site-4c8aa",
+    storageBucket: "wedding-site-4c8aa.firebasestorage.app",
+    messagingSenderId: "991495903535",
+    appId: "1:991495903535:web:df4ab8a87dabb41def0656"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+console.log('🔥 Firebase inicializado en sitting-tables');
 
 // Estado Global
 let guests = [];
@@ -58,49 +75,31 @@ async function initializeTables() {
 }
 
 /**
- * Cargar invitados confirmados desde Firebase
+ * Cargar invitados presenciales desde Firebase
  */
 async function loadGuests() {
     try {
-        // Paso 1: Obtener todos los invitados presenciales
-        const invitadosRef = collection(window.db, 'invitados');
+        // Obtener todos los invitados presenciales
+        const invitadosRef = collection(db, 'invitados');
         const invitadosQuery = query(invitadosRef, where('categoria', '==', 'presencial'));
         const invitadosSnapshot = await getDocs(invitadosQuery);
         
-        const invitadosPresenciales = new Map();
-        invitadosSnapshot.forEach((doc) => {
-            invitadosPresenciales.set(doc.id, doc.data());
-        });
-        
-        console.log(`👥 ${invitadosPresenciales.size} invitados presenciales encontrados`);
-        
-        // Paso 2: Obtener confirmaciones que asistirán
-        const confirmacionesRef = collection(window.db, 'confirmaciones');
-        const confirmacionesQuery = query(confirmacionesRef, where('asistira', '==', true));
-        const confirmacionesSnapshot = await getDocs(confirmacionesQuery);
-        
-        // Paso 3: Cruzar datos - solo invitados presenciales que confirmaron
         guests = [];
-        confirmacionesSnapshot.forEach((doc) => {
-            const confirmacion = doc.data();
-            const invitadoId = confirmacion.invitadoId;
-            
-            // Solo agregar si el invitado es presencial
-            if (invitadosPresenciales.has(invitadoId)) {
-                guests.push({
-                    id: doc.id,
-                    invitadoId: invitadoId,
-                    nombre: confirmacion.nombre,
-                    acompanantes: confirmacion.acompanantes || 0,
-                    totalPersonas: (confirmacion.acompanantes || 0) + 1,
-                    email: confirmacion.email || '',
-                    telefono: confirmacion.telefono || '',
-                    tableId: confirmacion.tableId || null
-                });
-            }
+        invitadosSnapshot.forEach((doc) => {
+            const data = doc.data();
+            guests.push({
+                id: doc.id,
+                invitadoId: doc.id,
+                nombre: data.nombreCompleto || data.nombre || 'Sin nombre',
+                acompanantes: data.cupos ? data.cupos - 1 : 0,
+                totalPersonas: data.cupos || 1,
+                email: data.email || '',
+                telefono: data.telefono || '',
+                tableId: data.tableId || null
+            });
         });
         
-        console.log(`📋 ${guests.length} invitados confirmados (presenciales) cargados para organización de mesas`);
+        console.log(`📋 ${guests.length} invitados presenciales cargados para organización de mesas`);
     } catch (error) {
         console.error('Error cargando invitados:', error);
         throw error;
@@ -112,7 +111,7 @@ async function loadGuests() {
  */
 async function loadTables() {
     try {
-        const tablesRef = collection(window.db, 'tables');
+        const tablesRef = collection(db, 'tables');
         const querySnapshot = await getDocs(tablesRef);
         
         tables = [];
@@ -633,7 +632,7 @@ window.saveTables = async function() {
         
         // Guardar mesas
         for (const table of tables) {
-            const tableRef = doc(window.db, 'tables', table.id);
+            const tableRef = doc(db, 'tables', table.id);
             await setDoc(tableRef, {
                 number: table.number,
                 capacity: table.capacity,
@@ -644,15 +643,13 @@ window.saveTables = async function() {
             });
         }
         
-        // Actualizar confirmaciones con tableId
+        // Actualizar invitados con tableId
         for (const guest of guests) {
-            if (guest.tableId) {
-                const confirmacionRef = doc(window.db, 'confirmaciones', guest.id);
-                await updateDoc(confirmacionRef, {
-                    tableId: guest.tableId,
-                    updatedAt: new Date().toISOString()
-                });
-            }
+            const invitadoRef = doc(db, 'invitados', guest.id);
+            await updateDoc(invitadoRef, {
+                tableId: guest.tableId || null,
+                updatedAt: new Date().toISOString()
+            });
         }
         
         showToast('✅ Configuración guardada correctamente en Firebase', 'success');

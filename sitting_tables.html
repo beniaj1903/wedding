@@ -144,25 +144,7 @@
     <!-- Toast Notifications -->
     <div id="toast" class="toast"></div>
 
-    <!-- Firebase y Scripts -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
-        import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyCOnilmJBfj0RIH-LO9oc3TZ7ByC6G2YQo",
-            authDomain: "wedding-site-4c8aa.firebaseapp.com",
-            projectId: "wedding-site-4c8aa",
-            storageBucket: "wedding-site-4c8aa.firebasestorage.app",
-            messagingSenderId: "991495903535",
-            appId: "1:991495903535:web:df4ab8a87dabb41def0656"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        
-        window.db = db;
-    </script>
+    <!-- Scripts -->
     <script type="module" src="js/modules/sitting-tables.js"></script>
 </body>
 </html>
