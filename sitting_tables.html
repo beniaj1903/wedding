@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organización de Mesas - Boda Yoselyn & Benito</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/sections/sitting-tables.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="tables-header">
+        <div class="header-content">
+            <div class="header-left">
+                <a href="admin.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Volver al Admin</span>
+                </a>
+                <h1><i class="fas fa-chair"></i> Organización de Mesas</h1>
+            </div>
+            <div class="header-actions">
+                <button id="saveTablesBtn" class="btn-primary">
+                    <i class="fas fa-save"></i> Guardar Configuración
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="tables-container">
+        <!-- Sidebar: Panel de Invitados -->
+        <aside class="guests-panel">
+            <div class="panel-header">
+                <h2><i class="fas fa-users"></i> Invitados Confirmados</h2>
+                <div class="guests-stats">
+                    <span id="assignedCount" class="stat-badge assigned">0 Asignados</span>
+                    <span id="unassignedCount" class="stat-badge unassigned">0 Sin Mesa</span>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="guests-filters">
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="guestSearchInput" placeholder="Buscar invitado...">
+                </div>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">
+                        Todos
+                    </button>
+                    <button class="filter-btn" data-filter="unassigned">
+                        Sin Mesa
+                    </button>
+                    <button class="filter-btn" data-filter="assigned">
+                        Asignados
+                    </button>
+                </div>
+            </div>
+
+            <!-- Lista de Invitados -->
+            <div id="guestsList" class="guests-list">
+                <!-- Se llena dinámicamente -->
+            </div>
+        </aside>
+
+        <!-- Main: Área de Mesas -->
+        <main class="tables-area">
+            <div class="area-header">
+                <h2><i class="fas fa-table"></i> Disposición del Salón</h2>
+                <div class="tables-actions">
+                    <button id="addTableBtn" class="btn-add-table">
+                        <i class="fas fa-plus"></i> Nueva Mesa
+                    </button>
+                    <button id="autoAssignBtn" class="btn-auto-assign">
+                        <i class="fas fa-magic"></i> Asignar Automáticamente
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid de Mesas -->
+            <div id="tablesGrid" class="tables-grid">
+                <!-- Se llena dinámicamente -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state">
+                <i class="fas fa-chair"></i>
+                <h3>No hay mesas creadas</h3>
+                <p>Comienza agregando mesas para organizar a tus invitados</p>
+                <button class="btn-add-first" onclick="document.getElementById('addTableBtn').click()">
+                    <i class="fas fa-plus"></i> Crear Primera Mesa
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Nueva Mesa -->
+    <div id="tableModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle"><i class="fas fa-plus-circle"></i> Nueva Mesa</h3>
+                <button class="modal-close" onclick="closeTableModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="tableForm">
+                <div class="form-group">
+                    <label for="tableNumber">Número de Mesa *</label>
+                    <input type="number" id="tableNumber" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tableCapacity">Capacidad *</label>
+                    <input type="number" id="tableCapacity" min="1" max="20" value="8" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tableType">Tipo de Mesa</label>
+                    <select id="tableType">
+                        <option value="round">Redonda</option>
+                        <option value="rectangular">Rectangular</option>
+                        <option value="square">Cuadrada</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tableNotes">Notas (opcional)</label>
+                    <textarea id="tableNotes" rows="3" placeholder="Ej: Mesa de honor, cerca de la pista..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeTableModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-check"></i> Guardar Mesa
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Firebase y Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCOnilmJBfj0RIH-LO9oc3TZ7ByC6G2YQo",
+            authDomain: "wedding-site-4c8aa.firebaseapp.com",
+            projectId: "wedding-site-4c8aa",
+            storageBucket: "wedding-site-4c8aa.firebasestorage.app",
+            messagingSenderId: "991495903535",
+            appId: "1:991495903535:web:df4ab8a87dabb41def0656"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        window.db = db;
+    </script>
+    <script type="module" src="js/modules/sitting-tables.js"></script>
+</body>
+</html>
+
