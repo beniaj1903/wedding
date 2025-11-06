@@ -62,26 +62,45 @@ async function initializeTables() {
  */
 async function loadGuests() {
     try {
-        const confirmacionesRef = collection(window.db, 'confirmaciones');
-        const q = query(confirmacionesRef, where('asistira', '==', true), where('categoria', '==', 'presencial'));
-        const querySnapshot = await getDocs(q);
+        // Paso 1: Obtener todos los invitados presenciales
+        const invitadosRef = collection(window.db, 'invitados');
+        const invitadosQuery = query(invitadosRef, where('categoria', '==', 'presencial'));
+        const invitadosSnapshot = await getDocs(invitadosQuery);
         
-        guests = [];
-        querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            guests.push({
-                id: doc.id,
-                invitadoId: data.invitadoId,
-                nombre: data.nombre,
-                acompanantes: data.acompanantes || 0,
-                totalPersonas: (data.acompanantes || 0) + 1,
-                email: data.email || '',
-                telefono: data.telefono || '',
-                tableId: data.tableId || null
-            });
+        const invitadosPresenciales = new Map();
+        invitadosSnapshot.forEach((doc) => {
+            invitadosPresenciales.set(doc.id, doc.data());
         });
         
-        console.log(`📋 ${guests.length} invitados confirmados cargados`);
+        console.log(`👥 ${invitadosPresenciales.size} invitados presenciales encontrados`);
+        
+        // Paso 2: Obtener confirmaciones que asistirán
+        const confirmacionesRef = collection(window.db, 'confirmaciones');
+        const confirmacionesQuery = query(confirmacionesRef, where('asistira', '==', true));
+        const confirmacionesSnapshot = await getDocs(confirmacionesQuery);
+        
+        // Paso 3: Cruzar datos - solo invitados presenciales que confirmaron
+        guests = [];
+        confirmacionesSnapshot.forEach((doc) => {
+            const confirmacion = doc.data();
+            const invitadoId = confirmacion.invitadoId;
+            
+            // Solo agregar si el invitado es presencial
+            if (invitadosPresenciales.has(invitadoId)) {
+                guests.push({
+                    id: doc.id,
+                    invitadoId: invitadoId,
+                    nombre: confirmacion.nombre,
+                    acompanantes: confirmacion.acompanantes || 0,
+                    totalPersonas: (confirmacion.acompanantes || 0) + 1,
+                    email: confirmacion.email || '',
+                    telefono: confirmacion.telefono || '',
+                    tableId: confirmacion.tableId || null
+                });
+            }
+        });
+        
+        console.log(`📋 ${guests.length} invitados confirmados (presenciales) cargados para organización de mesas`);
     } catch (error) {
         console.error('Error cargando invitados:', error);
         throw error;
