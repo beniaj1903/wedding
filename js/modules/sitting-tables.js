@@ -109,8 +109,8 @@ async function loadTables() {
             });
         });
         
-        // Ordenar por número de mesa
-        tables.sort((a, b) => a.number - b.number);
+        // Ordenar alfabéticamente por nombre de mesa
+        tables.sort((a, b) => a.name.localeCompare(b.name));
         
         console.log(`🪑 ${tables.length} mesas cargadas`);
     } catch (error) {
@@ -208,7 +208,7 @@ function renderGuests() {
                 ${table ? `
                     <div class="guest-table-badge">
                         <i class="fas fa-chair"></i>
-                        Mesa ${table.number}
+                        ${table.name}
                     </div>
                 ` : ''}
             </div>
@@ -244,7 +244,7 @@ function renderTables() {
         return `
             <div class="table-card" data-table-id="${table.id}">
                 <div class="table-header">
-                    <span class="table-number">Mesa ${table.number}</span>
+                    <span class="table-number">${table.name}</span>
                     <div class="table-actions-menu">
                         <button class="table-action-btn" onclick="editTable('${table.id}')" title="Editar">
                             <i class="fas fa-edit"></i>
@@ -369,14 +369,14 @@ async function handleDrop(e) {
     const availableSeats = table.capacity - occupiedSeats;
     
     if (draggedGuest.totalPersonas > availableSeats) {
-        showToast(`No hay suficiente espacio en la Mesa ${table.number}. Disponibles: ${availableSeats}, Necesarios: ${draggedGuest.totalPersonas}`, 'error');
+        showToast(`No hay suficiente espacio en ${table.name}. Disponibles: ${availableSeats}, Necesarios: ${draggedGuest.totalPersonas}`, 'error');
         return;
     }
     
     // Asignar invitado a la mesa
     try {
         await assignGuestToTable(draggedGuest.id, tableId);
-        showToast(`${draggedGuest.nombre} asignado a Mesa ${table.number}`, 'success');
+        showToast(`${draggedGuest.nombre} asignado a ${table.name}`, 'success');
     } catch (error) {
         console.error('Error asignando invitado:', error);
         showToast('Error al asignar invitado', 'error');
@@ -421,9 +421,8 @@ function openAddTableModal() {
     editingTableId = null;
     document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Nueva Mesa';
     
-    // Sugerir siguiente número de mesa
-    const maxTableNumber = tables.length > 0 ? Math.max(...tables.map(t => t.number)) : 0;
-    document.getElementById('tableNumber').value = maxTableNumber + 1;
+    // Limpiar campos
+    document.getElementById('tableName').value = '';
     document.getElementById('tableCapacity').value = 8;
     document.getElementById('tableType').value = 'round';
     document.getElementById('tableNotes').value = '';
@@ -440,7 +439,7 @@ window.editTable = function(tableId) {
     
     editingTableId = tableId;
     document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit"></i> Editar Mesa';
-    document.getElementById('tableNumber').value = table.number;
+    document.getElementById('tableName').value = table.name;
     document.getElementById('tableCapacity').value = table.capacity;
     document.getElementById('tableType').value = table.type;
     document.getElementById('tableNotes').value = table.notes || '';
@@ -457,7 +456,7 @@ window.deleteTable = async function(tableId) {
     
     const tableGuests = guests.filter(g => g.tableId === tableId);
     
-    let confirmMessage = `¿Eliminar Mesa ${table.number}?`;
+    let confirmMessage = `¿Eliminar ${table.name}?`;
     if (tableGuests.length > 0) {
         confirmMessage += `\n\nTiene ${tableGuests.length} invitado(s) asignado(s) que quedarán sin mesa.`;
     }
@@ -483,7 +482,7 @@ window.deleteTable = async function(tableId) {
         renderTables();
         updateStats();
         
-        showToast(`Mesa ${table.number} eliminada`, 'success');
+        showToast(`${table.name} eliminada`, 'success');
     } catch (error) {
         console.error('Error eliminando mesa:', error);
         showToast('Error al eliminar mesa', 'error');
@@ -506,11 +505,28 @@ async function handleTableFormSubmit(e) {
     e.preventDefault();
     
     const tableData = {
-        number: parseInt(document.getElementById('tableNumber').value),
+        name: document.getElementById('tableName').value.trim(),
         capacity: parseInt(document.getElementById('tableCapacity').value),
         type: document.getElementById('tableType').value,
         notes: document.getElementById('tableNotes').value.trim()
     };
+    
+    // Validar que el nombre no esté vacío
+    if (!tableData.name) {
+        showToast('El nombre de la mesa es obligatorio', 'error');
+        return;
+    }
+    
+    // Validar que el nombre no esté duplicado (excepto si estamos editando la misma mesa)
+    const duplicateName = tables.find(t => 
+        t.name.toLowerCase() === tableData.name.toLowerCase() && 
+        t.id !== editingTableId
+    );
+    
+    if (duplicateName) {
+        showToast(`Ya existe una mesa con el nombre "${tableData.name}"`, 'error');
+        return;
+    }
     
     try {
         if (editingTableId) {
@@ -519,7 +535,7 @@ async function handleTableFormSubmit(e) {
             if (tableIndex !== -1) {
                 tables[tableIndex] = { ...tables[tableIndex], ...tableData };
             }
-            showToast(`Mesa ${tableData.number} actualizada`, 'success');
+            showToast(`${tableData.name} actualizada`, 'success');
         } else {
             // Crear nueva mesa
             const newTable = {
@@ -528,10 +544,10 @@ async function handleTableFormSubmit(e) {
                 createdAt: new Date().toISOString()
             };
             tables.push(newTable);
-            showToast(`Mesa ${tableData.number} creada`, 'success');
+            showToast(`${tableData.name} creada`, 'success');
         }
         
-        tables.sort((a, b) => a.number - b.number);
+        tables.sort((a, b) => a.name.localeCompare(b.name));
         renderTables();
         closeTableModal();
         
@@ -621,7 +637,7 @@ window.saveTables = async function() {
         for (const table of tables) {
             const tableRef = doc(db, 'tables', table.id);
             await setDoc(tableRef, {
-                number: table.number,
+                name: table.name,
                 capacity: table.capacity,
                 type: table.type,
                 notes: table.notes || '',
