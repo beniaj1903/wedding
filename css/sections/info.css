@@ -101,7 +101,7 @@
 }
 
 .transport-option p {
-    color: var(--text-light);
+    color: var(--white);
     margin-bottom: 0.5rem;
     line-height: 1.6;
 }

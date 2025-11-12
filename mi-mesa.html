@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Mesa - Boda Yose & Benito</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/sections/welcome-modal.css">
+    <link rel="stylesheet" href="css/sections/mi-mesa.css">
+    <link rel="stylesheet" href="css/sections/footer.css">
+</head>
+<body class="loading-page">
+    
+    <!-- ========================================
+         MODAL DE BIENVENIDA (Para identificación)
+         ======================================== -->
+    <div class="welcome-modal" id="welcomeModal">
+        <div class="welcome-overlay"></div>
+        <div class="welcome-content">
+            <div class="welcome-inner">
+                <div class="welcome-decoration-top">
+                    <i class="fas fa-heart"></i>
+                </div>
+                
+                <h1 class="welcome-title">Bienvenido</h1>
+                <p class="welcome-subtitle">Mi Mesa</p>
+                <p class="welcome-date">Boda Yose & Benito</p>
+                
+                <div class="welcome-divider">✦ ✦ ✦</div>
+                
+                <p class="welcome-message">
+                    Para ver tu mesa y compartir fotos, por favor identifícate:
+                </p>
+                
+                <!-- Formulario de búsqueda de invitados -->
+                <form class="welcome-guest-form" id="guestSearchForm">
+                    <div class="guest-search-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input 
+                            type="text" 
+                            id="welcomeGuestSearch" 
+                            class="guest-search-input" 
+                            placeholder="Escribe tu nombre o el de tu grupo..."
+                            autocomplete="off"
+                        >
+                        <i class="fas fa-spinner fa-spin search-loader" id="welcomeSearchLoader" style="display: none;"></i>
+                    </div>
+                    
+                    <!-- Sugerencias de búsqueda -->
+                    <div class="guest-suggestions" id="welcomeGuestSuggestions" style="display: none;"></div>
+                    
+                    <!-- Invitado seleccionado -->
+                    <div class="guest-selected" id="welcomeGuestSelected" style="display: none;">
+                        <div class="selected-info">
+                            <i class="fas fa-user-check"></i>
+                            <div class="selected-text">
+                                <strong id="welcomeSelectedName"></strong>
+                                <span id="welcomeSelectedGuests"></span>
+                            </div>
+                        </div>
+                        <button type="button" class="change-guest-btn" id="welcomeChangeGuest">
+                            <i class="fas fa-sync-alt"></i>
+                            Cambiar
+                        </button>
+                    </div>
+                </form>
+                
+                <button class="welcome-btn" id="welcomeEnterBtn" style="display: none;">
+                    <i class="fas fa-door-open"></i>
+                    Ver Mi Mesa
+                </button>
+                
+                <button class="welcome-skip-btn" id="welcomeSkipBtn">
+                    Volver al sitio principal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         INFORMACIÓN DE LA MESA
+         ======================================== -->
+    <section class="table-display-section" id="tableDisplaySection">
+        <div class="container">
+            <!-- Contenido de la mesa (Solo imagen de Canva) -->
+            <div class="table-display-content" id="tableDisplayContent" style="display: none;">
+                <div class="table-display-image">
+                    <img id="tableDisplayImage" src="" alt="Tu Mesa" />
+                </div>
+            </div>
+
+            <!-- Mensaje si no tiene mesa asignada -->
+            <div class="no-table-message" id="noTableMessage" style="display: none;">
+                <i class="fas fa-info-circle"></i>
+                <h3>Aún no tienes mesa asignada</h3>
+                <p>No te preocupes, pronto te asignaremos una mesa perfecta para ti y tus acompañantes.</p>
+            </div>
+            
+            <!-- Mensaje si no hay imagen configurada -->
+            <div class="no-image-message" id="noImageMessage" style="display: none;">
+                <i class="fas fa-image"></i>
+                <h3>Imagen en preparación</h3>
+                <p>Estamos preparando algo especial para tu mesa. ¡Pronto estará listo!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         SUBIR FOTOS
+         ======================================== -->
+    <section class="upload-photos-section" id="uploadPhotosSection">
+        <div class="container">
+            <div class="section-header">
+                <i class="fas fa-camera section-icon"></i>
+                <h2 class="section-title">Comparte tus Fotos</h2>
+                <p class="section-subtitle">Sube tus fotos de la boda para que todos las disfrutemos</p>
+            </div>
+
+            <div class="upload-container">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>Arrastra tus fotos aquí</h3>
+                    <p>o haz clic para seleccionar archivos</p>
+                    <input type="file" id="fileInput" accept="image/*,video/*" multiple hidden>
+                    <button class="btn btn-primary" id="selectFilesBtn">
+                        <i class="fas fa-folder-open"></i>
+                        Seleccionar Archivos
+                    </button>
+                    <p class="upload-hint">
+                        <i class="fas fa-info-circle"></i>
+                        Puedes subir fotos (JPG, PNG) y videos (MP4, MOV)
+                    </p>
+                </div>
+
+                <!-- Preview de archivos seleccionados -->
+                <div class="files-preview" id="filesPreview" style="display: none;">
+                    <h4>Archivos seleccionados:</h4>
+                    <div class="preview-grid" id="previewGrid">
+                        <!-- Se llenará dinámicamente -->
+                    </div>
+                    <div class="upload-actions">
+                        <button class="btn btn-primary" id="uploadBtn">
+                            <i class="fas fa-upload"></i>
+                            Subir <span id="fileCount">0</span> archivo(s)
+                        </button>
+                        <button class="btn btn-outline" id="cancelUploadBtn">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Progreso de subida -->
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <h4>
+                        <i class="fas fa-spinner fa-spin"></i>
+                        Subiendo archivos...
+                    </h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <p class="progress-text" id="progressText">0 de 0 archivos subidos</p>
+                </div>
+
+                <!-- Mensaje de éxito -->
+                <div class="upload-success" id="uploadSuccess" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <h4>¡Archivos subidos exitosamente!</h4>
+                    <p>Gracias por compartir tus recuerdos con nosotros</p>
+                    <button class="btn btn-outline" id="uploadMoreBtn">
+                        <i class="fas fa-plus"></i>
+                        Subir más archivos
+                    </button>
+                </div>
+            </div>
+
+            <!-- Instrucciones -->
+            <div class="upload-instructions">
+                <h4>
+                    <i class="fas fa-lightbulb"></i>
+                    Consejos para subir fotos
+                </h4>
+                <ul>
+                    <li><i class="fas fa-check"></i> Puedes subir varias fotos a la vez</li>
+                    <li><i class="fas fa-check"></i> Los archivos se guardarán en nuestra carpeta compartida</li>
+                    <li><i class="fas fa-check"></i> También puedes subir videos cortos</li>
+                    <li><i class="fas fa-check"></i> Las fotos quedarán disponibles para todos los invitados</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         FOOTER
+         ======================================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <h3 class="footer-title">Yoselyn y Benito</h3>
+                <p class="footer-date">10.10.2026</p>
+                <p class="footer-hashtag">#bodalosnenes</p>
+                <p class="footer-text">Nos vemos pronto ♥</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================
+         SCRIPTS
+         ======================================== -->
+    <script type="module" src="js/mi-mesa-main.js"></script>
+    
+</body>
+</html>
+

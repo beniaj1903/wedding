@@ -14,6 +14,7 @@ import { initLiveStream } from './modules/live-stream.js';
 import { initMusicPlayer, startMusicFromExternalTrigger } from './modules/music-player.js';
 import { initWelcomeModal, onModalClose, getCurrentGuest, isGuestSkipped } from './modules/welcome-modal.js';
 import { showConsoleMessage } from './modules/utils.js';
+import { loadSavedPalette } from './modules/color-palette.js';
 
 /* ================================
    INICIALIZACIÓN
@@ -29,6 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
  * Inicializa todas las funcionalidades de la aplicación
  */
 function initializeApp() {
+    // Cargar paleta de colores guardada (si existe)
+    loadSavedPalette();
+    
     // Módulos esenciales
     initSwiper();
     initNavigation();

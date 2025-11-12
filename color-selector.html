@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selector de Paletas - Boda Yose y Benito</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/sections/color-selector.css">
+</head>
+<body>
+    
+    <!-- Navegación con botón de volver -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">Y & B</div>
+            <a href="index.html" class="btn btn-outline">
+                <i class="fas fa-arrow-left"></i>
+                Volver al sitio
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero del selector -->
+    <section class="selector-hero">
+        <div class="container">
+            <div class="selector-header">
+                <i class="fas fa-palette section-icon"></i>
+                <h1 class="section-title">Selector de Paletas de Colores</h1>
+                <p class="section-subtitle">
+                    Explora diferentes combinaciones de colores para encontrar el estilo perfecto para tu boda
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Selector de paletas -->
+    <section class="palettes-section">
+        <div class="container">
+            
+            <!-- Paleta 1: Original -->
+            <div class="palette-card" data-palette="original">
+                <div class="palette-header">
+                    <div class="palette-info">
+                        <h2 class="palette-name">
+                            <i class="fas fa-circle-check"></i>
+                            Original
+                        </h2>
+                        <p class="palette-description">
+                            Paleta elegante con tonos cálidos y terrosos
+                        </p>
+                    </div>
+                    <button class="btn-select-palette" data-palette="original">
+                        <i class="fas fa-check"></i>
+                        Seleccionar
+                    </button>
+                </div>
+                
+                <!-- Muestra de colores -->
+                <div class="color-swatches">
+                    <div class="color-swatch" style="background: #BFA77D;" title="Primary">
+                        <span class="color-label">Primary</span>
+                        <span class="color-hex">#BFA77D</span>
+                    </div>
+                    <div class="color-swatch" style="background: #C97A57;" title="Secondary">
+                        <span class="color-label">Secondary</span>
+                        <span class="color-hex">#C97A57</span>
+                    </div>
+                    <div class="color-swatch" style="background: #A9A17A;" title="Accent">
+                        <span class="color-label">Accent</span>
+                        <span class="color-hex">#A9A17A</span>
+                    </div>
+                    <div class="color-swatch" style="background: #7C3F44;" title="Text Dark">
+                        <span class="color-label">Text Dark</span>
+                        <span class="color-hex">#7C3F44</span>
+                    </div>
+                    <div class="color-swatch" style="background: #EAD7B6;" title="Background">
+                        <span class="color-label">Background</span>
+                        <span class="color-hex">#EAD7B6</span>
+                    </div>
+                </div>
+                
+                <!-- Preview de componentes -->
+                <div class="palette-preview">
+                    <h3 class="preview-title">Vista Previa</h3>
+                    <div class="preview-components original-preview">
+                        <!-- Botón de ejemplo -->
+                        <button class="preview-btn" style="background: linear-gradient(135deg, #BFA77D 0%, #C97A57 100%); color: #F8F4EC;">
+                            <i class="fas fa-heart"></i>
+                            Botón de Ejemplo
+                        </button>
+                        
+                        <!-- Card de ejemplo -->
+                        <div class="preview-card" style="background: #A9A17A; color: #7C3F44;">
+                            <i class="fas fa-calendar" style="color: #BFA77D;"></i>
+                            <h4 style="color: #7C3F44;">Tarjeta de Ejemplo</h4>
+                            <p style="color: #F8F4EC;">Esta es una vista previa de cómo se verán los elementos con esta paleta.</p>
+                        </div>
+                        
+                        <!-- Gradiente de ejemplo -->
+                        <div class="preview-gradient" style="background: linear-gradient(135deg, #C97A57 0%, #7C3F44 100%);">
+                            <span style="color: #F8F4EC;">Gradiente Principal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paleta 2: Boho Constelaciones -->
+            <div class="palette-card" data-palette="boho">
+                <div class="palette-header">
+                    <div class="palette-info">
+                        <h2 class="palette-name">
+                            <i class="fas fa-moon"></i>
+                            Boho Constelaciones
+                        </h2>
+                        <p class="palette-description">
+                            Inspirada en cielos nocturnos, estrellas y naturaleza mística
+                        </p>
+                    </div>
+                    <button class="btn-select-palette" data-palette="boho">
+                        <i class="fas fa-check"></i>
+                        Seleccionar
+                    </button>
+                </div>
+                
+                <!-- Muestra de colores -->
+                <div class="color-swatches">
+                    <div class="color-swatch" style="background: #D4AF37;" title="Primary">
+                        <span class="color-label">Primary</span>
+                        <span class="color-hex">#D4AF37</span>
+                    </div>
+                    <div class="color-swatch" style="background: #2C3E50;" title="Secondary">
+                        <span class="color-label">Secondary</span>
+                        <span class="color-hex">#2C3E50</span>
+                    </div>
+                    <div class="color-swatch" style="background: #34495E;" title="Accent">
+                        <span class="color-label">Accent</span>
+                        <span class="color-hex">#34495E</span>
+                    </div>
+                    <div class="color-swatch" style="background: #1A252F;" title="Text Dark">
+                        <span class="color-label">Text Dark</span>
+                        <span class="color-hex">#1A252F</span>
+                    </div>
+                    <div class="color-swatch" style="background: #455A64;" title="Background">
+                        <span class="color-label">Background</span>
+                        <span class="color-hex">#455A64</span>
+                    </div>
+                </div>
+                
+                <!-- Preview de componentes -->
+                <div class="palette-preview">
+                    <h3 class="preview-title">Vista Previa</h3>
+                    <div class="preview-components boho-preview">
+                        <!-- Botón de ejemplo -->
+                        <button class="preview-btn" style="background: linear-gradient(135deg, #D4AF37 0%, #2C3E50 100%); color: #ECF0F1;">
+                            <i class="fas fa-star"></i>
+                            Botón de Ejemplo
+                        </button>
+                        
+                        <!-- Card de ejemplo -->
+                        <div class="preview-card" style="background: #34495E; color: #ECF0F1;">
+                            <i class="fas fa-calendar" style="color: #D4AF37;"></i>
+                            <h4 style="color: #ECF0F1;">Tarjeta de Ejemplo</h4>
+                            <p style="color: #ECF0F1;">Esta es una vista previa de cómo se verán los elementos con esta paleta.</p>
+                        </div>
+                        
+                        <!-- Gradiente de ejemplo -->
+                        <div class="preview-gradient" style="background: linear-gradient(135deg, #2C3E50 0%, #1A252F 100%);">
+                            <span style="color: #ECF0F1;">Gradiente Principal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paleta 3: Cuarzo Rosa -->
+            <div class="palette-card" data-palette="rose">
+                <div class="palette-header">
+                    <div class="palette-info">
+                        <h2 class="palette-name">
+                            <i class="fas fa-gem"></i>
+                            Cuarzo Rosa
+                        </h2>
+                        <p class="palette-description">
+                            Inspirada en minerales, tonos rosados suaves y elegancia contemporánea
+                        </p>
+                    </div>
+                    <button class="btn-select-palette" data-palette="rose">
+                        <i class="fas fa-check"></i>
+                        Seleccionar
+                    </button>
+                </div>
+                
+                <!-- Muestra de colores -->
+                <div class="color-swatches">
+                    <div class="color-swatch" style="background: #E8B4B8;" title="Primary">
+                        <span class="color-label">Primary</span>
+                        <span class="color-hex">#E8B4B8</span>
+                    </div>
+                    <div class="color-swatch" style="background: #C89FA3;" title="Secondary">
+                        <span class="color-label">Secondary</span>
+                        <span class="color-hex">#C89FA3</span>
+                    </div>
+                    <div class="color-swatch" style="background: #F4E4E5;" title="Accent">
+                        <span class="color-label">Accent</span>
+                        <span class="color-hex">#F4E4E5</span>
+                    </div>
+                    <div class="color-swatch" style="background: #6B4C4C;" title="Text Dark">
+                        <span class="color-label">Text Dark</span>
+                        <span class="color-hex">#6B4C4C</span>
+                    </div>
+                    <div class="color-swatch" style="background: #FFF0F0;" title="Background">
+                        <span class="color-label">Background</span>
+                        <span class="color-hex">#FFF0F0</span>
+                    </div>
+                </div>
+                
+                <!-- Preview de componentes -->
+                <div class="palette-preview">
+                    <h3 class="preview-title">Vista Previa</h3>
+                    <div class="preview-components rose-preview">
+                        <!-- Botón de ejemplo -->
+                        <button class="preview-btn" style="background: linear-gradient(135deg, #E8B4B8 0%, #C89FA3 100%); color: #FFFFFF;">
+                            <i class="fas fa-heart"></i>
+                            Botón de Ejemplo
+                        </button>
+                        
+                        <!-- Card de ejemplo -->
+                        <div class="preview-card" style="background: #F4E4E5; color: #6B4C4C;">
+                            <i class="fas fa-calendar" style="color: #E8B4B8;"></i>
+                            <h4 style="color: #6B4C4C;">Tarjeta de Ejemplo</h4>
+                            <p style="color: #6B4C4C;">Esta es una vista previa de cómo se verán los elementos con esta paleta.</p>
+                        </div>
+                        
+                        <!-- Gradiente de ejemplo -->
+                        <div class="preview-gradient" style="background: linear-gradient(135deg, #E8B4B8 0%, #C89FA3 100%);">
+                            <span style="color: #FFFFFF;">Gradiente Principal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paleta 4: Natural Celestial -->
+            <div class="palette-card" data-palette="celestial">
+                <div class="palette-header">
+                    <div class="palette-info">
+                        <h2 class="palette-name">
+                            <i class="fas fa-leaf"></i>
+                            Natural Celestial
+                        </h2>
+                        <p class="palette-description">
+                            Tonos naturales con detalles dorados y constelaciones. Elegancia terrestre y celestial
+                        </p>
+                    </div>
+                    <button class="btn-select-palette" data-palette="celestial">
+                        <i class="fas fa-check"></i>
+                        Seleccionar
+                    </button>
+                </div>
+                
+                <!-- Muestra de colores -->
+                <div class="color-swatches">
+                    <div class="color-swatch" style="background: #D9B57B;" title="Primary">
+                        <span class="color-label">Primary</span>
+                        <span class="color-hex">#D9B57B</span>
+                    </div>
+                    <div class="color-swatch" style="background: #C78B7B;" title="Secondary">
+                        <span class="color-label">Secondary</span>
+                        <span class="color-hex">#C78B7B</span>
+                    </div>
+                    <div class="color-swatch" style="background: #9A9E7E;" title="Accent">
+                        <span class="color-label">Accent</span>
+                        <span class="color-hex">#9A9E7E</span>
+                    </div>
+                    <div class="color-swatch" style="background: #2C2E3E;" title="Text Dark">
+                        <span class="color-label">Text Dark</span>
+                        <span class="color-hex">#2C2E3E</span>
+                    </div>
+                    <div class="color-swatch" style="background: #E8DCC5; color: #2C2E3E; text-shadow: none;" title="Background">
+                        <span class="color-label">Background</span>
+                        <span class="color-hex">#E8DCC5</span>
+                    </div>
+                </div>
+                
+                <!-- Preview de componentes -->
+                <div class="palette-preview">
+                    <h3 class="preview-title">Vista Previa</h3>
+                    <div class="preview-components celestial-preview">
+                        <!-- Botón de ejemplo -->
+                        <button class="preview-btn" style="background: linear-gradient(135deg, #D9B57B 0%, #C78B7B 100%); color: #F9F5F0;">
+                            <i class="fas fa-sparkles"></i>
+                            Botón de Ejemplo
+                        </button>
+                        
+                        <!-- Card de ejemplo -->
+                        <div class="preview-card" style="background: #9A9E7E; color: #F9F5F0;">
+                            <i class="fas fa-calendar" style="color: #D9B57B;"></i>
+                            <h4 style="color: #F9F5F0;">Tarjeta de Ejemplo</h4>
+                            <p style="color: #F9F5F0;">Esta es una vista previa de cómo se verán los elementos con esta paleta.</p>
+                        </div>
+                        
+                        <!-- Gradiente de ejemplo -->
+                        <div class="preview-gradient" style="background: linear-gradient(135deg, #C78B7B 0%, #2C2E3E 100%);">
+                            <span style="color: #F9F5F0;">Gradiente Principal</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Sección de prueba en vivo -->
+    <section class="live-preview-section">
+        <div class="container">
+            <div class="section-header">
+                <i class="fas fa-eye section-icon"></i>
+                <h2 class="section-title">Vista Previa en Vivo</h2>
+                <p class="section-subtitle">
+                    Estos elementos cambian en tiempo real cuando seleccionas una paleta
+                </p>
+            </div>
+
+            <div class="live-preview-grid">
+                <!-- Card 1 -->
+                <div class="live-card">
+                    <div class="live-card-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Ceremonia</h3>
+                    <p>15 de Junio, 2026</p>
+                    <p class="small">5:00 PM</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="live-card">
+                    <div class="live-card-icon">
+                        <i class="fas fa-champagne-glasses"></i>
+                    </div>
+                    <h3>Recepción</h3>
+                    <p>Después de la ceremonia</p>
+                    <p class="small">6:00 PM - 12:00 AM</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="live-card">
+                    <div class="live-card-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Ubicación</h3>
+                    <p>Hacienda Los Sueños</p>
+                    <p class="small">Ciudad de México</p>
+                </div>
+            </div>
+
+            <!-- Botones de ejemplo -->
+            <div class="live-buttons">
+                <button class="btn btn-primary">
+                    <i class="fas fa-envelope"></i>
+                    Confirmar Asistencia
+                </button>
+                <button class="btn btn-outline">
+                    <i class="fas fa-info-circle"></i>
+                    Más Información
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nota informativa -->
+    <section class="info-section">
+        <div class="container">
+            <div class="info-box">
+                <i class="fas fa-lightbulb"></i>
+                <h3>💡 Cómo funciona</h3>
+                <p>
+                    Al seleccionar una paleta, los colores se aplican inmediatamente en esta vista previa.
+                    Tu selección se guarda automáticamente y se aplicará cuando vuelvas al sitio principal.
+                </p>
+                <p>
+                    <strong>Nota:</strong> Para aplicar permanentemente los cambios en el sitio, un desarrollador
+                    deberá actualizar las variables CSS en el archivo <code>base.css</code>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer simple -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Yose & Benito - #bodalosnenes</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script type="module" src="js/color-selector-main.js"></script>
+    
+</body>
+</html>
+

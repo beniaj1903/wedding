@@ -1,0 +1,422 @@
+/* ================================
+   MI MESA - PÁGINA PERSONALIZADA
+   Vista para mostrar mesa asignada y subir fotos
+   ================================ */
+
+/* ================================
+   DISPLAY DE LA MESA (Solo Imagen de Canva)
+   ================================ */
+.table-display-section {
+    padding: 2rem 0 4rem 0;
+    background: var(--background);
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+}
+
+.table-display-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 2rem;
+    animation: fadeInUp 0.8s ease;
+}
+
+.table-display-image {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.8s ease 0.2s backwards;
+    background: var(--white);
+}
+
+.table-display-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mensaje sin imagen configurada */
+.no-image-message {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 3rem;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+.no-image-message i {
+    font-size: 4rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.no-image-message h3 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.no-image-message p {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+/* Mensaje sin mesa */
+.no-table-message {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 3rem;
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+.no-table-message i {
+    font-size: 4rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.no-table-message h3 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.no-table-message p {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+/* ================================
+   SUBIR FOTOS
+   ================================ */
+.upload-photos-section {
+    padding: 6rem 0;
+    background: var(--white);
+}
+
+.upload-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.upload-area {
+    background: var(--accent-color);
+    border: 3px dashed var(--primary-color);
+    border-radius: 20px;
+    padding: 4rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.upload-area:hover {
+    background: var(--background);
+    border-color: var(--secondary-color);
+    transform: scale(1.02);
+}
+
+.upload-icon {
+    font-size: 5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.upload-area h3 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.upload-area p {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+.upload-hint {
+    margin-top: 2rem !important;
+    font-size: 0.9rem !important;
+    opacity: 0.6 !important;
+}
+
+/* Preview de archivos */
+.files-preview {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--accent-color);
+    border-radius: 20px;
+}
+
+.files-preview h4 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.preview-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--background);
+}
+
+.preview-item img,
+.preview-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-item-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    color: var(--primary-color);
+    font-size: 3rem;
+}
+
+.preview-item-remove {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
+    background: var(--secondary-color);
+    color: var(--white);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.preview-item-remove:hover {
+    background: var(--text-dark);
+    transform: scale(1.1);
+}
+
+.upload-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Progreso de subida */
+.upload-progress {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--accent-color);
+    border-radius: 20px;
+    text-align: center;
+}
+
+.upload-progress h4 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 30px;
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    width: 0%;
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-weight: 600;
+}
+
+.progress-text {
+    font-size: 1rem;
+    color: var(--text-dark);
+    opacity: 0.8;
+}
+
+/* Mensaje de éxito */
+.upload-success {
+    margin-top: 3rem;
+    padding: 3rem 2rem;
+    background: var(--accent-color);
+    border-radius: 20px;
+    text-align: center;
+}
+
+.upload-success i {
+    font-size: 4rem;
+    color: var(--secondary-color);
+    margin-bottom: 1.5rem;
+}
+
+.upload-success h4 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.upload-success p {
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    opacity: 0.8;
+    margin-bottom: 2rem;
+}
+
+/* Instrucciones */
+.upload-instructions {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--accent-color);
+    border-radius: 15px;
+}
+
+.upload-instructions h4 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.upload-instructions ul {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.upload-instructions li {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--text-dark);
+}
+
+.upload-instructions li i {
+    color: var(--secondary-color);
+}
+
+/* ================================
+   RESPONSIVE
+   ================================ */
+@media (max-width: 768px) {
+    .table-display-section {
+        padding: 1.5rem 0 3rem 0;
+    }
+    
+    .table-display-content {
+        padding: 1rem;
+    }
+    
+    .table-display-image {
+        max-width: 100%;
+        border-radius: 15px;
+    }
+    
+    .upload-area {
+        padding: 3rem 1.5rem;
+    }
+    
+    .upload-icon {
+        font-size: 3.5rem;
+    }
+    
+    .preview-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+    
+    .upload-actions {
+        flex-direction: column;
+    }
+    
+    .upload-actions .btn {
+        width: 100%;
+    }
+    
+    .upload-instructions ul {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .table-display-section {
+        padding: 1rem 0 2rem 0;
+    }
+    
+    .table-display-content {
+        padding: 0.5rem;
+    }
+    
+    .table-display-image {
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .no-image-message,
+    .no-table-message {
+        padding: 2rem 1.5rem;
+    }
+    
+    .no-image-message h3,
+    .no-table-message h3 {
+        font-size: 1.5rem;
+    }
+}
+
