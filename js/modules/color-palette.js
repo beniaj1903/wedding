@@ -134,8 +134,10 @@ export function applyPalette(paletteKey) {
 /**
  * Carga la paleta guardada en localStorage o aplica la original
  */
+const DEFAULT_PALETTE = 'champagne';
+
 export function loadSavedPalette() {
-    const savedPalette = localStorage.getItem('selectedPalette') || 'original';
+    const savedPalette = localStorage.getItem('selectedPalette') || DEFAULT_PALETTE;
     applyPalette(savedPalette);
     return savedPalette;
 }
@@ -144,13 +146,13 @@ export function loadSavedPalette() {
  * Obtiene la paleta actualmente seleccionada
  */
 export function getCurrentPalette() {
-    return localStorage.getItem('selectedPalette') || 'original';
+    return localStorage.getItem('selectedPalette') || DEFAULT_PALETTE;
 }
 
 /**
  * Resetea a la paleta original
  */
 export function resetToOriginal() {
-    applyPalette('original');
+    applyPalette(DEFAULT_PALETTE);
 }
 

@@ -1,0 +1,12 @@
+{
+  "name": "wedding-site",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "googleapis": "^126.0.1"
+  }
+}
+

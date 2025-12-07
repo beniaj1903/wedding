@@ -19,6 +19,13 @@ import {
 let currentGuest = null;
 let selectedFiles = [];
 let currentTable = null;
+const DRIVE_UPLOAD_CONFIG = {
+    uploadUrl: window.__MI_MESA_CONFIG__?.driveUploadUrl || '/.netlify/functions/upload',
+    folderId: window.__MI_MESA_CONFIG__?.driveFolderId || '',
+    authToken: window.__MI_MESA_CONFIG__?.driveAuthToken || ''
+};
+const MAX_FILE_SIZE_MB = 15;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 // ================================
 // INICIALIZACIÓN
@@ -386,15 +393,39 @@ function handleDrop(e) {
 }
 
 function addFiles(files) {
-    // Filtrar solo imágenes y videos
-    const validFiles = files.filter(file => {
-        return file.type.startsWith('image/') || file.type.startsWith('video/');
+    const validFiles = [];
+    const rejectedTypes = [];
+    const rejectedSizes = [];
+    
+    files.forEach(file => {
+        const isValidType = file.type.startsWith('image/') || file.type.startsWith('video/');
+        if (!isValidType) {
+            rejectedTypes.push(file.name);
+            return;
+        }
+        
+        const isValidSize = file.size <= MAX_FILE_SIZE_BYTES;
+        if (!isValidSize) {
+            rejectedSizes.push(file.name);
+            return;
+        }
+        
+        validFiles.push(file);
     });
     
-    if (validFiles.length === 0) {
-        alert('Por favor selecciona solo archivos de imagen o video');
-        return;
+    if (rejectedTypes.length || rejectedSizes.length) {
+        let message = '';
+        if (rejectedTypes.length) {
+            message += `Los siguientes archivos no son imágenes o videos soportados:\n- ${rejectedTypes.join('\n- ')}\n\n`;
+        }
+        if (rejectedSizes.length) {
+            message += `Estos archivos superan el límite de ${MAX_FILE_SIZE_MB}MB:\n- ${rejectedSizes.join('\n- ')}\n\n`;
+        }
+        message += 'Por favor selecciona otros archivos.';
+        alert(message);
     }
+    
+    if (validFiles.length === 0) return;
     
     selectedFiles = [...selectedFiles, ...validFiles];
     displayFilesPreview();
@@ -470,11 +501,113 @@ function handleUploadMore() {
     document.getElementById('fileInput').value = '';
 }
 
+function updateUploadProgress(processed, total, progressBar, progressText) {
+    const percent = Math.round((processed / total) * 100);
+    progressBar.style.width = `${percent}%`;
+    progressBar.textContent = `${percent}%`;
+    progressText.textContent = `${processed} de ${total} archivos subidos`;
+}
+
+function ensureDriveConfig() {
+    if (!DRIVE_UPLOAD_CONFIG.uploadUrl) {
+        alert('La subida a Google Drive aún no está configurada. Por favor define driveUploadUrl en mi-mesa.html.');
+        return false;
+    }
+    if (!DRIVE_UPLOAD_CONFIG.folderId) {
+        alert('Falta configurar el ID de la carpeta de Google Drive.');
+        return false;
+    }
+    return true;
+}
+
+function buildUploadMetadata(file, index) {
+    const sanitizedFileName = sanitizeFileName(file.name, index);
+    
+    return {
+        fileName: sanitizedFileName,
+        guestName: currentGuest?.nombreCompleto || 'Invitado anónimo',
+        guestId: currentGuest?.id || currentGuest?.uid || currentGuest?.documento || 'sin-id',
+        tableName: currentTable?.name || currentGuest?.tableName || 'Sin mesa',
+        tableId: currentTable?.id || currentGuest?.tableId || 'sin-mesa',
+        uploadedAt: new Date().toISOString(),
+        originalName: file.name,
+        originalSize: file.size,
+        mimeType: file.type,
+        isVideo: file.type.startsWith('video/'),
+        source: 'mi-mesa'
+    };
+}
+
+function sanitizeFileName(fileName, index) {
+    const extension = fileName && fileName.includes('.') ? fileName.substring(fileName.lastIndexOf('.')).toLowerCase() : '';
+    const baseName = fileName
+        .replace(extension, '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'recuerdo';
+    const tableSlug = currentTable?.name ? normalizeTableName(currentTable.name) : 'sin-mesa';
+    return `${Date.now()}-${index}-${tableSlug}-${baseName}${extension}`;
+}
+
+function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const result = reader.result?.toString() || '';
+            const base64 = result.split(',').pop();
+            resolve(base64);
+        };
+        reader.onerror = () => reject(new Error('No pudimos leer el archivo seleccionado.'));
+        reader.readAsDataURL(file);
+    });
+}
+
+async function uploadFileToBackend(file, metadata) {
+    const base64Data = await readFileAsBase64(file);
+    
+    const payload = {
+        fileName: metadata.fileName,
+        mimeType: metadata.mimeType || 'application/octet-stream',
+        data: base64Data,
+        metadata,
+        folderId: DRIVE_UPLOAD_CONFIG.folderId || undefined
+    };
+    
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    if (DRIVE_UPLOAD_CONFIG.authToken) {
+        headers['X-Upload-Token'] = DRIVE_UPLOAD_CONFIG.authToken;
+    }
+    
+    const response = await fetch(DRIVE_UPLOAD_CONFIG.uploadUrl, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload)
+    });
+    
+    let result = null;
+    try {
+        result = await response.json();
+    } catch (error) {
+        console.error('Respuesta inválida del servidor', error);
+    }
+    
+    if (!response.ok || !result?.success) {
+        throw new Error(result?.message || 'El servidor rechazó la subida.');
+    }
+    
+    return result;
+}
+
 // ================================
 // SUBIDA DE ARCHIVOS
 // ================================
 async function handleUpload() {
     if (selectedFiles.length === 0) return;
+    if (!ensureDriveConfig()) return;
     
     const filesPreview = document.getElementById('filesPreview');
     const uploadProgress = document.getElementById('uploadProgress');
@@ -485,35 +618,39 @@ async function handleUpload() {
     filesPreview.style.display = 'none';
     uploadProgress.style.display = 'block';
     
-    // Simulación de subida (aquí se integraría con Google Drive API)
     let uploaded = 0;
     const total = selectedFiles.length;
+    const errors = [];
     
     for (let i = 0; i < total; i++) {
-        // Simular subida
-        await simulateUpload(selectedFiles[i]);
-        uploaded++;
+        const file = selectedFiles[i];
+        const metadata = buildUploadMetadata(file, i);
         
-        const percent = Math.round((uploaded / total) * 100);
-        progressBar.style.width = `${percent}%`;
-        progressBar.textContent = `${percent}%`;
-        progressText.textContent = `${uploaded} de ${total} archivos subidos`;
+        try {
+            await uploadFileToBackend(file, metadata);
+            uploaded++;
+        } catch (error) {
+            console.error(`Error subiendo ${file.name}:`, error);
+            errors.push({ file: file.name, message: error.message });
+        }
+        
+        updateUploadProgress(i + 1, total, progressBar, progressText);
     }
     
-    // Mostrar éxito
+    if (errors.length) {
+        uploadProgress.style.display = 'none';
+        filesPreview.style.display = 'block';
+        const errorList = errors.map(err => `• ${err.file}: ${err.message}`).join('\n');
+        alert(`Algunos archivos no se pudieron subir:\n${errorList}`);
+        return;
+    }
+    
     setTimeout(() => {
         uploadProgress.style.display = 'none';
         uploadSuccess.style.display = 'block';
         selectedFiles = [];
         document.getElementById('fileInput').value = '';
-    }, 500);
-}
-
-function simulateUpload(file) {
-    return new Promise(resolve => {
-        // Aquí iría la lógica real de subida a Google Drive
-        setTimeout(resolve, 1000);
-    });
+    }, 400);
 }
 
 // ================================

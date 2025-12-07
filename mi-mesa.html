@@ -217,8 +217,18 @@
     </footer>
 
     <!-- ========================================
-         SCRIPTS
+         CONFIG & SCRIPTS
          ======================================== -->
+    <script>
+        window.__MI_MESA_CONFIG__ = {
+            // Netlify Function (producción y netlify dev)
+            driveUploadUrl: '/.netlify/functions/upload',
+            // Carpeta de Drive donde se guardarán las fotos (fallback si la Function no recibe uno)
+            driveFolderId: '179moh_1aiXIjE17kXNK_oqvVoYqj-_Oa',
+            // Token opcional para validar peticiones (debe coincidir con BACKEND_UPLOAD_TOKEN)
+            driveAuthToken: 'MI_MESA_2026'
+        };
+    </script>
     <script type="module" src="js/mi-mesa-main.js"></script>
     
 </body>

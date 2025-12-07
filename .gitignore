@@ -9,9 +9,14 @@ Thumbs.db
 *.swo
 *~
 
-# Node modules (si decides usar npm en el futuro)
+# Node modules
 node_modules/
+.netlify/
+client_secret.json
 
 # Archivos temporales
 *.log
 *.tmp
+
+# secrets
+.env
