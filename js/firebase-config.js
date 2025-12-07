@@ -6,7 +6,7 @@ const firebaseConfig = window.__FIREBASE_CONFIG__;
 
 if (!firebaseConfig || !firebaseConfig.apiKey) {
   throw new Error(
-    'Firebase no está configurado. Asegúrate de generar env.js (ejecuta scripts/netlify-build.sh o define las variables en Netlify).'
+    'Firebase no está configurado. Asegúrate de definir las variables en Netlify o cargar un script con window.__FIREBASE_CONFIG__ antes de importar firebase-config.js.'
   );
 }
 

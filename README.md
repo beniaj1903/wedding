@@ -37,13 +37,10 @@ python -m http.server 8001
 # Netlify Dev (para probar la Function /upload)
 npm install
 npm run dev   # inicia http://localhost:8888 y proxya /.netlify/functions/upload
-
-# Configura tus variables
-cp env.example .env   # completa los valores Firebase + Google OAuth
-source .env && bash ./scripts/netlify-build.sh   # genera env.js (si sirves con python)
 ```
 
 En `mi-mesa.html`, `driveUploadUrl` apunta por defecto a `/.netlify/functions/upload`, por lo que no necesitas cambios para local si usas `netlify dev`.
+Si decides servir el sitio con `python -m http.server`, crea un archivo `env.js` a mano con `window.__FIREBASE_CONFIG__ = {...}` (usa los valores de tu proyecto) antes de abrir la página.
 
 ## 📚 Documentación
 

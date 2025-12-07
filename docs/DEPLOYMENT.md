@@ -60,7 +60,7 @@ Ejecuta `python generate_token.py` (con `client_secret.json` en la raíz). Al fi
 
 ### Variables de Firebase
 
-Además, define las claves de Firebase para que el build genere `env.js`:
+Define las credenciales de tu proyecto para que la Function `firebase-config` pueda exponer `window.__FIREBASE_CONFIG__`:
 
 ```
 FIREBASE_API_KEY=...
@@ -71,7 +71,7 @@ FIREBASE_MESSAGING_SENDER_ID=...
 FIREBASE_APP_ID=...
 ```
 
-El script `scripts/netlify-build.sh` usa estos valores para crear `env.js` (que expone `window.__FIREBASE_CONFIG__`). Para desarrollo local, carga el `.env` y ejecuta el script antes de servir el sitio con `python -m http.server`.
+Estas variables sólo viven en Netlify (o en tu `.env` cuando ejecutes `netlify dev`). No se generan archivos con secretos durante el build.
 
 ## Entornos y configuración
 
@@ -79,7 +79,7 @@ El script `scripts/netlify-build.sh` usa estos valores para crear `env.js` (que 
 | --- | --- | --- |
 | `driveUploadUrl` | `mi-mesa.html` | URL de la Function (default `/.netlify/functions/upload`). |
 | `driveAuthToken` | `mi-mesa.html` | Debe coincidir con `BACKEND_UPLOAD_TOKEN`. |
-| `FIREBASE_*` | Build (`env.js`) | Credenciales de Firebase (ver lista anterior). |
+| `FIREBASE_*` | Netlify env / Function `firebase-config` | Credenciales de Firebase (ver lista anterior). |
 | `GOOGLE_CLIENT_ID`/`SECRET` | Netlify env | Credenciales OAuth (cuenta personal). |
 | `GOOGLE_REFRESH_TOKEN` | Netlify env | Refresh token obtenido con `generate_token.py`. |
 | `GOOGLE_DRIVE_FOLDER_ID` | Netlify env | Carpeta destino (puede variar por entorno). |
