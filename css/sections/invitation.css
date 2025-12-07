@@ -4,7 +4,7 @@
    ================================ */
 
 .invitation-section {
-    background: var(--white);
+    background: var(--accent-color);
     padding: 4rem 0 6rem 0;
     min-height: auto;
     display: flex;
@@ -104,13 +104,10 @@
 
 /* Nombres - PARTE INFERIOR DEL SOBRE */
 .names {
-    font-family: 'Snell Roundhand', cursive;
+    font-family: 'Snell Roundhand', bold cursive;
     font-size: 4rem;
-    font-weight: 400;
-    color: var(--primary-color);
-    text-shadow: 
-        2px 2px 4px rgba(0, 0, 0, 0.8),
-        0 0 20px rgba(191, 167, 125, 0.3);
+    font-weight: 500;
+    color: #BC7D76;
     letter-spacing: 2px;
     position: absolute;
     bottom: 7rem;

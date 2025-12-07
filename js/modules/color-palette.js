@@ -79,6 +79,25 @@ export const palettes = {
             '--gradient-2': 'linear-gradient(135deg, #D9B57B 0%, #C78B7B 100%)',
             '--gradient-3': 'linear-gradient(135deg, #E8DCC5 0%, #9A9E7E 100%)',
         }
+    },
+    
+    champagne: {
+        name: 'Champagne Celestial',
+        description: 'Base champagne con acentos dusty rose y vino apagado, elegante y boho-celestial',
+        colors: {
+            '--primary-color': '#C9A3A7',      // Dusty rose cálido (botones / detalles)
+            '--secondary-color': '#B76B50',    // Terracota suave (secundario)
+            '--accent-color': '#D6C2A8',       // Champagne dorado (acento)
+            '--text-dark': '#6F2C3F',          // Vino apagado (títulos)
+            '--text-light': '#F2E7D8',         // Champagne claro (texto sobre fondos oscuros)
+            '--white': '#F2E7D8',              // Base clara
+            '--background': '#F2E7D8',         // Fondo general
+        },
+        gradients: {
+            '--gradient-1': 'linear-gradient(135deg, #C9A3A7 0%, #B76B50 100%)',
+            '--gradient-2': 'linear-gradient(135deg, #B76B50 0%, #6F2C3F 100%)',
+            '--gradient-3': 'linear-gradient(135deg, #D6C2A8 0%, #C9A3A7 100%)',
+        }
     }
 };
 

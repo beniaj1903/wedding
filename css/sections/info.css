@@ -101,7 +101,7 @@
 }
 
 .transport-option p {
-    color: var(--white);
+    color: var(--secondary-color);
     margin-bottom: 0.5rem;
     line-height: 1.6;
 }
@@ -143,6 +143,7 @@
 .hotel-info p {
     margin: 0.3rem 0;
     font-size: 0.95rem;
+    color: var(--secondary-color);
 }
 
 .hotel-info a {

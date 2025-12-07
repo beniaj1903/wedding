@@ -169,7 +169,7 @@ section {
 
 .section-subtitle {
     font-size: 1.1rem;
-    color: var(--text-light);
+    color: var(--text-dark);
     max-width: 600px;
     margin: 1rem auto 0;
 }
@@ -290,7 +290,7 @@ section {
     font-family: var(--font-heading);
     font-size: 3rem;
     font-weight: 600;
-    color: var(--primary-color);
+    color: var(--secondary-color);
     margin: 1rem 0;
 }
 

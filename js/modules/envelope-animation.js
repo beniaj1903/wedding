@@ -31,9 +31,13 @@ export function initEnvelopeAnimation() {
     // Personalizar con el nombre del invitado si está disponible
     personalizarSobre();
     
-    // Abrir sobre al hacer click
+    // Abrir o cerrar sobre al hacer click sobre él
     envelope.addEventListener('click', function() {
-        openEnvelope();
+        if (invitationDetails.classList.contains('show')) {
+            closeEnvelope();
+        } else {
+            openEnvelope();
+        }
     });
     
     // Cerrar sobre al hacer click en el botón
@@ -79,6 +83,16 @@ export function initEnvelopeAnimation() {
             });
         }, 800);
     }
+    
+    // Cerrar al hacer click fuera del sobre/detalles
+    document.addEventListener('click', function(e) {
+        const clickOnEnvelope = envelope.contains(e.target);
+        const clickOnCloseBtn = closeButton.contains(e.target);
+        
+        if (!clickOnEnvelope && !clickOnCloseBtn && invitationDetails.classList.contains('show')) {
+            closeEnvelope();
+        }
+    });
     
     // Permitir cerrar con tecla Escape
     document.addEventListener('keydown', function(e) {
