@@ -58,12 +58,28 @@ Con esto la Function `/.netlify/functions/upload` queda desplegada junto con el 
 
 Ejecuta `python generate_token.py` (con `client_secret.json` en la raíz). Al finalizar, copia los valores mostrados en las variables de entorno de Netlify.
 
+### Variables de Firebase
+
+Además, define las claves de Firebase para que el build genere `env.js`:
+
+```
+FIREBASE_API_KEY=...
+FIREBASE_AUTH_DOMAIN=...
+FIREBASE_PROJECT_ID=...
+FIREBASE_STORAGE_BUCKET=...
+FIREBASE_MESSAGING_SENDER_ID=...
+FIREBASE_APP_ID=...
+```
+
+El script `scripts/netlify-build.sh` usa estos valores para crear `env.js` (que expone `window.__FIREBASE_CONFIG__`). Para desarrollo local, carga el `.env` y ejecuta el script antes de servir el sitio con `python -m http.server`.
+
 ## Entornos y configuración
 
 | Variable | Dónde se usa | Descripción |
 | --- | --- | --- |
 | `driveUploadUrl` | `mi-mesa.html` | URL de la Function (default `/.netlify/functions/upload`). |
 | `driveAuthToken` | `mi-mesa.html` | Debe coincidir con `BACKEND_UPLOAD_TOKEN`. |
+| `FIREBASE_*` | Build (`env.js`) | Credenciales de Firebase (ver lista anterior). |
 | `GOOGLE_CLIENT_ID`/`SECRET` | Netlify env | Credenciales OAuth (cuenta personal). |
 | `GOOGLE_REFRESH_TOKEN` | Netlify env | Refresh token obtenido con `generate_token.py`. |
 | `GOOGLE_DRIVE_FOLDER_ID` | Netlify env | Carpeta destino (puede variar por entorno). |

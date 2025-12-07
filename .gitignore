@@ -13,6 +13,7 @@ Thumbs.db
 node_modules/
 .netlify/
 client_secret.json
+env.js
 
 # Archivos temporales
 *.log
