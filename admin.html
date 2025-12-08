@@ -455,7 +455,7 @@
                             <th>Cupos</th>
                             <th>Transporte</th>
                             <th>Alergias</th>
-                            <th>Acciones</th>
+                    <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="confirmacionesBody">
@@ -502,6 +502,22 @@
                 <button type="button" class="btn btn-primary" onclick="guardarEditInvitado()">
                     <i class="fas fa-save"></i> Guardar
                 </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para ver mensaje de confirmación -->
+    <div id="mensajeConfirmacionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="mensajeConfirmacionTitulo">Mensaje de confirmación</h3>
+                <button class="modal-close" onclick="cerrarModalMensaje()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="mensajeConfirmacionTexto" style="white-space: pre-wrap; color: var(--text-dark);"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="cerrarModalMensaje()">Cerrar</button>
             </div>
         </div>
     </div>
@@ -601,26 +617,38 @@
                 return;
             }
             
-            tbody.innerHTML = confirmaciones.map(conf => `
-                <tr>
-                    <td>${conf.nombreCompleto}</td>
-                    <td>${conf.email || '-'}</td>
-                    <td>${conf.telefono || '-'}</td>
-                    <td>
-                        <span class="badge ${conf.confirmado ? 'badge-success' : 'badge-danger'}">
-                            ${conf.confirmado ? 'Sí asistirá' : 'No asistirá'}
-                        </span>
-                    </td>
-                    <td>${conf.cuposConfirmados || 0}</td>
-                    <td>${conf.necesitaTransporte ? 'Sí' : 'No'}</td>
-                    <td>${conf.restriccionesAlimenticias || '-'}</td>
-                    <td>
-                        <button class="btn-action btn-delete" onclick="eliminarConfirmacionConfirm('${conf.id}', '${conf.nombreCompleto}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `).join('');
+            tbody.innerHTML = confirmaciones.map(conf => {
+                const mensaje = conf.mensaje && conf.mensaje.trim().length > 0 
+                    ? conf.mensaje 
+                    : 'Sin mensaje adicional.';
+                
+                const mensajeEncoded = encodeURIComponent(mensaje);
+                const nombreEncoded = encodeURIComponent(conf.nombreCompleto || 'Invitado');
+                
+                return `
+                    <tr>
+                        <td>${conf.nombreCompleto}</td>
+                        <td>${conf.email || '-'}</td>
+                        <td>${conf.telefono || '-'}</td>
+                        <td>
+                            <span class="badge ${conf.confirmado ? 'badge-success' : 'badge-danger'}">
+                                ${conf.confirmado ? 'Sí asistirá' : 'No asistirá'}
+                            </span>
+                        </td>
+                        <td>${conf.cuposConfirmados || 0}</td>
+                        <td>${conf.necesitaTransporte ? 'Sí' : 'No'}</td>
+                        <td>${conf.restriccionesAlimenticias || '-'}</td>
+                        <td>
+                            <button class="btn-action btn-edit" onclick="verMensajeConfirmacion(decodeURIComponent('${nombreEncoded}'), decodeURIComponent('${mensajeEncoded}'))">
+                                <i class="fas fa-comment"></i>
+                            </button>
+                            <button class="btn-action btn-delete" onclick="eliminarConfirmacionConfirm('${conf.id}', '${conf.nombreCompleto}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
         
         // Agregar invitado
@@ -745,6 +773,23 @@
         document.getElementById('editInvitadoModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 cerrarModalInvitado();
+            }
+        });
+        
+        // Modal mensaje confirmación
+        window.verMensajeConfirmacion = function(nombre, mensaje) {
+            document.getElementById('mensajeConfirmacionTitulo').textContent = `Mensaje de ${nombre}`;
+            document.getElementById('mensajeConfirmacionTexto').textContent = mensaje;
+            document.getElementById('mensajeConfirmacionModal').classList.add('show');
+        }
+        
+        window.cerrarModalMensaje = function() {
+            document.getElementById('mensajeConfirmacionModal').classList.remove('show');
+        }
+        
+        document.getElementById('mensajeConfirmacionModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                cerrarModalMensaje();
             }
         });
         
